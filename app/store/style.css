@@ -1,0 +1,18 @@
+.add {
+  padding-inline: 1rem;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  outline: none;
+  &:hover {
+    border: 1px solid white;
+    box-shadow: 0 0 8px #ffffff80;
+  }
+
+  &:active {
+    box-shadow: 0 0 8px #ffffff40;
+  }
+}
+
+.product-list {
+  grid-template-columns: 2rem repeat(3, minmax(min-content, 1fr)) min-content;
+}

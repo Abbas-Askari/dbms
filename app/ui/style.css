@@ -1,0 +1,27 @@
+.stats-card {
+  --delay: 0ms;
+
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  outline: none;
+
+  opacity: 0;
+  animation: fade-in ease-in-out 500ms var(--delay) forwards;
+
+  /* &:hover {
+    border: 1px solid white;
+    box-shadow: 0 0 16px #ffffff80;
+  } */
+}
+
+@keyframes fade-in {
+  from {
+    translate: 10px 0;
+    opacity: 0;
+  }
+
+  to {
+    translate: 0 0;
+    opacity: 1;
+  }
+}
