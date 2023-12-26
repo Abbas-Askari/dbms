@@ -9,7 +9,6 @@ async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
 
   const result = await sql`SELECT * FROM product WHERE id=${id}`;
-  console.log({ result });
 
   if (!result.rowCount) {
     notFound();

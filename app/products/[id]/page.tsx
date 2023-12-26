@@ -1,7 +1,10 @@
 import { getProductById } from "@/app/lib/actions";
+import { addToCart, removeFromCart } from "@/app/lib/cartActions";
 import { Product } from "@/app/lib/definitions";
 import SellerInfo from "@/app/ui/sellerInfo";
+import { auth } from "@/auth";
 import { sql } from "@vercel/postgres";
+import { unstable_noStore } from "next/cache";
 import Link from "next/link";
 import React from "react";
 
@@ -10,11 +13,18 @@ type Props = {
 };
 
 async function Page({ params }: Props) {
+  unstable_noStore();
+  
   const { id } = params;
   const product: Product = await getProductById(id);
 
-  const products: Product[] = (await sql`SELECT * FROM product;`)
-    .rows as Product[];
+  // const products: Product[] = (await sql`SELECT * FROM product;`)
+  //   .rows as Product[];
+
+    const session = await auth();
+  const addToCartBound = addToCart.bind(null, product.id, session?.user?.id as string);
+  const removeFromCartBound = removeFromCart.bind(null, product.id, session?.user?.id as string);
+  const inCart = (await sql`SELECT * FROM cart WHERE product_id=${product.id} AND customer_id=${session?.user?.id};`).rowCount > 0;
 
   return (
     <div className="p-8">
@@ -35,9 +45,11 @@ async function Page({ params }: Props) {
               {product.stock > 0 ? "In stock" : "Out of stock"}
             </div>
           </div>
-          <button className=" bg-gray-800 hover:bg-gray-600 outline-none px-6 py-2 rounded-lg mx-auto  ">
-            Add to Cart
-          </button>
+          <form action={!inCart ? addToCartBound : removeFromCartBound}>
+            <button className=" bg-gray-800 hover:bg-gray-600 outline-none px-6 py-2 rounded-lg mx-auto  ">
+              {!inCart ? "Add to Cart" : "Remove from Cart"}
+            </button>
+          </form>
         </div>
       </div>
 

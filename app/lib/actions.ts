@@ -24,16 +24,12 @@ export async function createProduct(formData: FormData) {
         ${product.stock},
         ${product.price});
     `;
-    console.log({
-      result,
-    });
   } catch (error) {
-    console.log({ error });
+    console.error({ error });
   }
-
+  
   revalidatePath("/products");
   revalidatePath("/store");
-  console.log({ product });
 }
 
 export async function deleteProduct(id: string) {
@@ -64,7 +60,7 @@ export async function updateProduct(id: string, formData: FormData) {
       product,
     });
   } catch (error) {
-    console.log({ error });
+    console.error({ error });
   }
 
   revalidatePath("/products");

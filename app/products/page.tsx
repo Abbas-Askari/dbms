@@ -28,7 +28,7 @@ async function Page({ searchParams }: Props) {
 
   return (
     <div className="">
-      <Search />
+      {/* <Search /> */}
       <div className=" grid grid-cols-4 gap-4 p-8">
         {products.map((product) => (
           <ProductCard product={product} key={product.id} />

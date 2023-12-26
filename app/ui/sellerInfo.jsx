@@ -10,7 +10,7 @@ function SellerInfo() {
         className=" w-20  aspect-square object-contain flex-shrink-0 bg-white box-border p-4"
       />
       <div className="">
-        <h1 className="text-2xl">Abbas And Bros.</h1>
+        <h1 className="text-2xl font-bold">Abbas And Bros.</h1>
         <div className="description">
           An online store is a website or app where buyers can see a catalog of
           products or services and make electronic purchases. An ecommerce store
