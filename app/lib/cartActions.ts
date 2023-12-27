@@ -5,6 +5,7 @@ import { sql } from "@vercel/postgres";
 import { randomUUID } from "crypto";
 import { getSession } from "next-auth/react";
 import { revalidatePath, revalidateTag, unstable_noStore } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function addToCart(product_id: string, customer_id: string, formData: FormData) {
     try {
@@ -68,7 +69,19 @@ export async function getCartProducts() {
     }   
 }
 
+export async function clearCart() {
+    try {
+        const session = await auth();
+        const result = await sql`DELETE FROM cart WHERE customer_id = ${session?.user?.id}`;
+        console.log("Success!");
+        revalidatePath(`/`);
+    } catch (error) {
+        console.error("Failed to clear cart: ", error);
+    }
+}
+
 export async function placeOrder(formData: FormData) {
+
     try {
         // const session = await getSession();
         const session = await auth();
@@ -88,11 +101,15 @@ export async function placeOrder(formData: FormData) {
         const orderProductsResult = await sql.query(defectiveQuery);
 
         console.log("Success!");
+        clearCart();
+        revalidatePath('/');
     } catch (error) {
         console.error("Failed to place order", error);
+        return;
     }
     
-
+    
+    redirect('/products');
     console.log(formData)
 }
 
