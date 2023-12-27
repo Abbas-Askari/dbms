@@ -47,9 +47,7 @@ async function Page({ params }: Props) {
             <div className="flex justify-between">
               <div className="text-4xl font-bold">{product.title}</div>
               <form action={!inCart ? addToCartBound : removeFromCartBound}>
-                <button className=" bg-gray-800 hover:bg-gray-600 outline-none px-6 py-2 rounded-lg mx-auto  ">
-                  {!inCart ? "Add to Cart" : "Remove from Cart"}
-                </button>
+                <FormSubmitButton className=" bg-gray-800 hover:bg-gray-600 outline-none px-6 py-2 rounded-lg mx-auto  " value={!inCart ? "Add to Cart" : "Remove from Cart"} />
               </form>
             </div>
             <div className="text-lg text-neutral-300">{product.description}</div>
