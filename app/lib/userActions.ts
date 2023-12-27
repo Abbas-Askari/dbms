@@ -8,8 +8,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
 import { error } from "console";
-import { signIn } from "@/auth";
-
+import { signIn } from "../api/auth/[...nextauth]/route";
+// import { signIn } from "@/auth";
 
 export async function createCustomer(formData: FormData) {
     const customer: Customer = {

@@ -2,7 +2,7 @@ import { getProductById } from "@/app/lib/actions";
 import { addToCart, removeFromCart } from "@/app/lib/cartActions";
 import { Product } from "@/app/lib/definitions";
 import SellerInfo from "@/app/ui/sellerInfo";
-import { auth } from "@/auth";
+import { auth } from "@/app/api/auth/[...nextauth]/route";
 import { sql } from "@vercel/postgres";
 import { unstable_noStore } from "next/cache";
 import Link from "next/link";
@@ -21,7 +21,8 @@ async function Page({ params }: Props) {
   // const products: Product[] = (await sql`SELECT * FROM product;`)
   //   .rows as Product[];
 
-    const session = await auth();
+  const session = await getSession();
+  // const session = await auth();
   const addToCartBound = addToCart.bind(null, product.id, session?.user?.id as string);
   const removeFromCartBound = removeFromCart.bind(null, product.id, session?.user?.id as string);
   const inCart = (await sql`SELECT * FROM cart WHERE product_id=${product.id} AND customer_id=${session?.user?.id};`).rowCount > 0;

@@ -69,6 +69,13 @@ const page = () => {
                         placeholder="Enter your password"
                     />
                 </div>
+                <label htmlFor="customer" className="flex justify-between items-center text-black mb-2">Sign up as a customer
+                    <input id="customer" type="radio" name="radio-1" className="radio radio-primary" checked />
+                </label>
+                <label htmlFor="vendor" className="flex justify-between items-center text-black mb-2">Sign up as a vendor
+                    <input id="vendor" type="radio" name="radio-1" className="radio radio-primary" checked />
+                </label>
+
                 <div className="text-black mb-4">
                     Already have an account? <Link href={'/login'} className="text-blue-500">Sign In</Link>
                 </div>
@@ -80,6 +87,7 @@ const page = () => {
                         Sign Up
                     </button>
                 </div>
+
             </form>
         </div>
     );

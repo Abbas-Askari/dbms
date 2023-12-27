@@ -1,7 +1,7 @@
 import { StringValidation } from "zod";
 
 export type Product = {
-  id: string;
+  id: number;
   title: string;
   description: string;
   price: number;
@@ -24,7 +24,7 @@ export type Customer = {
 }
 
 export type Address = {
-  id: string;
+  id: number;
   address: string;
   city: string;
   province: string;
@@ -32,7 +32,7 @@ export type Address = {
 }
 
 export type Order = {
-  id: string;
+  id: number;
   date: Date;
   customer_id: string;
   address: Address;

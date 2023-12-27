@@ -1,11 +1,13 @@
 import React from 'react'
 import favIcon from "@/app/favicon.ico";
-import { MagnifyingGlassCircleIcon, MagnifyingGlassIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftOnRectangleIcon, MagnifyingGlassCircleIcon, MagnifyingGlassIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { redirect } from 'next/navigation';
 import CartToggleButton from './cartButton';
 import { CartProductCard } from './cartProductCard';
 import CartSidebar from './cartSidebar';
 import Link from 'next/link';
+import { signOut } from 'next-auth/react';
+import { LogoutButton } from './LogoutButton';
 
 
 async function searchProducts(formData: FormData) {
@@ -37,7 +39,12 @@ const Nav = () => {
             <input type="text" className=' outline-none w-[400px] ' placeholder='Search'/>
             <MagnifyingGlassIcon className='w-6 h-6 '/>
         </div> */}
-        <CartToggleButton />
+        <div className="flex gap-4 ">
+
+            <LogoutButton />
+            <CartToggleButton />
+        </div>
+
     </div>
   )
 }

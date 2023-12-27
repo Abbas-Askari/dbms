@@ -1,8 +1,9 @@
 'use server';
 
-import { auth } from "@/auth";
+import { auth } from "../api/auth/[...nextauth]/route";
 import { sql } from "@vercel/postgres";
 import { randomUUID } from "crypto";
+import { getSession } from "next-auth/react";
 import { revalidatePath, revalidateTag, unstable_noStore } from "next/cache";
 
 export async function addToCart(product_id: string, customer_id: string, formData: FormData) {
@@ -57,7 +58,8 @@ export async function updateProductQuantity(product_id: string, customer_id: str
 export async function getCartProducts() {
     unstable_noStore();
     try {
-        const session = await auth();
+        // const session = await auth();
+        const session = await getSession();
         const result = await sql`SELECT * FROM product JOIN cart ON cart.product_id = product.id WHERE cart.customer_id = ${session?.user?.id} ORDER BY product.id`;
         console.log("getting cart products!");
         return result.rows as any[];
@@ -68,24 +70,24 @@ export async function getCartProducts() {
 
 export async function placeOrder(formData: FormData) {
     try {
-        const session = await auth();
+        const session = await getSession();
+        // const session = await auth();
         const cart = await getCartProducts();   
-        const addressId = randomUUID();
-        const orderId = randomUUID();
-        const addressResult = await sql`INSERT INTO address VALUES
-            (${addressId}, ${formData.get('address')}, ${formData.get('city')}, ${formData.get('province')}, ${formData.get('zip_code')});
+        const addressResult = await sql`INSERT INTO address (address, city, province, zip_code) VALUES 
+            (${formData.get('address')}, ${formData.get('city')}, ${formData.get('province')}, ${formData.get('zip_code')}) RETURNING id;
         `;
-        const orderResult = await sql`INSERT INTO order_ VALUES
-            (${orderId}, ${new Date()}, ${session?.user?.id}, ${addressId});
+        const addressId = addressResult.rows[0].id as number;
+        console.log({rows: addressResult.rows})
+        const orderResult = await sql`INSERT INTO order_ (date, customer_id, address_id) VALUES
+            (${new Date()}, ${session?.user?.id}, ${addressId}) RETURNING id;
         `;
+        const orderId = orderResult.rows[0].id as number;
         const defectiveQuery = 
-        `INSERT INTO orderproduct VALUES (${orderId}, ${cart[0].id}, ${cart[0].quantity})`;
-            // cart?.map(product => (`(Order_id = "${orderId}", Product_id = "${product.id}", Quantity = ${product.quantity})`)).join(",\n");
-        console.log(defectiveQuery)
+        `INSERT INTO orderproducts VALUES `
+            + cart?.map(product => (`(${orderId}, ${product.id} ,${product.quantity})`)).join(", ");
+        const orderProductsResult = await sql.query(defectiveQuery);
 
-        const orderProductsResult = await sql`${defectiveQuery}`;
-        console.log({addressResult})
-        // console.log({addressResult, orderResult, orderProductsResult})
+        console.log("Success!");
     } catch (error) {
         console.error("Failed to place order", error);
     }
