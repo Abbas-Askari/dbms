@@ -21,3 +21,7 @@
 body {
   color: rgb(var(--foreground-rgb));
 }
+
+.form-input {
+  @apply shadow appearance-none rounded-lg p-3 text-gray-200 leading-tight focus:outline-none focus:bg-neutral-800
+}

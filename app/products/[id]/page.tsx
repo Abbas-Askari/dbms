@@ -27,35 +27,41 @@ async function Page({ params }: Props) {
   const inCart = (await sql`SELECT * FROM cart WHERE product_id=${product.id} AND customer_id=${session?.user?.id};`).rowCount > 0;
 
   return (
-    <div className="p-8">
+    <div className="p-8 flex flex-col gap-4">
       <div className="flex">
-        <div className=" flex-1 p-8">
-          <img
-            src=""
-            alt=""
-            className="bg-white rounded-lg aspect-square h-[100%]"
-          />
-        </div>
-        <div className=" flex-1 p-8 pl-0">
-          <div className="text-2xl font-semibold">{product.title}</div>
-          <div className="my-4">{product.description}</div>
-          <div className="flex justify-between items-center mb-4">
-            <div className="text-xl">${product.price}</div>
-            <div className="">
-              {product.stock > 0 ? "In stock" : "Out of stock"}
-            </div>
+        <div className="flex p-8 px-16 gap-8">
+          <div className="flex-1 h-full aspect-square">
+            <img
+              src=""
+              alt=""
+              className="bg-white rounded-xl aspect-square"
+              />
           </div>
-          <form action={!inCart ? addToCartBound : removeFromCartBound}>
-            <button className=" bg-gray-800 hover:bg-gray-600 outline-none px-6 py-2 rounded-lg mx-auto  ">
-              {!inCart ? "Add to Cart" : "Remove from Cart"}
-            </button>
-          </form>
+          <div className="flex flex-col flex-[2_2_0%] justify-between">
+            <div className="flex flex-col gap-4">
+
+            <div className="flex justify-between">
+              <div className="text-4xl font-bold">{product.title}</div>
+              <form action={!inCart ? addToCartBound : removeFromCartBound}>
+                <button className=" bg-gray-800 hover:bg-gray-600 outline-none px-6 py-2 rounded-lg mx-auto  ">
+                  {!inCart ? "Add to Cart" : "Remove from Cart"}
+                </button>
+              </form>
+            </div>
+            <div className="text-lg text-neutral-300">{product.description}</div>
+            </div>
+            <div className="flex justify-between items-center">
+              <div className="text-4xl">${product.price}</div>
+              <div className="text-3xl">
+                {product.stock > 0 ? "In stock" : "Out of stock"}
+              </div>
+            </div>
+          
+          </div>
         </div>
       </div>
 
-      {/* Store info */}
-
-      <div className="my-4">
+      <div className="">
         <div className="text-2xl font-bold">Store</div>
         <Link
           href="/store"
@@ -79,15 +85,15 @@ async function Page({ params }: Props) {
         </Link>
       </div>
 
-      {/* Reviews */}
-
-      <div className="my-4">
-        <div className="text-2xl font-bold mb-4">Reviews</div>
-        <Review />
-        <Review />
-        <Review />
-        <Review />
-        <Review />
+      <div className="flex flex-col gap-4">
+        <div className="text-2xl font-bold">Reviews</div>
+        <div className="flex flex-col gap-2">
+          <Review />
+          <Review />
+          <Review />
+          <Review />
+          <Review />
+        </div>
         <WriteReview />
       </div>
     </div>
@@ -96,17 +102,18 @@ async function Page({ params }: Props) {
 
 function Review() {
   return (
-    <div className="pb-4 px-8">
-      <div className="flex justify-between translate-y-[0.5rem]">
-        {/* translate-y-[-0.5rem] */}
-        <div className="title  font-extralight text-[12px]">Abbas Askari</div>
-        <div className="title font-extralight text-[12px]">
+    <div className="flex flex-col bg-neutral-800 p-4 rounded-lg">
+      <div className="flex justify-between p-2 border-b border-white">
+        <div className="text-sm">Abbas Askari</div>
+        <div className="text-sm">
           12<sup>th</sup> Sep. 2023
         </div>
       </div>
-      <div className="title text-lg font-semibold">An Amazing Product</div>
-      <div className="px-4">
-        Thanks Mr's Abbas and you'r bros. as well for this awsome product.
+      <div className="flex flex-col p-4">
+        <div className="title text-lg font-semibold">An Amazing Product</div>
+        <div className="">
+          Thanks Mr's Abbas and you'r bros. as well for this awsome product.
+        </div>
       </div>
     </div>
   );
@@ -114,21 +121,20 @@ function Review() {
 
 function WriteReview() {
   return (
-    <div className="pb-4 px-8">
-      <div className="flex justify-between translate-y-[0.5rem]">
-        {/* translate-y-[-0.5rem] */}
-        <div className="title  font-extralight text-[12px]">User Name</div>
-        {/* Get Username from auth */}
-        <div className="title font-extralight text-[12px]">
+    <div className="flex flex-col gap-2">
+      <h1 className="font-bold text-2xl">Add Your Review</h1>
+      <div className="flex justify-between">
+        <div className="text-sm">User Name</div>
+        <div className="text-sm">
           {Date().split(" ").slice(1, 4).join(" ")}
         </div>
       </div>
       <input
-        className="w-[100%] text-lg font-semibold my-2 p-2 outline-none rounded-md text-black"
+        className="w-full form-input"
         placeholder="Enter title for the review"
       />
       <textarea
-        className="w-[100%] px-4 py-2 rounded-md outline-none text-black resize-none"
+        className="w-full form-input resize-none"
         placeholder="Enter you comments about this product."
       />
       <div className="flex justify-end gap-2">
@@ -136,7 +142,7 @@ function WriteReview() {
           Discard
         </button>
         <button className="hover:bg-gray-900 bg-gray-700  transition-colors px-4 py-1 rounded-md">
-          Send
+          Post
         </button>
       </div>
     </div>

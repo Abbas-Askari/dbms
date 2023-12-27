@@ -10,23 +10,25 @@ function ProductCard({ product }: Props) {
   return (
     <Link
       href={`products/${product.id}`}
-      className=" bg-[#ffffff20] rounded-xl p-4 flex flex-col cursor-pointer"
+      className=" bg-neutral-800 rounded-xl p-6 flex flex-col gap-4 cursor-pointer"
     >
       <img
         src="/next.svg"
         alt=""
-        className="bg-white  self-stretch aspect-square"
-      />
-      <div className=" text-2xl">{product.title}</div>
-      <div
-        title={product.description}
-        className=" text-sm  whitespace-nowrap overflow-hidden  text-ellipsis"
-      >
-        {product.description}
+        className="bg-neutral-500 p-2 rounded-xl self-stretch aspect-square"
+          />
+      <div className="flex flex-col gap-2">
+        <div className=" text-3xl font-bold">{product.title}</div>
+        <div
+          title={product.description}
+          className=" text-sm whitespace-nowrap overflow-hidden text-ellipsis text-neutral-300"
+          >
+          {product.description}
+        </div>
       </div>
-      <div className="flex justify-between items-center mt-auto">
-        <div className=" text-lg">${product.price}</div>
-        <div className=" text-sm">
+      <div className="flex justify-between items-center">
+        <div className="text-2xl">${product.price}</div>
+        <div className=" text-lg">
           {product.stock > 0 ? "In stock" : "Out of stock"}
         </div>
       </div>

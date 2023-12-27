@@ -14,11 +14,11 @@ export const authConfig = {
       // } else if (isLoggedIn) {
       //   return Response.redirect(new URL('/store', nextUrl));
       // }
-      if ((nextUrl.pathname.startsWith('/login') || nextUrl.pathname.startsWith('/signup')) && isLoggedIn) {
-        return Response.redirect(new URL('/products', nextUrl));
-      }
-      return isLoggedIn
-      // return true;
+      // if ((nextUrl.pathname.startsWith('/login') || nextUrl.pathname.startsWith('/signup')) && isLoggedIn) {
+      //   return Response.redirect(new URL('/products', nextUrl));
+      // }
+      // return isLoggedIn
+      return true;
     },
     session({ session, user, token }) {
       // session.user = user;
