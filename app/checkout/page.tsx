@@ -8,7 +8,7 @@ const CheckoutProductCard = ({product}) => {
     
 
     return (
-        <div className="flex items-center mb-4 gap-4 items-center  ">
+        <div className="flex items-center gap-4">
             <PhotoIcon className="w-12 h-12"/>
             <div className="flex-1">
                 <div className="">{product.title}</div>
