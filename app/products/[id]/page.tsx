@@ -7,6 +7,7 @@ import { sql } from "@vercel/postgres";
 import { unstable_noStore } from "next/cache";
 import Link from "next/link";
 import React from "react";
+import FormSubmitButton from "@/app/ui/formSubmitButton";
 
 type Props = {
   params: { id: string };
@@ -21,6 +22,8 @@ async function Page({ params }: Props) {
   // const products: Product[] = (await sql`SELECT * FROM product;`)
   //   .rows as Product[];
 
+  // const session = await getSession();
+  const session = await auth();
   // const session = await getSession();
   const session = await auth();
   const addToCartBound = addToCart.bind(null, product.id, session?.user?.id as string);

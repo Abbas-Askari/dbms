@@ -54,7 +54,7 @@ const CheckoutPage = async () => {
                     <ChevronLeftIcon className='w-4 h-4 inline-block text-blue-500'/>
                     <span className='text-blue-500'>More Products</span>
                 </Link>
-                <FormSubmitButton className='bg-blue-500 px-6 py-2 rounded-md text-white font-bold  ' value={'Place Order'} />
+                <FormSubmitButton  className='bg-blue-500 px-6 py-2 rounded-md text-white font-bold  ' value={'Place Order'} type='submit' />
                 {/* <button className='bg-blue-500 px-6 py-2 rounded-md text-white font-bold  '>Place Order</button> */}
             </div>
         </form>
