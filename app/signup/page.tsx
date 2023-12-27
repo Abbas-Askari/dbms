@@ -93,6 +93,7 @@ const page = () => {
                         Sign Up
                     </button>
                 </div>
+
             </form>
         </div>
     );

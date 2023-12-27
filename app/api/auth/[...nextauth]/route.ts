@@ -1,8 +1,8 @@
 import NextAuth from "next-auth";
-import { authConfig } from "./auth.config";
+import { authConfig } from "../../../../auth.config";
 import credentials from "next-auth/providers/credentials";
 import {z } from 'zod';
-import { Customer, User } from "./app/lib/definitions";
+import { Customer, User } from "../../../lib/definitions";
 import { sql } from "@vercel/postgres";
 const bcrypt = require('bcrypt');
 
@@ -16,7 +16,7 @@ async function getUser(email: string) : Promise<Customer | undefined> {
     }
 }
 
-export const {auth, signIn, signOut} = NextAuth({
+const handler = NextAuth({
     ...authConfig,
     providers: [credentials({
         async authorize(credentials, req) {
@@ -38,3 +38,9 @@ export const {auth, signIn, signOut} = NextAuth({
         },
     })]
 })
+
+const GET = handler.handlers.GET;
+const POST = handler.handlers.POST;
+const auth = handler.auth;
+const {signIn, signOut} = handler;
+export { GET, POST, auth, signIn, signOut };

@@ -3,6 +3,7 @@ import React from "react";
 import { Product } from "../lib/definitions";
 import ProductCard from "../ui/productCard";
 import Search from "../ui/search";
+import { unstable_noStore } from "next/cache";
 
 type Props = {
   searchParams: {
@@ -13,6 +14,8 @@ type Props = {
 async function Page({ searchParams }: Props) {
   const { query } = searchParams;
   let result: QueryResult<QueryResultRow>;
+
+  unstable_noStore();
 
   if (query) {
     result = await sql`

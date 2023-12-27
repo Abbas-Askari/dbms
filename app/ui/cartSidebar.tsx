@@ -1,6 +1,6 @@
 'use client';
 
-import { auth } from '@/auth';
+import { auth } from '../api/auth/[...nextauth]/route';
 import { sql } from '@vercel/postgres';
 import { SessionProvider, useSession } from 'next-auth/react';
 import React, { cache, useEffect, useState } from 'react'
@@ -26,7 +26,7 @@ const CartSidebar = ({setIsOpen}) => {
 
     useEffect(() => {
         fetch('/api/cart').then((res) => 
-            res.json().then((result) => setProducts(result.result))
+            res.json().then((result) => {console.log({newProducts: result}); setProducts(result.result)})
         );
     }, []);
 
@@ -43,7 +43,7 @@ const CartSidebar = ({setIsOpen}) => {
 
 
     return (
-        <div className="absolute top-0 right-0 h-[100vh] backdrop-filter backdrop-blur-md  bg-[#000000e8] p-8 flex flex-col">
+        <div className="absolute z-10 top-0 right-0 h-[100vh] backdrop-filter backdrop-blur-md  bg-[#000000e8] p-8 flex flex-col">
             
             <div className="flex items-center justify-between mb-4">
                 <div className=" font-bold text-xl">Cart</div>
