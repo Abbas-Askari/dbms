@@ -7,8 +7,6 @@ import * as dayjs from 'dayjs';
 import OrderModal from '../ui/orderModal';
 dayjs.extend(require('dayjs/plugin/relativeTime'));
 
-
-
 async function getOrders(): Promise<any[]> {
   "use server";
   return (await sql`
@@ -25,9 +23,9 @@ async function OrdersPage() {
   return (
     <div className=" h-screen  ">
         <SellerInfo />
-        <div className="px-16 py-8">
+        <div className="px-16 py-8 bg-neutral-900">
         <div className="overflow-x-auto">
-            <table className="table   ">
+            <table className="table">
               <thead>
                 <tr>
                   <th></th>
@@ -42,15 +40,14 @@ async function OrdersPage() {
               <tbody>
 
                 {
-                  orders.map((order, i) => <tr>
-                    <th>{i}</th>
+                  orders.map((order, i) => <tr className='p-2'>
+                    <th>{i+1}</th>
                     <td className='font-semibold'>{order.title}</td>
-                    <td>{order.first_name + order.last_name}</td>
+                    <td>{order.first_name + " " + order.last_name}</td>
                     <td>{
                         // calculate time ago using dayjs
                         dayjs(order.date).fromNow(true)
-
-                        }</td>
+                        } ago</td>
                     <td>{order.quantity}</td>
                     <td>{numberToDollars(order.quantity * (+order.price))}</td>
                     <OrderModal order={order}/>

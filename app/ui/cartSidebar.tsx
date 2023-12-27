@@ -43,31 +43,28 @@ const CartSidebar = ({setIsOpen}) => {
 
 
     return (
-        <div className="absolute z-10 top-0 right-0 h-[100vh] backdrop-filter backdrop-blur-md  bg-[#000000e8] p-8 flex flex-col">
-            
-            <div className="flex items-center justify-between mb-4">
+        <div className="absolute z-10 top-0 right-0 h-screen backdrop-filter backdrop-blur-md  bg-[#000000e8] p-8 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
                 <div className=" font-bold text-xl">Cart</div>
                 <button onClick={() => setIsOpen(false)}>
                     <XMarkIcon className='w-8 h-8 border-[1px] border-neutral-700 rounded-md p-1'/>
                 </button>
             </div>
 
-            <div className="  flex-1">
+            <div className="flex-1">
                 {products.length > 0 ? products?.map((product) => (
                     <CartProductCard key={product.id} product={product}  setProducts={setProducts}/>
                 )) : <span className='text-neutral-400 italic text-center w-full'>Your cart is empty.</span>}
 
             </div>
 
-            <div className="flex mb-4 text-sm">
-                <div className="mr-auto font-light">Total</div>
+            <div className="flex text-lg justify-between">
+                <div className="font-light">Total</div>
                 <div className=" ">${totalCost.toFixed(2)} USD</div>
-                </div>
-            <button className="btn">This button</button>
+            </div>
 
-            <Link href={'/checkout'} className=' bg-blue-700 px-8 py-3 text-sm rounded-full text-center' onClick={() => setIsOpen(false)}>Proceed to Checkout</Link>
+            <Link href={'/checkout'} className='btn' onClick={() => setIsOpen(false)}>Proceed to Checkout</Link>
         </div>
-
     )
 }
 
