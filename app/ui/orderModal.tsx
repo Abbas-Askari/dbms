@@ -7,11 +7,10 @@ import CompleteOrderButton from "./completeOrderButton";
 function OrderModal({order}: {order: any}) {
 
   return (
-        <tr className="">
-            <button className="btn m-2" onClick={()=>document.getElementById(`${order.id}-order-modal`).showModal()}>Manage</button>
+        <td className="">
+            <button className="btn m-2  w-full" onClick={()=>document.getElementById(`${order.id}-order-modal`).showModal()}>Manage</button>
             <dialog id={`${order.id}-order-modal`} className="modal">
             <div className="modal-box">
-
             <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
             <div className="card-body">
                 <h2 className="card-title">{order.first_name + " " + order.last_name}</h2>
@@ -45,7 +44,10 @@ function OrderModal({order}: {order: any}) {
                     <div className=" text-xl font-bold">{numberToDollars(+order.price * order.quantity)}</div>
                 </div>
                 <div className="card-actions flex mt-4">
-                    <form className="flex-1 flex" action={() => completeOrder(order.order_id, order.product_id)}>
+                    <form className="flex-1 flex" action={async () => {
+                        await completeOrder(order.order_id, order.product_id);
+                        document.getElementById(`${order.id}-order-modal`).close();
+                    }}>
                         <CompleteOrderButton />
                     </form>
                     <form method="dialog" className="flex-1">
@@ -59,7 +61,7 @@ function OrderModal({order}: {order: any}) {
                 <button>close</button>
             </form>
             </dialog>
-        </tr>
+        </td>
     )
 }
 

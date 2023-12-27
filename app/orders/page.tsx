@@ -41,7 +41,7 @@ async function OrdersPage() {
 
                 {
                   orders.map((order, i) => <tr className='p-2'>
-                    <th>{i+1}</th>
+                    <td>{i+1}</td>
                     <td className='font-semibold'>{order.title}</td>
                     <td>{order.first_name + " " + order.last_name}</td>
                     <td>{
