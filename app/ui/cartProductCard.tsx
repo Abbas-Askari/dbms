@@ -18,7 +18,7 @@ export const CartProductCard = ({product, setProducts} : any) => {
             <PhotoIcon className='w-24 h-24'/>
             <div className="flex-1 mb-4">
                 <div className="flex justify-between gap-16 mb-2">
-                    <div className='  '>{product.title}</div>
+                    <div className=' min-w-max font-bold'>{product.title}</div>
                     <div className=''>${product.price * product.quantity}</div>
                 </div>
                     <div className="ml-auto flex border-[1px] border-neutral-700 w-min px-3 py-1 gap-4 rounded-full">

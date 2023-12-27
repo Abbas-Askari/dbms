@@ -33,12 +33,9 @@ const CartSidebar = ({setIsOpen}) => {
     }, 0) || 0;
 
     return (
-        <div className="absolute z-10 top-0 right-0 h-screen backdrop-filter backdrop-blur-md  bg-[#000000e8] p-8 flex flex-col gap-4">
+        <div className="z-100 h-screen backdrop-filter backdrop-blur-md  bg-[#000000d0] p-8 flex flex-col gap-4 w-max">
             <div className="flex items-center justify-between">
                 <div className=" font-bold text-xl">Cart</div>
-                <button onClick={() => setIsOpen(false)}>
-                    <XMarkIcon className='w-8 h-8 border-[1px] border-neutral-700 rounded-md p-1'/>
-                </button>
             </div>
 
             {
@@ -51,7 +48,9 @@ const CartSidebar = ({setIsOpen}) => {
                     </div>
                 :
                     <div className="flex-1 flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-neutral-700"></div>
+                        {/* <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-neutral-700"></div> */}
+                        <span className="loading loading-spinner loading-lg"></span>
+
                     </div>
             }
 

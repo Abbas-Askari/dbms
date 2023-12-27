@@ -8,6 +8,7 @@ import CartSidebar from './cartSidebar';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import { LogoutButton } from './LogoutButton';
+import Cart from './cart';
 
 
 async function searchProducts(formData: FormData) {
@@ -40,9 +41,8 @@ const Nav = () => {
             <MagnifyingGlassIcon className='w-6 h-6 '/>
         </div> */}
         <div className="flex gap-4 ">
-
             <LogoutButton />
-            <CartToggleButton />
+            <Cart />
         </div>
 
     </div>
