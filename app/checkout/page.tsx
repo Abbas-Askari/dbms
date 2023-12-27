@@ -3,6 +3,7 @@ import { getCartProducts, placeOrder } from '../lib/cartActions';
 import { ChevronLeftIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import FormInput from '../ui/formInput';
 import Link from 'next/link';
+import FormSubmitButton from '../ui/formSubmitButton';
 
 const CheckoutProductCard = ({product}) => {
     
@@ -53,7 +54,8 @@ const CheckoutPage = async () => {
                     <ChevronLeftIcon className='w-4 h-4 inline-block text-blue-500'/>
                     <span className='text-blue-500'>More Products</span>
                 </Link>
-                <button className='bg-blue-500 px-6 py-2 rounded-md text-white font-bold  '>Place Order</button>
+                <FormSubmitButton className='bg-blue-500 px-6 py-2 rounded-md text-white font-bold  ' value={'Place Order'} />
+                {/* <button className='bg-blue-500 px-6 py-2 rounded-md text-white font-bold  '>Place Order</button> */}
             </div>
         </form>
         <div className="flex-1 flex flex-col border-l-[1px] border-neutral-700 p-16">

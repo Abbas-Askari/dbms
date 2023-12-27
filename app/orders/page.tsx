@@ -14,7 +14,7 @@ async function getOrders(): Promise<any[]> {
   return (await sql`
       SELECT * FROM order_ JOIN customer ON order_.customer_id = customer_id
       JOIN orderProducts ON order_.id = orderProducts.order_id JOIN product ON orderProducts.product_id = product.id
-      JOIN address ON address.id::INT = order_.address_id::INT;
+      JOIN address ON address.id::INT = order_.address_id::INT WHERE completed = false;
   `).rows;
 }
 

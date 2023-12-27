@@ -58,8 +58,8 @@ export async function updateProductQuantity(product_id: string, customer_id: str
 export async function getCartProducts() {
     unstable_noStore();
     try {
-        // const session = await auth();
-        const session = await getSession();
+        const session = await auth();
+        // const session = await getSession();
         const result = await sql`SELECT * FROM product JOIN cart ON cart.product_id = product.id WHERE cart.customer_id = ${session?.user?.id} ORDER BY product.id`;
         console.log("getting cart products!");
         return result.rows as any[];
@@ -70,8 +70,8 @@ export async function getCartProducts() {
 
 export async function placeOrder(formData: FormData) {
     try {
-        const session = await getSession();
-        // const session = await auth();
+        // const session = await getSession();
+        const session = await auth();
         const cart = await getCartProducts();   
         const addressResult = await sql`INSERT INTO address (address, city, province, zip_code) VALUES 
             (${formData.get('address')}, ${formData.get('city')}, ${formData.get('province')}, ${formData.get('zip_code')}) RETURNING id;
@@ -94,4 +94,18 @@ export async function placeOrder(formData: FormData) {
     
 
     console.log(formData)
+}
+
+export async function completeOrder(orderId: number, productId: number) {
+    try {
+        const result = await sql`
+            UPDATE orderProducts SET completed = true WHERE order_id = ${orderId} AND product_id = ${productId  };;    
+        `;
+
+        console.log("Success!", {result});
+        revalidatePath(`/orders`);
+    }
+    catch (error) {
+        console.error("Failed to complete order", error);
+    }
 }

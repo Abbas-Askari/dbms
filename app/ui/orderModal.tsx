@@ -1,6 +1,8 @@
 'use client';
 
+import { completeOrder } from "../lib/cartActions";
 import { numberToDollars } from "../utils/general";
+import CompleteOrderButton from "./completeOrderButton";
 
 function OrderModal({order}: {order: any}) {
     console.log({order})
@@ -38,7 +40,9 @@ function OrderModal({order}: {order: any}) {
                     <div className=" text-xl font-bold">{numberToDollars(+order.price * order.quantity)}</div>
                 </div>
                 <div className="card-actions flex mt-4">
-                    <button className="btn btn-primary flex-1 ">Finish Order</button>
+                    <form action={() => completeOrder(order.order_id, order.product_id)}>
+                        <CompleteOrderButton />
+                    </form>
                     <form method="dialog" className=" flex-1">
                         <button className="btn  btn-info w-full ">Close</button>
                     </form>
