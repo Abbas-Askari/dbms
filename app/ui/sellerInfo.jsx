@@ -3,7 +3,7 @@ import next from "../../public/next.svg";
 
 function SellerInfo() {
   return (
-    <div className=" p-8 flex gap-8 items-center">
+    <div className="p-8 flex gap-8 items-center">
       <img
         src={"/next.svg"}
         alt=""

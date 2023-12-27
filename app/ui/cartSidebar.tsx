@@ -33,7 +33,7 @@ const CartSidebar = ({setIsOpen}) => {
     }, 0) || 0;
 
     return (
-        <div className="z-100 h-screen backdrop-filter backdrop-blur-md  bg-[#000000d0] p-8 flex flex-col gap-4 w-max">
+        <div className="z-100 h-screen bg-black bg-opacity-90 p-8 flex flex-col gap-4 w-max">
             <div className="flex items-center justify-between">
                 <div className=" font-bold text-xl">Cart</div>
             </div>
