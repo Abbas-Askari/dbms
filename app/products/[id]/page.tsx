@@ -8,14 +8,16 @@ import { unstable_noStore } from "next/cache";
 import Link from "next/link";
 import React from "react";
 import FormSubmitButton from "@/app/ui/formSubmitButton";
+import CarouselButton from "./carousel";
+import CarouselButtons from "./carousel";
 
 type Props = {
   params: { id: string };
 };
 
 async function Page({ params }: Props) {
-  unstable_noStore();
-  
+  // unstable_noStore();
+
   const { id } = params;
   const product: Product = await getProductById(id);
 
@@ -25,31 +27,80 @@ async function Page({ params }: Props) {
   // const session = await getSession();
   const session = await auth();
   // const session = await getSession();
-  const addToCartBound = addToCart.bind(null, product.id, session?.user?.id as string);
-  const removeFromCartBound = removeFromCart.bind(null, product.id, session?.user?.id as string);
-  const inCart = (await sql`SELECT * FROM cart WHERE product_id=${product.id} AND customer_id=${session?.user?.id};`).rowCount > 0;
+  const addToCartBound = addToCart.bind(
+    null,
+    product.id,
+    session?.user?.id as string
+  );
+  const removeFromCartBound = removeFromCart.bind(
+    null,
+    product.id,
+    session?.user?.id as string
+  );
+  const inCart =
+    (
+      await sql`SELECT * FROM cart WHERE product_id=${product.id} AND customer_id=${session?.user?.id};`
+    ).rowCount > 0;
+
+  const images = (
+    await sql`
+        SELECT * from image;
+      `
+  ).rows;
 
   return (
     <div className="p-8 flex flex-col gap-4">
       <div className="flex">
-        <div className="flex p-8 px-16 gap-8">
-          <div className="flex-1 h-full aspect-square">
-            <img
-              src=""
+        <div className="flex flex-1 p-8 px-16 gap-8">
+          <div className="flex-1 h-full aspect-square relative">
+            {/* <img src="" alt="" className="bg-white rounded-xl aspect-square" /> */}
+            {/* <img
+              src={images[0].data}
               alt=""
               className="bg-white rounded-xl aspect-square"
-              />
+            /> */}
+
+            <CarouselButtons className="absolute left-2 right-2 top-[50%] translate-y-[-50%]" />
+
+            {/* <CarouselButton
+              isLeft={false}
+              className="absolute right-2 top-[50%] translate-y-[-50%]"
+            /> */}
+            <div className="w-full h-full carousel rounded-box">
+              <div className="carousel-item w-full">
+                <img
+                  src="https://daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg"
+                  className="w-full"
+                  alt="Tailwind CSS Carousel component"
+                />
+              </div>
+
+              {images.map((image) => (
+                <div className="carousel-item w-full">
+                  <img
+                    src={image.data}
+                    className="w-full object-contain"
+                    alt={image.name}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
+
           <div className="flex flex-col flex-[2_2_0%] justify-between">
             <div className="flex flex-col gap-4">
-
-            <div className="flex justify-between">
-              <div className="text-4xl font-bold">{product.title}</div>
-              <form action={!inCart ? addToCartBound : removeFromCartBound}>
-                <FormSubmitButton className=" bg-gray-800 hover:bg-gray-600 outline-none px-6 py-2 rounded-lg mx-auto  " value={!inCart ? "Add to Cart" : "Remove from Cart"} />
-              </form>
-            </div>
-            <div className="text-lg text-neutral-300">{product.description}</div>
+              <div className="flex justify-between">
+                <div className="text-4xl font-bold">{product.title}</div>
+                <form action={!inCart ? addToCartBound : removeFromCartBound}>
+                  <FormSubmitButton
+                    className=" bg-gray-800 hover:bg-gray-600 outline-none px-6 py-2 rounded-lg mx-auto  "
+                    value={!inCart ? "Add to Cart" : "Remove from Cart"}
+                  />
+                </form>
+              </div>
+              <div className="text-lg text-neutral-300">
+                {product.description}
+              </div>
             </div>
             <div className="flex justify-between items-center">
               <div className="text-4xl">${product.price}</div>
@@ -57,7 +108,6 @@ async function Page({ params }: Props) {
                 {product.stock > 0 ? "In stock" : "Out of stock"}
               </div>
             </div>
-          
           </div>
         </div>
       </div>
@@ -126,9 +176,7 @@ function WriteReview() {
       <h1 className="font-bold text-2xl">Add Your Review</h1>
       <div className="flex justify-between">
         <div className="text-sm">User Name</div>
-        <div className="text-sm">
-          {Date().split(" ").slice(1, 4).join(" ")}
-        </div>
+        <div className="text-sm">{Date().split(" ").slice(1, 4).join(" ")}</div>
       </div>
       <input
         className="w-full form-input"

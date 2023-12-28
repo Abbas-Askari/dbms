@@ -14,7 +14,7 @@ function Cart() {
         </div> 
         <div className="drawer-side  z-20 overflow-hidden">
             <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label>
-            <div className="menu min-h-full text-base-content w-[min-content]">
+            <div className="menu min-h-full text-base-content w-[min-content] p-0">
                 <CartSidebar setIsOpen={async () => {
                     'use server'
                 }} />

@@ -12,7 +12,7 @@ import { NextResponse } from "next/server";
 
 
 // CREATE TABLE IF NOT EXISTS customer (
-//     id VARCHAR(255) PRIMARY KEY,
+//     id SERIAL PRIMARY KEY,
 //     email VARCHAR(255) NOT NULL CHECK ( email like '%@%.%'),
 //     password VARCHAR(255) NOT NULL,
 //     first_name VARCHAR(255) NOT NULL,
@@ -56,12 +56,19 @@ import { NextResponse } from "next/server";
 
 // ALTER TABLE orderProducts ALTER COLUMN order_id TYPE INT USING order_id::INT
 
+// CREATE TABLE IF NOT EXISTS image (
+//   id SERIAL PRIMARY KEY,
+//   name VARCHAR(255) NOT NULL,
+//   data TEXT NOT NULL
+// );
+
 export async function GET(request: Request) {
   try {
-    // const result = await sql`
-    //       `;
+    //write schema from image table to store images in base64 format
+    const result = await sql`
+    `;
     revalidatePath('/');
-    return NextResponse.json({  }, { status: 200 });
+    return NextResponse.json({ result }, { status: 200 });
   } catch (error) {
     console.error("Failed to create tables: ", error);
     return NextResponse.json({ error }, { status: 500 });
