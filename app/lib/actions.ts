@@ -51,8 +51,8 @@ export async function updateProduct(id: number, formData: FormData) {
     price: formData.get("price"),
   };
 
-  // const images = JSON.parse(formData.get("images") as string);
-  // updateProductImages(id, images);
+  const images = JSON.parse(formData.get("images") as string);
+  updateProductImages(id, images);
 
   try {
     const result = await DB.query(`
@@ -74,7 +74,7 @@ export async function updateProduct(id: number, formData: FormData) {
   revalidatePath("/products");
   revalidatePath("/store");
   // revalidatePath("/");
-  redirect("/store");
+  // redirect("/store");
 }
 
 export async function getProductById(id: string) {
