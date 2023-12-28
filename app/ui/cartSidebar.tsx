@@ -40,11 +40,19 @@ const CartSidebar = ({ setIsOpen }) => {
       return acc + product.price * product.quantity;
     }, 0) || 0;
 
+<<<<<<< HEAD
   return (
     <div className="z-100 h-screen backdrop-filter backdrop-blur-md  bg-[#000000a0] p-8 flex flex-col gap-4 w-max">
       <div className="flex items-center justify-between">
         <div className=" font-bold text-xl">Cart</div>
       </div>
+=======
+    return (
+        <div className="z-100 h-screen bg-black bg-opacity-90 p-8 flex flex-col gap-4 w-max">
+            <div className="flex items-center justify-between">
+                <div className=" font-bold text-xl">Cart</div>
+            </div>
+>>>>>>> de3e9fab5f0dd7fc1dcdf8c96f19a6fc518b9185
 
       {data ? (
         <div className="  flex-1">
