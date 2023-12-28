@@ -4,6 +4,7 @@ import { Product } from "../lib/definitions";
 import ProductCard from "../ui/productCard";
 import Search from "../ui/search";
 import { unstable_noStore } from "next/cache";
+import DB, { SQL } from "@/database";
 
 type Props = {
   searchParams: {
@@ -18,13 +19,13 @@ async function Page({ searchParams }: Props) {
   unstable_noStore();
 
   if (query) {
-    result = await sql`
+    result = await DB.query(`
     SELECT * FROM product WHERE starts_with(LOWER(title), LOWER(${query}));
-  `;
+  `);
   } else {
-    result = await sql`
+    result = await DB.query(`
       SELECT * FROM product;
-    `;
+    `);
   }
 
   const products: Product[] = result.rows as Product[];

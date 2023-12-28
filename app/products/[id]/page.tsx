@@ -3,13 +3,16 @@ import { addToCart, removeFromCart } from "@/app/lib/cartActions";
 import { Product } from "@/app/lib/definitions";
 import SellerInfo from "@/app/ui/sellerInfo";
 import { auth } from "@/app/api/auth/[...nextauth]/route";
-import { sql } from "@vercel/postgres";
+// import { sql } from "@vercel/postgres";
+// import { sql } from "@/database";
 import { unstable_noStore } from "next/cache";
 import Link from "next/link";
 import React from "react";
 import FormSubmitButton from "@/app/ui/formSubmitButton";
 import CarouselButton from "./carousel";
 import CarouselButtons from "./carousel";
+import DB from "@/database";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: { id: string };
@@ -20,6 +23,7 @@ async function Page({ params }: Props) {
 
   const { id } = params;
   const product: Product = await getProductById(id);
+  if (!product) notFound();
 
   // const products: Product[] = (await sql`SELECT * FROM product;`)
   //   .rows as Product[];
@@ -39,33 +43,19 @@ async function Page({ params }: Props) {
   );
   const inCart =
     (
-      await sql`SELECT * FROM cart WHERE product_id=${product.id} AND customer_id=${session?.user?.id};`
+      await DB.query(
+        `SELECT * FROM cart WHERE product_id=${product.id} AND customer_id=${session?.user?.id};`
+      )
     ).rowCount > 0;
 
-  const images = (
-    await sql`
-        SELECT * from image;
-      `
-  ).rows;
+  const images = (await DB.query(`SELECT * from image;`)).rows;
 
   return (
     <div className="p-8 flex flex-col gap-4">
       <div className="flex">
         <div className="flex flex-1 p-8 px-16 gap-8">
           <div className="flex-1 h-full aspect-square relative">
-            {/* <img src="" alt="" className="bg-white rounded-xl aspect-square" /> */}
-            {/* <img
-              src={images[0].data}
-              alt=""
-              className="bg-white rounded-xl aspect-square"
-            /> */}
-
             <CarouselButtons className="absolute left-2 right-2 top-[50%] translate-y-[-50%]" />
-
-            {/* <CarouselButton
-              isLeft={false}
-              className="absolute right-2 top-[50%] translate-y-[-50%]"
-            /> */}
             <div className="w-full h-full carousel rounded-box">
               <div className="carousel-item w-full">
                 <img
@@ -74,7 +64,6 @@ async function Page({ params }: Props) {
                   alt="Tailwind CSS Carousel component"
                 />
               </div>
-
               {images.map((image) => (
                 <div className="carousel-item w-full">
                   <img

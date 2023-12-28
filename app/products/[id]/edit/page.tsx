@@ -1,5 +1,6 @@
 import { updateProduct } from "@/app/lib/actions";
 import { ProductForm } from "@/app/ui/productForm";
+import DB from "@/database";
 import { sql } from "@vercel/postgres";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -7,9 +8,9 @@ import { rule } from "postcss";
 import React from "react";
 
 async function Page({ params }: { params: { id: string } }) {
-  const id = params.id;
+  const id = +params.id;
 
-  const result = await sql`SELECT * FROM product WHERE id=${id}`;
+  const result = await DB.query(`SELECT * FROM product WHERE id=${id}`);
 
   if (!result.rowCount) {
     notFound();
@@ -68,7 +69,14 @@ async function Page({ params }: { params: { id: string } }) {
     //     </div>
     //   </div>
     // </form>
-    <ProductForm actionCallback={updateProductWithId} title={product.title} price={product.price} stock={product.stock} desc={product.description}/>
+    <ProductForm
+      id={id}
+      actionCallback={updateProductWithId}
+      title={product.title}
+      price={product.price}
+      stock={product.stock}
+      desc={product.description}
+    />
   );
 }
 

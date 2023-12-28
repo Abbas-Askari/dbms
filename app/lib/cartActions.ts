@@ -1,5 +1,6 @@
 "use server";
 
+import DB from "@/database";
 import { auth } from "../api/auth/[...nextauth]/route";
 import { sql } from "@vercel/postgres";
 import { randomUUID } from "crypto";
@@ -13,16 +14,17 @@ export async function addToCart(
   formData: FormData
 ) {
   try {
-    const res = await sql`
+    const res = await DB.query(`
         INSERT INTO cart VALUES(
             ${product_id},
             ${customer_id},
             ${1}
-        )`;
+        )`);
   } catch (error) {
     console.log("Failed to add to cart: ", error);
   }
   revalidatePath(`/products/${product_id}`);
+  revalidatePath(`/`);
   revalidateTag("cart");
 }
 
@@ -32,9 +34,9 @@ export async function removeFromCart(
   formData: FormData
 ) {
   try {
-    const res = await sql`
+    const res = await DB.query(`
             DELETE FROM cart WHERE product_id=${product_id} AND customer_id=${customer_id};
-        `;
+        `);
   } catch (error) {
     console.log("Failed to add to cart: ", error);
   }
@@ -51,9 +53,9 @@ export async function updateProductQuantity(
   unstable_noStore();
 
   try {
-    const res = await sql`
+    const res = await DB.query(`
             UPDATE cart SET quantity = ${quantity} WHERE product_id=${product_id} AND customer_id=${customer_id};
-        `;
+        `);
     console.log({ res, row: res.rows }, "updating quantity");
     return { res, error: false };
   } catch (error) {
@@ -72,8 +74,9 @@ export async function getCartProducts() {
   try {
     const session = await auth();
     // const session = await getSession();
-    const result =
-      await sql`SELECT * FROM product JOIN cart ON cart.product_id = product.id WHERE cart.customer_id = ${session?.user?.id} ORDER BY product.id`;
+    const result = await DB.query(
+      `SELECT * FROM product JOIN cart ON cart.product_id = product.id WHERE cart.customer_id = ${session?.user?.id} ORDER BY product.id`
+    );
     console.log("getting cart products!");
     return result.rows as any[];
   } catch (error) {
@@ -84,8 +87,9 @@ export async function getCartProducts() {
 export async function clearCart() {
   try {
     const session = await auth();
-    const result =
-      await sql`DELETE FROM cart WHERE customer_id = ${session?.user?.id}`;
+    const result = await DB.query(
+      `DELETE FROM cart WHERE customer_id = ${session?.user?.id}`
+    );
     console.log("Success!");
     revalidatePath(`/`);
   } catch (error) {
@@ -99,26 +103,27 @@ export async function placeOrder(formData: FormData) {
     const session = await auth();
     const cart = await getCartProducts();
     const addressResult =
-      await sql`INSERT INTO address (address, city, province, zip_code) VALUES 
-            (${formData.get("address")}, ${formData.get(
-        "city"
-      )}, ${formData.get("province")}, ${formData.get(
+      await DB.query(`INSERT INTO address (address, city, province, zip_code) VALUES 
+            ('${formData.get("address")}', '${formData.get("city")}',
+            '${formData.get("province")}', ${formData.get(
         "zip_code"
       )}) RETURNING id;
-        `;
+        `);
     const addressId = addressResult.rows[0].id as number;
     console.log({ rows: addressResult.rows });
     const orderResult =
-      await sql`INSERT INTO order_ (date, customer_id, address_id) VALUES
-            (${new Date()}, ${session?.user?.id}, ${addressId}) RETURNING id;
-        `;
+      await DB.query(`INSERT INTO orders (date, customer_id, address_id) VALUES
+            ('${new Date().toISOString()}', ${
+        session?.user?.id
+      }, ${addressId}) RETURNING id;
+        `);
     const orderId = orderResult.rows[0].id as number;
     const defectiveQuery =
       `INSERT INTO orderproducts VALUES ` +
       cart
         ?.map((product) => `(${orderId}, ${product.id} ,${product.quantity})`)
         .join(", ");
-    const orderProductsResult = await sql.query(defectiveQuery);
+    const orderProductsResult = await DB.query(defectiveQuery);
 
     console.log("Success!");
     clearCart();
@@ -134,9 +139,9 @@ export async function placeOrder(formData: FormData) {
 
 export async function completeOrder(orderId: number, productId: number) {
   try {
-    const result = await sql`
+    const result = await DB.query(`
             UPDATE orderProducts SET completed = true WHERE order_id = ${orderId} AND product_id = ${productId};;    
-        `;
+        `);
 
     console.log("Success!", { result });
     revalidatePath(`/orders`);

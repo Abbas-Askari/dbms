@@ -42,21 +42,14 @@ function CarouselButtons({ className, ...props }: Props) {
           button.parentNode.getBoundingClientRect().width
       : false;
 
-    console.log(
-      button.parentNode.parentNode.lastChild.scrollLeft,
-      button.parentNode?.parentNode?.lastChild.scrollWidth,
-      button.parentNode.getBoundingClientRect().width
-    );
-
     setDisabledLeft(disabledLeft);
     setDisabledRight(disabledRight);
   }
 
-  console.log({ disabledLeft, disabledRight });
-
   return (
     <div ref={ref} className={`${className}  flex justify-between`}>
       <button
+        type="button"
         onClick={() => handleClick(true)}
         disabled={disabledLeft}
         className={` btn btn-circle  btn-sm active:transfrom-y-[-50%] `}
@@ -66,6 +59,7 @@ function CarouselButtons({ className, ...props }: Props) {
       </button>
 
       <button
+        type="button"
         onClick={() => handleClick(false)}
         disabled={disabledRight}
         className={` btn btn-circle  btn-sm active:transfrom-y-[-50%] `}
