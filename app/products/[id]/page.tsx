@@ -48,7 +48,11 @@ async function Page({ params }: Props) {
       )
     ).rowCount > 0;
 
-  const images = (await DB.query(`SELECT * from image;`)).rows;
+  const images = (
+    await DB.query(`
+    SELECT * from image WHERE id IN 
+      (SELECT image_id FROM productimage WHERE product_id = ${product.id}) ;`)
+  ).rows;
 
   return (
     <div className="p-8 flex flex-col gap-4">

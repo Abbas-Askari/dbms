@@ -59,6 +59,7 @@ export function Carousel({ productId, className, formInput, ...props }: Props) {
         className=" hidden"
         name="images"
         value={JSON.stringify(images)}
+        readOnly={true}
       />
 
       <div className="w-full h-full carousel rounded-box">
