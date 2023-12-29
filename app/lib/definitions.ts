@@ -44,3 +44,13 @@ export type Image = {
   data: string;
   name: string;
 };
+
+export type Review = {
+  id: number;
+  product_id: number;
+  customer_id: number;
+  date: Date;
+  title: string;
+  content: string;
+  rating: number;
+};

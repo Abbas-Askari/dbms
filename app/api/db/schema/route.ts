@@ -74,11 +74,23 @@ import { NextResponse } from "next/server";
 //   FOREIGN KEY (product_id) REFERENCES product(id)
 // )
 
+// CREATE TABLE IF NOT EXISTS review (
+//   id SERIAL PRIMARY KEY,
+//   product_id INT NOT NULL,
+//   customer_id INT NOT NULL,
+//   title TEXT NOT NULL,
+//   content TEXT NOT NULL,
+//   rating INT NOT NULL,
+//   FOREIGN KEY (product_id) REFERENCES product(id),
+//   FOREIGN KEY (customer_id) REFERENCES customer(id)
+// );
+
 export async function GET(request: Request) {
   try {
-    //write schema from image table to store images in base64 format
+    //write schema for the review table
     const result = await DB.query(`
     `);
+
     revalidatePath("/");
     return NextResponse.json({ result }, { status: 200 });
   } catch (error) {
