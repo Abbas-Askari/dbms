@@ -1,7 +1,8 @@
 "use client"
 import Link from "next/link";
-import { createCustomer } from "../lib/userActions";
+import { createCustomer, makeCustomer } from "../lib/userActions";
 import { useEffect, useState } from "react";
+import { Carousel } from "../ui/carousel";
 
 
 const page = () => {
@@ -13,6 +14,8 @@ const page = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
+    const [storeName, setStoreName] = useState("")
+    const [storeDesc, setStoreDesc] = useState("")
     const [error, setError] = useState("")
 
     const verifyEmail = (value: string) => {
@@ -40,7 +43,7 @@ const page = () => {
 
     return (
         <div className="flex justify-center items-center flex-1">
-            <form className="flex flex-col gap-4 bg-white shadow-md min-w-[25%] rounded-xl p-12" action={() => console.log("Submitted")}>
+            <form className="flex flex-col gap-4 bg-white shadow-md min-w-[25%] rounded-xl p-12" action={() => role === "Customer" ? makeCustomer({email, phoneNumber, password, firstName, lastName}) : console.log("Making Shop")}>
                 <h3 className="text-gray-700 font-bold text-3xl text-center">
                     Sign up
                 </h3>
@@ -48,21 +51,7 @@ const page = () => {
                 {page === 0 && 
                 <>
                 <h1 className="font-bold text-2xl text-neutral-700">Select Your Role: </h1>
-                {/* <div className="flex flex-col gap-4">
-                <div className="flex gap-2">
-                <input type="radio" name="userType" id="customer" value={"Customer"} defaultChecked onChange={() => setRole("Customer")}/>
-                <label className="block text-gray-700 text-lg font-bold" htmlFor="customer">
-                    Customer
-                </label>
-                </div>
-                <div className="flex gap-2">
-
-                <input type="radio" name="userType" id="vendor" value={"Vendor"} onChange={() => setRole("Vendor")}/>
-                <label className="block text-gray-700 text-lg font-bold" htmlFor="vendor">
-                    Vendor
-                </label>
-                </div>
-                </div> */}
+                
                 <div className="flex rounded-xl overflow-hidden border-2 border-black">
                     <button type="button"  onClick={() => setRole("Customer")} className={`${role === "Customer" ? "bg-red-500 text-white": "bg-neutral-900 text-neutral-100 hover:bg-white hover:text-black"} flex-1 font-mono text-xl p-4 border-r border-white `}>Customer</button>
                     <button type="button"  onClick={() => setRole("Vendor")} className={`${role === "Vendor" ? "bg-red-500 text-white": "bg-neutral-900 text-neutral-100 hover:bg-white hover:text-black"} flex-1 font-mono text-xl p-4 border-l border-white `}>Vendor</button>
@@ -167,101 +156,54 @@ const page = () => {
                 {error && <p className="text-red-500 underline text-sm">{error}</p>}
                 <div className="flex gap-2">
                 <button type="button"  className="btn flex-1" onClick={() => setPage(2)}>Previous</button>
-                {role === "Customer" && <button type="submit"  className="btn btn-primary flex-1" onClick={() => {if (isFilled(phoneNumber, password)) console.log(email, firstName, lastName, password, phoneNumber)}}>Done</button>}
-                {role === "Vendor" && <button type="submit"  className="btn btn-primary flex-1" onClick={() => {if (isFilled(phoneNumber, password)) console.log(email, firstName, lastName, password, phoneNumber)}}>Setup Shop</button>}
+                {role === "Customer" && <button type="submit"  className="btn btn-primary flex-1">Done</button>}
+                {role === "Vendor" && <button type="button" onClick={() => setPage(4)}  className="btn flex-1">Setup Shop</button>}
                 </div>
                 </>}
 
-                {/* <div className="grid grid-cols-2 gap-4 gap-x-8">
-                    <div className="flex flex-col gap-2">
-                        <label className="block text-gray-700 text-lg font-bold" htmlFor="name">
-                            First Name
-                        </label>
+                {page === 4 && role === "Vendor" && 
+                <>
+                <div className="flex flex-col gap-2">
+                    <div className="flex gap-2">
+                    <Carousel
+                    className="aspect-square w-48 h-48"
+                    formInput={true}
+                    />
+
+                    <div className="flex flex-col gap-2 w-96">
                         <input
-                            className="form-input w-72"
-                            id="first_name"
-                            name="first_name"
+                            className="form-input"
+                            id="storeName"
+                            name="storeName"
                             type="text"
-                            placeholder="Enter your first name"
-                        />
-                    </div> 
-                    <div className="flex flex-col gap-2">
-                        <label className="block text-gray-700 text-lg font-bold" htmlFor="name">
-                            Last Name
-                        </label>
-                        <input
-                            className="form-input w-72"
-                            id="last_name"
-                            name="last_name"
-                            type="text"
-                            placeholder="Enter your last name"
-                        />
-                    </div> 
-                    <div className="flex flex-col gap-2">
-                        <label className="block text-gray-700 text-lg font-bold" htmlFor="name">
-                            Phone
-                        </label>
-                        <input
-                            className="form-input w-72"
-                            id="phone"
-                            name="phone"
-                            type="text"
-                            placeholder="Enter your phone number"
+                            placeholder="Enter your Store's Name"
+                            value={storeName}
+                            onChange={(e) => setStoreName(e.target.value)}
                             />
-                    </div>  
-                    <div className="flex flex-col gap-2">
-                        <label className="block text-gray-700 text-lg font-bold" htmlFor="email">
-                            Email
-                        </label>
-                        <input
-                            className="form-input w-72"
-                            id="email"
-                            name="email"
-                            type="email"
-                            placeholder="Enter your email"
+                        <textarea
+                            className="form-input flex-1"
+                            id="storeDesc"
+                            name="storeDesc"
+                            placeholder="Enter your Store's Description"
+                            value={storeDesc}
+                            onChange={(e) => setStoreDesc(e.target.value)}
                             />
                     </div>
-                    <div className="flex flex-col gap-2">
-                        <label className="block text-gray-700 text-lg font-bold" htmlFor="password">
-                            Password
-                        </label>
-                        <input
-                            className="form-input w-72"
-                            id="password"
-                            name="password"
-                            type="password"
-                            placeholder="Enter your password"
-                            />
                     </div>
-                    <div className="flex flex-col gap-2">
-                        <label className="block text-gray-700 text-lg font-bold" htmlFor="confirmPassword">
-                            Confirm Password
-                        </label>
-                        <input
-                            className="form-input w-72"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            type="password"
-                            placeholder="Re-enter your password"
-                        />
-                    </div>
-                </div> */}
+                </div>
+                <div className="flex gap-2">
+                <button type="button"  className="btn flex-1" onClick={() => setPage(3)}>Previous</button>
+                <button type="submit"  className="btn btn-primary flex-1">Done</button>
+                </div>
+                </>}
+
+                
                 <p className="text-black text-center">
                     Already have an account? <Link href={'/login'} className="text-blue-500">Sign In</Link>
                 </p>
-                {/* <div className="flex items-center justify-center">
-                    <button
-                        className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline"
-                        type="submit"
-                    >
-                        Sign Up
-                    </button>
-                </div> */}
 
             </form>
         </div>
-
-        // <></>
     );
 };
 

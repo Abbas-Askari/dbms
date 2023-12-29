@@ -8,7 +8,7 @@ type Props = {
   desc?: string;
   price?: number;
   stock?: number;
-  id: number;
+  id?: number;
 };
 
 export const ProductForm = ({
@@ -23,13 +23,16 @@ export const ProductForm = ({
     <div className="flex justify-center items-center flex-1">
       <form
         action={actionCallback}
-        className="w-1/2 flex flex-col gap-4 bg-neutral-800 text-white shadow-md rounded-xl p-12 artboard"
+        className="w-1/2 flex flex-col gap-4 bg-neutral-800 text-white shadow-md rounded-xl p-12"
       >
+        <div className="flex gap-4">
         <Carousel
           productId={id}
-          className="aspect-square flex-1 w-48 h-48 mx-auto "
+          className="aspect-square w-48 h-48 mx-auto "
           formInput={true}
-        />
+          />
+
+        <div className="flex flex-col gap-2 flex-1">
         <div className="group">
           <label htmlFor="images" className="">
             Title
@@ -52,20 +55,25 @@ export const ProductForm = ({
             className="textarea textarea-bordered"
             placeholder="Add some description"
             defaultValue={desc}
-          ></textarea>
+            rows={3}
+            ></textarea>
         </div>
-        <div className="group">
+        </div>
+        </div>
+
+        <div className="flex gap-4 items-center">
+        <div className="flex gap-2 flex-1 items-center">
           <label htmlFor="stock">Stock</label>
           <input
             name="stock"
             id="stock"
             type="text"
             placeholder="Give a title to your product"
-            className="input input-sm input-bordered w-full"
+            className="input input-sm input-bordered flex-1"
             defaultValue={stock}
           />
         </div>
-        <div className="group">
+        <div className="flex gap-2 flex-1 items-center">
           <label htmlFor="price">Price</label>
           <input
             name="price"
@@ -74,7 +82,8 @@ export const ProductForm = ({
             placeholder="Price your product"
             className="input input-sm input-bordered w-full"
             defaultValue={price}
-          />
+            />
+        </div>
         </div>
         <div className="flex self-center gap-4 w-1/2">
           <Link href="/store" className="btn  btn-error flex-1">

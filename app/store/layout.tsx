@@ -3,8 +3,9 @@ import Link from "next/link";
 import SellerInfo from "../ui/sellerInfo";
 import { NextRequest } from "next/server";
 import { headers } from "next/headers";
+import DB from "@/database"
 
-export default function StoreLayout({
+export default async function StoreLayout({
   children,
   pageUrl,
 }: {
