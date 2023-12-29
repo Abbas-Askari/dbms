@@ -6,56 +6,13 @@ import { Product } from "../lib/definitions";
 import ProductListCard from "../ui/productListCard";
 import { sql } from "@vercel/postgres";
 import Link from "next/link";
-
-function getFakeDate() {
-  const products: Product[] = [
-    {
-      id: "1",
-      title: "Shampoo",
-      price: 32,
-      stock: 10,
-      description: "Lorem ipsum dolor sit amet.",
-    },
-
-    {
-      id: "2",
-      title: "Soap",
-      price: 320,
-      stock: 12,
-      description: "Lorem ipsum dolor sit amet.",
-    },
-
-    {
-      id: "3",
-      title: "Sanitizer",
-      price: 3200,
-      stock: 14,
-      description: "Lorem ipsum dolor sit amet.",
-    },
-
-    {
-      id: "4",
-      title: "Soap",
-      price: 320,
-      stock: 12,
-      description: "Lorem ipsum dolor sit amet.",
-    },
-
-    {
-      id: "5",
-      title: "Sanitizer",
-      price: 3200,
-      stock: 14,
-      description: "Lorem ipsum dolor sit amet.",
-    },
-  ];
-  return products;
-}
+import DB, { SQL } from "@/database";
 
 async function page() {
-  const result = await sql`
+  const result = await DB.query(`
     SELECT * from product;
-  `;
+  `);
+
   const products: Product[] = result.rows as Product[];
 
   return (

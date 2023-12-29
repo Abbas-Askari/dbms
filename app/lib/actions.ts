@@ -5,11 +5,12 @@ import { Product } from "./definitions";
 import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { updateProductImages } from "./imageActions";
+import DB, { SQL } from "@/database";
 
 export async function createProduct(formData: FormData) {
   //   const product: Product = {
   const product: any = {
-    id: randomUUID(),
     title: formData.get("title"),
     description: formData.get("description"),
     stock: formData.get("stock"),
@@ -17,28 +18,32 @@ export async function createProduct(formData: FormData) {
   };
 
   try {
-    const result = await sql`
-      INSERT INTO product VALUES(${product.id},
-        ${product.title},
-        ${product.description},
-        ${product.stock},
-        ${product.price});
-    `;
+    const query = `
+    INSERT INTO product (title, description, stock, price) VALUES (
+      '${product.title}',
+      '${product.description}',
+      ${product.stock},
+      ${product.price});
+  `;
+
+    console.log(query);
+
+    const result = await DB.query(query);
   } catch (error) {
     console.error({ error });
   }
-  
+
   revalidatePath("/products");
   revalidatePath("/store");
 }
 
 export async function deleteProduct(id: string) {
-  await sql`DELETE FROM product WHERE id=${id};`;
+  await DB.query(`DELETE FROM product WHERE id=${id};`);
   revalidatePath("/store");
   revalidatePath("/products");
 }
 
-export async function updateProduct(id: string, formData: FormData) {
+export async function updateProduct(id: number, formData: FormData) {
   const product: any = {
     title: formData.get("title"),
     description: formData.get("description"),
@@ -46,15 +51,18 @@ export async function updateProduct(id: string, formData: FormData) {
     price: formData.get("price"),
   };
 
+  const images = JSON.parse(formData.get("images") as string);
+  updateProductImages(id, images);
+
   try {
-    const result = await sql`
+    const result = await DB.query(`
       UPDATE product SET
-        title = ${product.title},
-        description = ${product.description},
+        title = '${product.title}',
+        description = '${product.description}',
         stock = ${product.stock},
         price = ${product.price}
       WHERE id = ${id};
-    `;
+    `);
     console.log({
       result,
       product,
@@ -62,13 +70,14 @@ export async function updateProduct(id: string, formData: FormData) {
   } catch (error) {
     console.error({ error });
   }
-
+  // TODO: uncomment these lines.
   revalidatePath("/products");
   revalidatePath("/store");
-  redirect("/store");
+  // revalidatePath("/");
+  // redirect("/store");
 }
 
 export async function getProductById(id: string) {
-  const result = await sql`SELECT * FROM product WHERE id = ${id}`;
+  const result = await DB.query(`SELECT * FROM product WHERE id = ${id}`);
   return result.rows[0] as Product;
 }

@@ -1,13 +1,12 @@
 import { StringValidation } from "zod";
 
 export type Product = {
-  id: string;
+  id: number;
   title: string;
   description: string;
   price: number;
   stock: number;
 };
-
 
 export type User = {
   emial: string;
@@ -20,22 +19,38 @@ export type Customer = {
   first_name: string;
   password: string;
   phone: string;
-  id: string;
-}
+  id: number;
+};
 
 export type Address = {
-  id: string;
+  id: number;
   address: string;
   city: string;
   province: string;
   zip_code: number;
-}
+};
 
 export type Order = {
-  id: string;
+  id: number;
   date: Date;
   customer_id: string;
   address: Address;
   product_id: string;
   quantity: number;
-}
+};
+
+export type Image = {
+  id: number;
+  data: string;
+  name: string;
+};
+
+export type Review = {
+  id: number;
+  product_id: number;
+  customer_id: number;
+  date: Date;
+  title: string;
+  content: string;
+  rating: number;
+};

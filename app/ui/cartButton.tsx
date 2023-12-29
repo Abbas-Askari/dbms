@@ -17,5 +17,3 @@ const CartToggleButton = ({children} : any) => {
 }
 
 export default CartToggleButton;
-
-

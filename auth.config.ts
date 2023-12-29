@@ -1,3 +1,4 @@
+import { on } from 'events';
 import type { NextAuthConfig } from 'next-auth';
  
 export const authConfig = {
@@ -14,10 +15,14 @@ export const authConfig = {
       // } else if (isLoggedIn) {
       //   return Response.redirect(new URL('/store', nextUrl));
       // }
-      if ((nextUrl.pathname.startsWith('/login') || nextUrl.pathname.startsWith('/signup')) && isLoggedIn) {
+
+      const onSignUpPage = nextUrl.pathname.startsWith('/signup');
+      const onLoginPage = nextUrl.pathname.startsWith('/login');
+
+      if ((onLoginPage || onSignUpPage) && isLoggedIn) {
         return Response.redirect(new URL('/products', nextUrl));
       }
-      return isLoggedIn
+      return isLoggedIn || onLoginPage || onSignUpPage;
       // return true;
     },
     session({ session, user, token }) {
