@@ -18,13 +18,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased bg-neutral-900 min-h-screen flex flex-col`}>
-          <Nav />
-          <div className="flex-1 flex flex-col">
-            {children}
-          </div>
-
-        </body>
+      <body
+        className={`${inter.className}  antialiased bg-neutral-900 min-h-screen flex flex-col`}
+      >
+        <Nav />
+        <div className="flex-1 flex flex-col">{children}</div>
+      </body>
     </html>
   );
 }

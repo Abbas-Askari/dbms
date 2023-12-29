@@ -8,7 +8,6 @@ export type Product = {
   stock: number;
 };
 
-
 export type User = {
   emial: string;
   password: string;
@@ -20,8 +19,8 @@ export type Customer = {
   first_name: string;
   password: string;
   phone: string;
-  id: string;
-}
+  id: number;
+};
 
 export type Address = {
   id: number;
@@ -29,7 +28,7 @@ export type Address = {
   city: string;
   province: string;
   zip_code: number;
-}
+};
 
 export type Order = {
   id: number;
@@ -38,4 +37,20 @@ export type Order = {
   address: Address;
   product_id: string;
   quantity: number;
-}
+};
+
+export type Image = {
+  id: number;
+  data: string;
+  name: string;
+};
+
+export type Review = {
+  id: number;
+  product_id: number;
+  customer_id: number;
+  date: Date;
+  title: string;
+  content: string;
+  rating: number;
+};
