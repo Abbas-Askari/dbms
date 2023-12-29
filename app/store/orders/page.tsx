@@ -1,11 +1,12 @@
 import React from "react";
-import SellerInfo from "../ui/sellerInfo";
-import { Order } from "../lib/definitions";
+import SellerInfo from "../../ui/sellerInfo";
+import { Order } from "../../lib/definitions";
 import { sql } from "@vercel/postgres";
-import { numberToDollars } from "../utils/general";
+import { numberToDollars } from "../../utils/general";
 import * as dayjs from "dayjs";
-import OrderModal from "../ui/orderModal";
+import OrderModal from "../../ui/orderModal";
 import DB from "@/database";
+import Link from "next/link";
 dayjs.extend(require("dayjs/plugin/relativeTime"));
 
 async function getOrders(): Promise<any[]> {
@@ -25,11 +26,26 @@ async function OrdersPage() {
   console.log({ orders }, "asdad");
 
   return (
-    <div className=" h-screen  ">
-      <SellerInfo />
-      <div className="px-16 py-8 bg-neutral-900">
+    <div className="mx-8">
+      <div role="tablist" className="tabs tabs-lifted w-min mx-auto">
+        <Link role="tab" className={`tab `} href={"/store/products"}>
+          Products
+        </Link>
+        <Link
+          role="tab"
+          className={`tab tab-active [--tab-bg:#262626] `}
+          href={"/store/orders"}
+        >
+          Orders
+        </Link>
+      </div>
+
+      <div className=" bg-neutral-800 rounded-lg px-16 py-8 pt-2">
         <div className="overflow-x-auto">
-          <table className="table">
+          {orders.length === 0 && (
+            <div className="text-center w-full italic">No pending orders</div>
+          )}
+          <table className={`table ${orders.length === 0 ? "hidden" : ""}`}>
             <thead>
               <tr>
                 <th></th>

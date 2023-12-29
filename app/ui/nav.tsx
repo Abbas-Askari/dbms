@@ -27,7 +27,7 @@ const Nav = async () => {
 
   return (
     <div className="px-8 py-4 flex gap-2  items-center justify-between">
-      <Link href={"/products"} className="flex gap-2 items-center">
+      <Link href={"/products"} className="flex gap-2 items-center ">
         <img
           src={favIcon.src}
           alt=""

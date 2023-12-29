@@ -68,7 +68,7 @@ async function Page({ params }: Props) {
     <div className="p-8 flex flex-col gap-4">
       <div className="flex">
         <div className="flex flex-1 p-8 px-16 gap-8">
-          <div className="flex-1 h-full aspect-square relative bg-base-100 rounded-2xl">
+          <div className="flex-1 h-full aspect-square relative bg-neutral-800 rounded-2xl">
             <CarouselButtons className="absolute left-2 right-2 top-[50%] translate-y-[-50%]" />
             <div className="w-full h-full carousel rounded-box">
               {/* <div className="carousel-item w-full">
