@@ -3,8 +3,10 @@ import Link from "next/link";
 import SellerInfo from "../ui/sellerInfo";
 import { NextRequest } from "next/server";
 import { headers } from "next/headers";
+import DB from "@/database";
+import { numberToDollars } from "../utils/general";
 
-export default function StoreLayout({
+export default async function StoreLayout({
   children,
   pageUrl,
 }: {
@@ -12,6 +14,22 @@ export default function StoreLayout({
   pageUrl: string;
 }) {
   console.log({ pageUrl });
+
+  const customersResult = await DB.query(
+    `SELECT count(distinct customer_id) as total FROM orders JOIN orderproducts ON orders.id = orderProducts.order_id WHERE completed = true;`
+  );
+  const customersTotal = customersResult.rows[0].total;
+
+  const salesResult = await DB.query(
+    `SELECT SUM(Pr.price * OP.quantity) as total FROM product PR JOIN orderproducts OP ON PR.id = OP.product_id WHERE completed = true;`
+  );
+  const salesTotal = +salesResult.rows[0].total;
+
+  const productsResult = await DB.query(
+    `SELECT SUM(quantity) as total FROM orderproducts WHERE completed = true;`
+  );
+  const productsTotal = +productsResult.rows[0].total;
+
   return (
     <div>
       <SellerInfo />
@@ -22,18 +40,20 @@ export default function StoreLayout({
 
         <div className="stats shadow bg-inherit">
           <div className="stat place-items-center">
-            <div className="stat-title text-xs">Downloads</div>
-            <div className="stat-value text-2xl">31K</div>
+            <div className="stat-title text-xs">Customers</div>
+            <div className="stat-value text-2xl">{customersTotal}</div>
           </div>
 
           <div className="stat place-items-center">
-            <div className="stat-title text-xs">Downloads</div>
-            <div className="stat-value text-2xl">31K</div>
+            <div className="stat-title text-xs">Sales</div>
+            <div className="stat-value text-2xl">
+              {numberToDollars(salesTotal)}
+            </div>
           </div>
 
           <div className="stat place-items-center">
-            <div className="stat-title text-xs">Downloads</div>
-            <div className="stat-value text-2xl">31K</div>
+            <div className="stat-title text-xs">Products Sold</div>
+            <div className="stat-value text-2xl">{productsTotal}</div>
           </div>
         </div>
       </div>
