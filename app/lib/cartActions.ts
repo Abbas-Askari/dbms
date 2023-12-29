@@ -57,10 +57,9 @@ export async function updateProductQuantity(
             UPDATE cart SET quantity = ${quantity} WHERE product_id=${product_id} AND customer_id=${customer_id};
         `);
     console.log({ res, row: res.rows }, "updating quantity");
-    return { res, error: false };
   } catch (error) {
     console.log("Failed to update qunatity: ", error);
-    return { error, res: null };
+    return;
   }
 
   console.log("revalidating");
@@ -101,6 +100,7 @@ export async function placeOrder(formData: FormData) {
   try {
     // const session = await getSession();
     const session = await auth();
+    console.log({ session });
     const cart = await getCartProducts();
     const addressResult =
       await DB.query(`INSERT INTO address (address, city, province, zip_code) VALUES 

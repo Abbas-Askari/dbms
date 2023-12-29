@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 // CREATE TABLE IF NOT EXISTS customer (
-//     id VARCHAR(255) PRIMARY KEY,
+//     id SERIAL PRIMARY KEY,
 //     email VARCHAR(255) NOT NULL CHECK ( email like '%@%.%'),
 //     password VARCHAR(255) NOT NULL,
 //     first_name VARCHAR(255) NOT NULL,

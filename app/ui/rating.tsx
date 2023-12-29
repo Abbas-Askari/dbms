@@ -1,22 +1,12 @@
-// "use client";
-
-import { useState } from "react";
-
-export function Rating({
-  defaultRating,
-  disabled,
-  className,
-  id,
-}: {
+type Props = {
   id?: number;
   defaultRating?: number;
   disabled?: boolean;
   className?: string;
-}) {
-  // const [checks, setChecks] = useState([]);
+};
 
+export function Rating({ defaultRating, disabled, className, id }: Props) {
   console.log({ defaultRating });
-
   return (
     <div className={`rating ${className}`}>
       {new Array(5).fill(0).map((_, i) => (
@@ -32,41 +22,6 @@ export function Rating({
           className={`mask mask-star-2 bg-amber-400 disabled:pointer-events-none `}
         />
       ))}
-    </div>
-  );
-
-  return (
-    <div className="rating">
-      <input
-        type="radio"
-        name="rating"
-        value={1}
-        className="mask mask-star-2 bg-green-500"
-      />
-      <input
-        type="radio"
-        name="rating"
-        value={2}
-        className="mask mask-star-2 bg-green-500"
-      />
-      <input
-        type="radio"
-        name="rating"
-        className="mask mask-star-2 bg-green-500"
-        value={3}
-      />
-      <input
-        type="radio"
-        name="rating"
-        value={4}
-        className="mask mask-star-2 bg-green-500"
-      />
-      <input
-        type="radio"
-        name="rating"
-        value={5}
-        className="mask mask-star-2 bg-green-500"
-      />
     </div>
   );
 }

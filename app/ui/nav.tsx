@@ -14,6 +14,7 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { LogoutButton } from "./LogoutButton";
 import Cart from "./cart";
+import { auth } from "../api/auth/[...nextauth]/route";
 
 async function searchProducts(formData: FormData) {
   "use server";
@@ -21,7 +22,9 @@ async function searchProducts(formData: FormData) {
   redirect(`/products?query=${formData.get("query")}`);
 }
 
-const Nav = () => {
+const Nav = async () => {
+  const session = await auth();
+
   return (
     <div className="px-8 py-4 flex gap-2  items-center justify-between">
       <Link href={"/products"} className="flex gap-2 items-center">
@@ -53,8 +56,12 @@ const Nav = () => {
             <MagnifyingGlassIcon className='w-6 h-6 '/>
         </div> */}
       <div className="flex gap-4 ">
-        <LogoutButton />
-        <Cart />
+        {session?.user && (
+          <>
+            <LogoutButton />
+            <Cart />
+          </>
+        )}
       </div>
     </div>
   );

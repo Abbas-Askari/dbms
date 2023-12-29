@@ -25,7 +25,10 @@ export function Carousel({ productId, className, formInput, ...props }: Props) {
   console.log({ images });
 
   return (
-    <div {...props} className={`${className} relative select-none`}>
+    <div
+      {...props}
+      className={`${className} relative select-none bg-base-100 rounded-2xl`}
+    >
       <CarouselButtons className="absolute left-2 right-2 top-[50%] translate-y-[-50%]" />
 
       {formInput && (
@@ -63,12 +66,13 @@ export function Carousel({ productId, className, formInput, ...props }: Props) {
       />
 
       <div className="w-full h-full carousel rounded-box">
-        <div className="carousel-item w-full">
-          <img
+        <div className="carousel-item w-full flex items-center justify-center">
+          {/* <img
             src="https://daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg"
             className="w-full"
             alt="Tailwind CSS Carousel component"
-          />
+          /> */}
+          <span className="text-xs">Click + to Add Images</span>
         </div>
         {images.map((image) => (
           <div className="carousel-item w-full">

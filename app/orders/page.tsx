@@ -2,7 +2,7 @@ import React from "react";
 import SellerInfo from "../ui/sellerInfo";
 import { Order } from "../lib/definitions";
 import { sql } from "@vercel/postgres";
-import { numberToDollars, timeAgo } from "../utils/general";
+import { numberToDollars } from "../utils/general";
 import * as dayjs from "dayjs";
 import OrderModal from "../ui/orderModal";
 import DB from "@/database";
@@ -10,9 +10,10 @@ dayjs.extend(require("dayjs/plugin/relativeTime"));
 
 async function getOrders(): Promise<any[]> {
   "use server";
+
   return (
     await DB.query(`
-      SELECT * FROM orders JOIN customer ON orders.customer_id = customer_id
+      SELECT * FROM orders JOIN customer ON orders.customer_id = customer.id
       JOIN orderProducts ON orders.id = orderProducts.order_id JOIN product ON orderProducts.product_id = product.id
       JOIN address ON address.id::INT = orders.address_id::INT WHERE completed = false;
   `)

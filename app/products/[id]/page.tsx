@@ -68,25 +68,31 @@ async function Page({ params }: Props) {
     <div className="p-8 flex flex-col gap-4">
       <div className="flex">
         <div className="flex flex-1 p-8 px-16 gap-8">
-          <div className="flex-1 h-full aspect-square relative">
+          <div className="flex-1 h-full aspect-square relative bg-base-100 rounded-2xl">
             <CarouselButtons className="absolute left-2 right-2 top-[50%] translate-y-[-50%]" />
             <div className="w-full h-full carousel rounded-box">
-              <div className="carousel-item w-full">
+              {/* <div className="carousel-item w-full">
                 <img
                   src="https://daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg"
                   className="w-full"
                   alt="Tailwind CSS Carousel component"
                 />
-              </div>
-              {images.map((image) => (
-                <div className="carousel-item w-full">
-                  <img
-                    src={image.data}
-                    className="w-full object-contain"
-                    alt={image.name}
-                  />
-                </div>
-              ))}
+              </div> */}
+              {images.length > 0 ? (
+                images.map((image) => (
+                  <div className="carousel-item w-full">
+                    <img
+                      src={image.data}
+                      className="w-full object-contain"
+                      alt={image.name}
+                    />
+                  </div>
+                ))
+              ) : (
+                <span className=" indicator-top">
+                  This product has no images
+                </span>
+              )}
             </div>
           </div>
 
@@ -180,11 +186,14 @@ function Review({ review, customerId }: { review: any; customerId: number }) {
   const deleteReviewBound = deleteReview.bind(null, review.id);
   return (
     <div className="flex flex-col bg-neutral-800 p-4 rounded-lg relative">
-      <form action={deleteReviewBound}>
-        <button className="btn btn-circle btn-xs absolute right-0 top-0">
-          <XMarkIcon className="p-1 text-white" />
-        </button>
-      </form>
+      {customerId === review.customer_id && (
+        <form action={deleteReviewBound}>
+          <button className="btn btn-circle btn-xs absolute right-0 top-0">
+            <XMarkIcon className="p-1 text-white" />
+          </button>
+        </form>
+      )}
+
       <div className="flex justify-between p-2 border-b border-white">
         <div className="text-sm">
           {review.first_name} {review.last_name}
@@ -215,10 +224,6 @@ function WriteReview({ productId }: { productId: number }) {
   return (
     <form className="flex flex-col gap-2" action={addReviewBound}>
       <h1 className="font-bold text-2xl">Add Your Review</h1>
-      <div className="flex justify-between">
-        <div className="text-sm">User Name</div>
-        <div className="text-sm">{Date().split(" ").slice(1, 4).join(" ")}</div>
-      </div>
       <div className="flex justify-between items-center gap-8">
         <input
           name="title"

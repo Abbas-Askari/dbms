@@ -1,20 +1,8 @@
 "use client";
 
-import { auth } from "../api/auth/[...nextauth]/route";
-import { sql } from "@vercel/postgres";
-import { SessionProvider, useSession } from "next-auth/react";
 import React, { cache, useEffect, useState } from "react";
-import { Product } from "../lib/definitions";
-import {
-  MinusIcon,
-  PhotoIcon,
-  PlusIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { getCartProducts, updateProductQuantity } from "../lib/cartActions";
 import { CartProductCard } from "./cartProductCard";
 import useSWR from "swr";
-import { noSSR } from "next/dynamic";
 import { unstable_noStore } from "next/cache";
 import Link from "next/link";
 
@@ -23,7 +11,7 @@ const fetcher = (...args) =>
     res.json()
   );
 
-const CartSidebar = ({ setIsOpen }) => {
+const CartSidebar = ({}) => {
   unstable_noStore();
   const [products, setProducts] = useState([]);
   const { data, error } = useSWR("/api/cart", fetcher);
@@ -32,6 +20,7 @@ const CartSidebar = ({ setIsOpen }) => {
     if (data) {
       console.log({ newProducts: data.result });
       setProducts(data.result);
+      console.log(products);
     }
   }, [data]);
 
@@ -74,7 +63,7 @@ const CartSidebar = ({ setIsOpen }) => {
         <div className=" ">${totalCost.toFixed(2)} USD</div>
       </div>
 
-      <Link href={"/checkout"} className="btn" onClick={() => setIsOpen(false)}>
+      <Link href={"/checkout"} className="btn">
         Proceed to Checkout
       </Link>
     </div>
