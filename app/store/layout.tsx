@@ -20,7 +20,7 @@ export default function StoreLayout({
     <StatsCard index={2} title="Products Sold" value="128" />
     <StatsCard index={3} title="Customers" value="118" /> */}
 
-        <div className="stats shadow bg-neutral-800">
+        <div className="stats shadow bg-inherit">
           <div className="stat place-items-center">
             <div className="stat-title text-xs">Downloads</div>
             <div className="stat-value text-2xl">31K</div>
