@@ -89,7 +89,7 @@ async function Page({ params }: Props) {
                   </div>
                 ))
               ) : (
-                <span className=" indicator-top">
+                <span className=" flex justify-center items-center w-full">
                   This product has no images
                 </span>
               )}
