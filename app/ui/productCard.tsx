@@ -2,7 +2,6 @@ import React from "react";
 import { Product } from "../lib/definitions";
 import Link from "next/link";
 import { numberToDollars } from "../utils/general";
-import { PhotoIcon } from "@heroicons/react/24/outline";
 
 type Props = {
   product: Product;
@@ -38,23 +37,17 @@ function ProductCard({ product }: Props) {
 
     <Link
       href={`products/${product.id}`}
-      className="card w-64 card-compact bg-base-100 shadow-xl self-stretch"
+      className="card w-64 card-compact bg-base-100 shadow-xl"
     >
       <figure className=" bg-base-200 p-4 box-border">
-        {product.data ? (
-          <img
-            src={product.data ?? ""}
-            alt={product.title}
-            className=" object-contain h-64"
-          />
-        ) : (
-          <div className="flex justify-center items-center h-64">
-            <PhotoIcon className="w-12 h-12 text-base-300" />
-            <span className="text-base-300 italic font-extrabold text-xl">
-              No Photo
-            </span>
-          </div>
-        )}
+        <img
+          src={
+            product.data ??
+            "https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
+          }
+          alt={product.title}
+          className=" object-contain h-64"
+        />
       </figure>
       <div className="card-body">
         <h2 className="card-title">

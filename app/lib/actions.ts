@@ -6,7 +6,7 @@ import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { updateProductImages } from "./imageActions";
-import DB from "@/database";
+import DB, { SQL } from "@/database";
 
 export async function createProduct(formData: FormData) {
   //   const product: Product = {
@@ -29,7 +29,6 @@ export async function createProduct(formData: FormData) {
     console.log(query);
 
     const result = await DB.query(query);
-    console.log({ result });
   } catch (error) {
     console.error({ error });
   }
