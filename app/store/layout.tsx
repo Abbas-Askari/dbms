@@ -1,8 +1,5 @@
 import "../globals.css";
-import Link from "next/link";
 import SellerInfo from "../ui/sellerInfo";
-import { NextRequest } from "next/server";
-import { headers } from "next/headers";
 import DB from "@/database";
 import { numberToDollars } from "../utils/general";
 
