@@ -82,7 +82,10 @@ export async function getCartProducts() {
     const session = await auth();
     // const session = await getSession();
     const result = await DB.query(
-      `SELECT * FROM product JOIN cart ON cart.product_id = product.id WHERE cart.customer_id = ${session?.user?.id} ORDER BY product.id`
+      `SELECT * FROM product Pr JOIN cart ON cart.product_id = Pr.id
+        LEFT JOIN productImage PI ON PI.product_id = Pr.id
+        LEFT JOIN image I ON I.id = PI.image_id
+        WHERE cart.customer_id = 1 ORDER BY Pr.id`
     );
     console.log("getting cart products!");
     return result.rows as any[];
