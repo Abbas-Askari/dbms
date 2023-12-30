@@ -1,9 +1,9 @@
-import { on } from 'events';
-import type { NextAuthConfig } from 'next-auth';
- 
+import { on } from "events";
+import type { NextAuthConfig } from "next-auth";
+
 export const authConfig = {
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
@@ -16,20 +16,19 @@ export const authConfig = {
       //   return Response.redirect(new URL('/store', nextUrl));
       // }
 
-      const onSignUpPage = nextUrl.pathname.startsWith('/signup');
-      const onLoginPage = nextUrl.pathname.startsWith('/login');
+      const onSignUpPage = nextUrl.pathname.startsWith("/signup");
+      const onLoginPage = nextUrl.pathname.startsWith("/login");
 
       if ((onLoginPage || onSignUpPage) && isLoggedIn) {
-        return Response.redirect(new URL('/products', nextUrl));
+        return Response.redirect(new URL("/products", nextUrl));
       }
       return isLoggedIn || onLoginPage || onSignUpPage;
       // return true;
     },
-    session({ session, user, token }) {
-      // session.user = user;
-      session.user.id = token.sub as string;
+    session({ session, token }) {
+      session.user.id = parseInt(token.sub) as number;
       return session;
-    }
+    },
   },
   providers: [], // Add providers with an empty array for now
 } satisfies NextAuthConfig;

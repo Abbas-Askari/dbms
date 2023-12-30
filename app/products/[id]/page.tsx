@@ -102,7 +102,7 @@ async function Page({ params }: Props) {
                 <div className="text-4xl font-bold">{product.title}</div>
                 <form action={!inCart ? addToCartBound : removeFromCartBound}>
                   <FormSubmitButton
-                    className=" bg-gray-800 hover:bg-gray-600 outline-none px-6 py-2 rounded-lg mx-auto  "
+                    className="  outline-none  mx-auto btn-primary  "
                     value={!inCart ? "Add to Cart" : "Remove from Cart"}
                   />
                 </form>
@@ -124,7 +124,7 @@ async function Page({ params }: Props) {
       <div className="">
         <div className="text-2xl font-bold">Store</div>
         <Link
-          href="/store"
+          href="/store/products"
           className=" hover:bg-[#ffffff20] transition-colors py-4 px-8 rounded-md flex gap-8 items-center "
         >
           <img

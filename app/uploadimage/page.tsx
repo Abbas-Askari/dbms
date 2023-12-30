@@ -24,7 +24,7 @@ function ImageUploadPage() {
           type="file"
           className="file-input w-full max-w-xs"
         />
-        <FormSubmitButton value={"Upload"} />
+        <FormSubmitButton value={"Upload"} className="btn-primary" />
         {/* <button className="btn btn-primary">Upload</button> */}
       </form>
     </div>
