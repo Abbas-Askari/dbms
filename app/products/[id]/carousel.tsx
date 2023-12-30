@@ -52,7 +52,7 @@ function CarouselButtons({ className, ...props }: Props) {
         type="button"
         onClick={() => handleClick(true)}
         disabled={disabledLeft}
-        className={` btn btn-circle  btn-sm active:transfrom-y-[-50%] `}
+        className={` btn btn-circle  btn-sm active:transfrom-y-[-50%]  `}
         //   className={` disabled:invisible w-8 h-8 rounded-full ${className} bg-red text-white bg-neutral-400 justify-center flex items-center`}
       >
         <ChevronLeftIcon className="w-4 h-4 rounded-full text-white" />

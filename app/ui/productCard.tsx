@@ -2,12 +2,15 @@ import React from "react";
 import { Product } from "../lib/definitions";
 import Link from "next/link";
 import { numberToDollars } from "../utils/general";
+import { PhotoIcon } from "@heroicons/react/24/outline";
 
 type Props = {
   product: Product;
 };
 
 function ProductCard({ product }: Props) {
+  console.log({ rating: product.rating });
+
   return (
     // <Link
     //   href={`products/${product.id}`}
@@ -40,14 +43,18 @@ function ProductCard({ product }: Props) {
       className="card w-64 card-compact bg-base-100 shadow-xl"
     >
       <figure className=" bg-base-200 p-4 box-border">
-        <img
-          src={
-            product.data ??
-            "https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-          }
-          alt={product.title}
-          className=" object-contain h-64"
-        />
+        {product.data ? (
+          <img
+            src={product.data}
+            alt={product.title}
+            className=" object-contain h-64"
+          />
+        ) : (
+          <div className="h-64 flex items-center gap-2 justify-center opacity-25">
+            <PhotoIcon className="w-12 h-12 textwhite" />
+            <span className=" font-extrabold italic">No photo</span>
+          </div>
+        )}
       </figure>
       <div className="card-body">
         <h2 className="card-title">
@@ -62,7 +69,7 @@ function ProductCard({ product }: Props) {
         <div className="card-actions justify-between items-center">
           <Rating
             // round product.rating to nearest multiple of 0.5
-            defaultRating={Math.round(parseInt(product.rating) * 2)}
+            defaultRating={Math.round(parseFloat(product.rating) * 2)}
             className="rating-xs"
             id={product.id}
           />
@@ -84,11 +91,12 @@ type PropsRating = {
 
 export function Rating({ defaultRating, className, id }: PropsRating) {
   if (isNaN(defaultRating)) {
-    return <div className="italic">No Reviews</div>;
+    return <div className="italic text-amber-400">No Reviews</div>;
   }
+  console.log({ defaultRating });
+
   return (
-    <div className={`rating rating-half rating-xs ${className}`}>
-      <input type="radio" name={`rating-${id}`} className="rating-hidden" />
+    <div className={`rating rating-half rating-sm ${className}`}>
       {new Array(10).fill(0).map((_, i) => (
         <input
           type="radio"
@@ -96,7 +104,6 @@ export function Rating({ defaultRating, className, id }: PropsRating) {
           className={`bg-amber-400 mask pointer-events-none mask-star-2 mask-half-${
             (i % 2) + 1
           }`}
-          //checked for i = 7
           {...(defaultRating && { defaultChecked: i + 1 <= defaultRating })}
         />
       ))}

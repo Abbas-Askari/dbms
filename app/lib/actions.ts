@@ -74,7 +74,7 @@ export async function updateProduct(id: number, formData: FormData) {
   revalidatePath("/products");
   revalidatePath("/store");
   // revalidatePath("/");
-  // redirect("/store");
+  redirect("/store/products");
 }
 
 export async function getProductById(id: string) {

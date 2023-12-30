@@ -21,7 +21,7 @@ type Props = {
   params: { id: string };
 };
 
-async function Page({ params }: Props) {
+async function ProductPage({ params }: Props) {
   // unstable_noStore();
 
   const { id } = params;
@@ -89,7 +89,7 @@ async function Page({ params }: Props) {
                   </div>
                 ))
               ) : (
-                <span className=" indicator-top">
+                <span className=" flex justify-center items-center w-full">
                   This product has no images
                 </span>
               )}
@@ -259,4 +259,4 @@ function WriteReview({ productId }: { productId: number }) {
   );
 }
 
-export default Page;
+export default ProductPage;

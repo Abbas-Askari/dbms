@@ -1,7 +1,4 @@
 import React from "react";
-import SellerInfo from "../../ui/sellerInfo";
-import { Order } from "../../lib/definitions";
-import { sql } from "@vercel/postgres";
 import { numberToDollars } from "../../utils/general";
 import * as dayjs from "dayjs";
 import OrderModal from "../../ui/orderModal";

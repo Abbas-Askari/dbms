@@ -1,6 +1,11 @@
 "use client";
 
-import { MinusIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  MinusIcon,
+  PhotoIcon,
+  PlusIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { removeFromCart, updateProductQuantity } from "../lib/cartActions";
 import { useState } from "react";
 import { Product } from "../lib/definitions";
@@ -31,21 +36,30 @@ export const CartProductCard = ({ product, setProducts }: any) => {
           />
         </form>
 
-        <img
-          src={product.data}
-          className="h-20 w-20 rounded-lg bg-[#00000080] border-neutral-800 border-[1px] object-contain"
-        />
+        <div className="">
+          {product.data ? (
+            <img
+              src={product.data}
+              className="h-20 w-20 rounded-lg bg-[#00000080] border-neutral-800 border-[1px] object-contain"
+            />
+          ) : (
+            <div className="h-20 w-20 rounded-lg bg-[#00000080] border-neutral-800 border-[1px] flex flex-col items-center  justify-center opacity-25">
+              <PhotoIcon className="w-12 h-12 textwhite" />
+              <span className=" font-extrabold italic">No photo</span>
+            </div>
+          )}
+        </div>
       </div>
-      {/* <PhotoIcon className="w-24 h-24" /> */}
-      <div className="flex-1 mb-4">
-        <div className="flex justify-between gap-16 mb-2">
+
+      <div className="flex-1 h-20 flex flex-col justify-evenly ">
+        <div className="flex justify-between gap-8 w-full">
           <div className=" min-w-max font-bold">{product.title}</div>
           <div className="badge badge-primary">
             {numberToDollars(product.price * product.quantity)}
           </div>
         </div>
 
-        <div className="flex justify-between">
+        <div className="flex justify-between w-full gap-8">
           <div className="badge badge-outline">
             <span>{product.quantity}</span>
             <XMarkIcon className="w-3 h-3 text-inherit" />

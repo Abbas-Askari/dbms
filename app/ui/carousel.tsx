@@ -3,7 +3,11 @@
 import { sql } from "@vercel/postgres";
 import { Image } from "../lib/definitions";
 import CarouselButtons from "../products/[id]/carousel";
-import { PlusCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  PlusCircleIcon,
+  PlusIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { getImages } from "../lib/imageActions";
 import { fileToImage } from "../utils/general";
@@ -32,8 +36,8 @@ export function Carousel({ productId, className, formInput, ...props }: Props) {
       <CarouselButtons className="absolute left-2 right-2 top-[50%] translate-y-[-50%]" />
 
       {formInput && (
-        <label className="btn btn-circle absolute left-1 top-1 btn-xs justify-center items-center flex">
-          <span>+</span>
+        <label className="btn p-1 box-border btn-circle btn-xs absolute left-1 top-1">
+          <PlusIcon />
           <input
             type="file"
             className="hidden"

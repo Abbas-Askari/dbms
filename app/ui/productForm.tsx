@@ -1,6 +1,7 @@
 import Link from "next/link";
 import FormInput from "./formInput";
 import { Carousel } from "./carousel";
+import FormSubmitButton from "./formSubmitButton";
 
 type Props = {
   actionCallback: (formData: FormData) => Promise<void>;
@@ -71,7 +72,7 @@ export const ProductForm = ({
             <input
               name="stock"
               id="stock"
-              type="text"
+              type="numebr"
               placeholder="Give a title to your product"
               className="input input-sm input-bordered w-full"
               defaultValue={stock}
@@ -93,7 +94,7 @@ export const ProductForm = ({
           <Link href="/store" className="btn  btn-error flex-1">
             Discard
           </Link>
-          <button className="btn btn-primary flex-1">Save</button>
+          <FormSubmitButton value={"Save"} className=" flex-1 btn-primary" />
         </div>
       </form>
     </div>
