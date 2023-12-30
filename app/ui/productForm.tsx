@@ -25,6 +25,7 @@ export const ProductForm = ({
         action={actionCallback}
         className="w-1/2 flex flex-col gap-4 bg-neutral-800 text-white shadow-md rounded-xl p-12"
       >
+        <h1 className=" text-3xl">Edit Product</h1>
         <div className="flex gap-4">
           <div className="flex-1">
             <label htmlFor="">Pictures</label>
