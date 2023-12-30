@@ -37,7 +37,7 @@ function ProductCard({ product }: Props) {
 
     <Link
       href={`products/${product.id}`}
-      className="card w-64 card-compact bg-base-100 shadow-xl "
+      className="card w-64 card-compact bg-base-100 shadow-xl"
     >
       <figure className=" bg-base-200 p-4 box-border">
         <img
@@ -82,32 +82,9 @@ type PropsRating = {
   className?: string;
 };
 
-// export function Rating({ defaultRating, className, id }: PropsRating) {
-//   console.log({ defaultRating });
-//   if (isNaN(defaultRating)) {
-//     return <div className="italic">No Reviews</div>;
-//   }
-//   return (
-//     <div className={`rating rating-half rating-xs ${className}`}>
-//       {/* <input type="radio" name="rating-10" className="rating-hidden" /> */}
-//       {new Array(10).fill(0).map((_, i) => (
-//         <input
-//           type="radio"
-//           name={`rating-${id}`}
-//           className={`bg-amber-400 mask pointer-events-none mask-star-2 mask-half-${
-//             (i % 2) + 1
-//           }`}
-//           //checked for i = 7
-//           {...(defaultRating && { defaultChecked: i + 1 <= defaultRating })}
-//         />
-//       ))}
-//     </div>
-//   );
-// }
-
 export function Rating({ defaultRating, className, id }: PropsRating) {
   if (isNaN(defaultRating)) {
-    return <div className="italic text-amber-400">No Reviews</div>;
+    return <div className="italic">No Reviews</div>;
   }
   return (
     <div className={`rating rating-half rating-xs ${className}`}>

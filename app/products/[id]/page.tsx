@@ -151,11 +151,7 @@ async function Page({ params }: Props) {
           <Revi />
           <Revi />
           {reviews.map((review) => (
-            <Review
-              key={review.id}
-              review={review}
-              customerId={+session?.user?.id as number}
-            />
+            <Review review={review} customerId={+session?.user?.id as number} />
           ))}
         </div>
         <WriteReview productId={product.id} />
