@@ -1,14 +1,14 @@
 "use client"
 import Link from "next/link";
-import { createCustomer, makeCustomer } from "../lib/userActions";
+import { createCustomer, makeCustomer, makeVendor } from "../lib/userActions";
 import { useEffect, useState } from "react";
 import { Carousel } from "../ui/carousel";
 
 
 const page = () => {
 
-    const [page, setPage] = useState(0);
-    const [role, setRole] = useState("Customer")
+    const [page, setPage] = useState(4);
+    const [role, setRole] = useState("Vendor")
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [email, setEmail] = useState("")
@@ -43,7 +43,7 @@ const page = () => {
 
     return (
         <div className="flex justify-center items-center flex-1">
-            <form className="flex flex-col gap-4 bg-white shadow-md min-w-[25%] rounded-xl p-12" action={() => role === "Customer" ? makeCustomer({email, phoneNumber, password, firstName, lastName}) : console.log("Making Shop")}>
+            <form className="flex flex-col gap-4 bg-white shadow-md min-w-[25%] rounded-xl p-12" action={(formData: FormData) => role === "Customer" ? makeCustomer({email, phoneNumber, password, firstName, lastName}) : makeVendor({email, phoneNumber, password, firstName, lastName, storeName, storeDesc, images: formData.get("images") as string})}>
                 <h3 className="text-gray-700 font-bold text-3xl text-center">
                     Sign up
                 </h3>
