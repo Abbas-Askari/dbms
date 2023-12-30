@@ -23,15 +23,20 @@ export async function createProduct(formData: FormData) {
       '${product.title}',
       '${product.description}',
       ${product.stock},
-      ${product.price});
+      ${product.price})
+      RETURNING id;
   `;
-
-    console.log(query);
-
-    const result = await DB.query(query);
+  
+  console.log(query);
+  
+  
+  const result = await DB.query(query);
+  const images = JSON.parse(formData.get("images") as string);
+  updateProductImages(result.rows[0].id, images);
   } catch (error) {
     console.error({ error });
   }
+
 
   revalidatePath("/products");
   revalidatePath("/store");

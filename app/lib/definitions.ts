@@ -19,7 +19,18 @@ export type Customer = {
   first_name: string;
   password: string;
   phone: string;
-  id: number;
+  id?: number;
+};
+
+export type Vendor = {
+  email: string;
+  last_name: string;
+  first_name: string;
+  password: string;
+  phone: string;
+  store_name: string;
+  store_description: string;
+  id?: number;
 };
 
 export type Address = {

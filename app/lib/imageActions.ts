@@ -1,12 +1,7 @@
 "use server";
 
-import { sql } from "@vercel/postgres";
-import { rejects } from "assert";
-import { resolve } from "path";
 import { Image } from "./definitions";
 import DB from "@/database";
-
-const FileReader = require("filereader");
 
 export async function uploadImage(name: string, data: string) {
   try {
@@ -66,5 +61,46 @@ export async function updateProductImages(
     console.log({ addResult });
   } catch (error) {
     console.error("Failed to update product images", error);
+  }
+}
+
+export async function updateStoreImages(
+  storeId: number,
+  newImages: Image[]
+) {
+  try {
+    const storeimageDelete = await DB.query(`
+    DELETE FROM storeimage WHERE vendor_id = ${storeId};
+    `);
+    const deleteResult = await DB.query(`
+        DELETE FROM image
+        WHERE id in (SELECT image_id FROM storeimage WHERE vendor_id = ${storeId});
+    `);
+    
+    const query = `
+      INSERT INTO image (name, data) VALUES
+      ${newImages
+        .map((image) => `('${image.name}', '${image.data}')`)
+        .join(",\n")}
+        RETURNING id;
+      `;
+
+    console.log(query);
+
+    const addResult = await DB.query(query);
+    console.log({ rows: addResult.rows, addResult });
+    const ids = addResult.rows.map((row) => row.id) as number[];
+
+    const q = `
+            INSERT INTO storeimage VALUES
+            ${ids.map((id) => `(${id}, ${storeId})`).join(",\n")};
+        `;
+
+    console.log(q);
+    const storeimageInsert = await DB.query(q);
+
+    console.log({ addResult });
+  } catch (error) {
+    console.error("Failed to update store images", error);
   }
 }

@@ -1,7 +1,7 @@
 "use server";
 
 import { sql } from "@vercel/postgres";
-import { Customer, Product } from "./definitions";
+import { Customer, Product, Vendor } from "./definitions";
 import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -66,6 +66,39 @@ export async function makeCustomer(data: {email: string, password: string, first
     console.log(res);
   } catch (error) {
     console.log("Failed to create customer: ", error);
+    return error;
+  }
+
+  redirect("/login");
+}
+
+export async function makeVendor(data: {email: string, password: string, firstName: string, lastName: string, phoneNumber: string, storeName: string, storeDesc: string}) {
+  const vendor: Vendor = {
+    email: data.email as string,
+    password: data.password as string,
+    first_name: data.firstName as string,
+    last_name: data.lastName as string,
+    phone: data.phoneNumber as string,
+    store_name: data.storeName as string,
+    store_description: data.storeDesc as string
+  };
+
+  try {
+    const res =
+      await DB.query(`INSERT INTO vendor (email, password, first_name, last_name, phone, store_name, store_description) VALUES
+        (
+            '${vendor.email}',
+            '${vendor.password}',
+            '${vendor.first_name}',
+            '${vendor.last_name}',
+            '${vendor.phone}',
+            '${vendor.store_name}',
+            '${vendor.store_description}'
+        )`);
+
+    console.log(res);
+  } catch (error) {
+    console.log("Failed to create vendor: ", error);
     return error;
   }
 
