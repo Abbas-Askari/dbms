@@ -9,7 +9,7 @@ import { getImages } from "../lib/imageActions";
 import { fileToImage } from "../utils/general";
 
 type Props = {
-  productId?: number;
+  productId: number;
   className?: string;
   props?: any;
   formInput?: boolean;
@@ -19,7 +19,6 @@ export function Carousel({ productId, className, formInput, ...props }: Props) {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    if (productId === undefined) return;
     getImages(productId).then((images) => setImages(images));
   }, [productId]);
 

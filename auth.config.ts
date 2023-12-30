@@ -19,11 +19,11 @@ export const authConfig = {
       const onSignUpPage = nextUrl.pathname.startsWith('/signup');
       const onLoginPage = nextUrl.pathname.startsWith('/login');
 
-      // if ((onLoginPage || onSignUpPage) && isLoggedIn) {
       if ((onLoginPage || onSignUpPage) && isLoggedIn) {
         return Response.redirect(new URL('/products', nextUrl));
       }
       return isLoggedIn || onLoginPage || onSignUpPage;
+      // return true;
     },
     session({ session, user, token }) {
       // session.user = user;

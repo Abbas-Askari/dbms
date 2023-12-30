@@ -18,7 +18,6 @@ export async function uploadImage(name: string, data: string) {
 }
 
 export async function getImages(productId: number): Promise<Image[]> {
-  if (productId === undefined) return [];
   const result = await DB.query(`
         SELECT image.id, image.name, image.data
         FROM image JOIN productimage ON image.id = productimage.image_id

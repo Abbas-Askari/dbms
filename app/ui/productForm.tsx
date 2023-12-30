@@ -8,7 +8,7 @@ type Props = {
   desc?: string;
   price?: number;
   stock?: number;
-  id?: number;
+  id: number;
 };
 
 export const ProductForm = ({
@@ -23,73 +23,60 @@ export const ProductForm = ({
     <div className="flex justify-center items-center flex-1">
       <form
         action={actionCallback}
-        className="w-1/2 flex flex-col gap-4 bg-neutral-800 text-white shadow-md rounded-xl p-12"
+        className="w-1/2 flex flex-col gap-4 bg-neutral-800 text-white shadow-md rounded-xl p-12 artboard"
       >
-        <h1 className=" text-3xl">Edit Product</h1>
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <label htmlFor="">Pictures</label>
-            <Carousel
-              productId={id}
-              className="aspect-square h-48 mx-auto w-full border-[1px] border-neutral-700"
-              formInput={true}
-            />
-          </div>
-
-          <div className="flex flex-col gap-2 flex-1">
-            <div className="group">
-              <label htmlFor="images" className="">
-                Title
-              </label>
-              <input
-                required
-                type="text"
-                name="title"
-                placeholder="Give a title to your product"
-                className="input input-sm input-bordered w-full"
-                defaultValue={title}
-              />
-            </div>
-            <div className="group flex-1">
-              <label htmlFor="description">Description</label>
-              <textarea
-                required
-                name="description"
-                id="description"
-                className="textarea textarea-bordered flex-1 resize-none"
-                placeholder="Add some description"
-                defaultValue={desc}
-                rows={3}
-              ></textarea>
-            </div>
-          </div>
+        <Carousel
+          productId={id}
+          className="aspect-square flex-1 w-48 h-48 mx-auto "
+          formInput={true}
+        />
+        <div className="group">
+          <label htmlFor="images" className="">
+            Title
+          </label>
+          <input
+            required
+            type="text"
+            name="title"
+            placeholder="Give a title to your product"
+            className="input input-sm input-bordered w-full"
+            defaultValue={title}
+          />
         </div>
-
-        <div className="flex gap-4 items-center">
-          <div className=" gap-2 flex-1 items-center flex-col">
-            <label htmlFor="stock">Stock</label>
-            <input
-              name="stock"
-              id="stock"
-              type="text"
-              placeholder="Give a title to your product"
-              className="input input-sm input-bordered w-full"
-              defaultValue={stock}
-            />
-          </div>
-          <div className=" gap-2 flex-1 items-center flex-col">
-            <label htmlFor="price">Price</label>
-            <input
-              name="price"
-              id="price"
-              type="number"
-              placeholder="Price your product"
-              className="input input-sm input-bordered w-full"
-              defaultValue={price}
-            />
-          </div>
+        <div className="group">
+          <label htmlFor="description">Description</label>
+          <textarea
+            required
+            name="description"
+            id="description"
+            className="textarea textarea-bordered"
+            placeholder="Add some description"
+            defaultValue={desc}
+          ></textarea>
         </div>
-        <div className="flex self-center gap-4 w-1/2 w-full mt-4">
+        <div className="group">
+          <label htmlFor="stock">Stock</label>
+          <input
+            name="stock"
+            id="stock"
+            type="text"
+            placeholder="Give a title to your product"
+            className="input input-sm input-bordered w-full"
+            defaultValue={stock}
+          />
+        </div>
+        <div className="group">
+          <label htmlFor="price">Price</label>
+          <input
+            name="price"
+            id="price"
+            type="number"
+            placeholder="Price your product"
+            className="input input-sm input-bordered w-full"
+            defaultValue={price}
+          />
+        </div>
+        <div className="flex self-center gap-4 w-1/2">
           <Link href="/store" className="btn  btn-error flex-1">
             Discard
           </Link>
