@@ -30,9 +30,11 @@ export async function addToCart(
 
 export async function removeFromCart(
   product_id: number,
-  customer_id: string,
-  formData: FormData
+  customer_id?: number,
+  formData?: FormData
 ) {
+  const session = await auth();
+  customer_id = customer_id ?? (session?.user?.id as unknown as number);
   try {
     const res = await DB.query(`
             DELETE FROM cart WHERE product_id=${product_id} AND customer_id=${customer_id};
@@ -45,12 +47,18 @@ export async function removeFromCart(
 }
 
 export async function updateProductQuantity(
-  product_id: string,
-  customer_id: string,
+  product_id: number,
   quantity: number
 ) {
-  console.log({ product_id, customer_id, quantity }, "updating quantity");
   unstable_noStore();
+  const session = await auth();
+  const customer_id = session?.user?.id;
+  console.log({ product_id, quantity }, "updating quantity");
+
+  if (quantity === 0) {
+    await removeFromCart(product_id);
+    return;
+  }
 
   try {
     const res = await DB.query(`

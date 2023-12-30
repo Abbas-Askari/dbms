@@ -82,19 +82,13 @@ type PropsRating = {
   className?: string;
 };
 
-export function Rating({
-  defaultRating,
-  disabled,
-  className,
-  id,
-}: PropsRating) {
-  console.log({ defaultRating });
+export function Rating({ defaultRating, className, id }: PropsRating) {
   if (isNaN(defaultRating)) {
     return <div className="italic">No Reviews</div>;
   }
   return (
-    <div className="rating rating-half rating-xs">
-      {/* <input type="radio" name="rating-10" className="rating-hidden" /> */}
+    <div className={`rating rating-half rating-xs ${className}`}>
+      <input type="radio" name={`rating-${id}`} className="rating-hidden" />
       {new Array(10).fill(0).map((_, i) => (
         <input
           type="radio"

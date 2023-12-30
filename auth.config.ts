@@ -24,9 +24,8 @@ export const authConfig = {
       }
       return isLoggedIn || onLoginPage || onSignUpPage;
     },
-    session({ session, user, token }) {
-      // session.user = user;
-      session.user.id = token.sub as string;
+    session({ session, token }) {
+      session.user.id = parseInt(token.sub) as number;
       return session;
     },
   },

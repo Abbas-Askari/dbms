@@ -6,7 +6,6 @@ type Props = {
 };
 
 export function Rating({ defaultRating, disabled, className, id }: Props) {
-  console.log({ defaultRating });
   return (
     <div className={`rating ${className}`}>
       {new Array(5).fill(0).map((_, i) => (

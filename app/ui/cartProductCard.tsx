@@ -1,82 +1,128 @@
 "use client";
 
-import { PhotoIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { updateProductQuantity } from "../lib/cartActions";
-import { useRouter } from "next/navigation";
+import { MinusIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { removeFromCart, updateProductQuantity } from "../lib/cartActions";
 import { useState } from "react";
 import { Product } from "../lib/definitions";
+import { numberToDollars } from "../utils/general";
+import FormSubmitButton from "./formSubmitButton";
 
 export const CartProductCard = ({ product, setProducts }: any) => {
   const [loading, setLoading] = useState(false);
 
+  console.log({ product });
+  const removeFromCartBound = removeFromCart.bind(null, product.id, null);
+
   return (
-    <div className="flex items-center gap-2 border-b-[1px] border-neutral-700 mb-4">
-      <PhotoIcon className="w-24 h-24" />
+    <div className="flex items-center gap-2 border-b-[1px] border-neutral-700 mb-2 pb-2">
+      <div className="relative">
+        <form
+          action={removeFromCartBound}
+          onSubmit={() =>
+            setProducts((products) =>
+              products.filter((p) => p.id !== product.id)
+            )
+          }
+          className="absolute right-0 top-0 rounded-full translate-x-[50%] translate-y-[-30%] overflow-hidden w-4 h-4 flex items-center justify-center"
+        >
+          <FormSubmitButton
+            className="btn-xs  w-2 h-2 aspect-square"
+            value={<XMarkIcon className="w-2 h-2 text-white" />}
+          />
+        </form>
+
+        <img
+          src={product.data}
+          className="h-20 w-20 rounded-lg bg-[#00000080] border-neutral-800 border-[1px] object-contain"
+        />
+      </div>
+      {/* <PhotoIcon className="w-24 h-24" /> */}
       <div className="flex-1 mb-4">
         <div className="flex justify-between gap-16 mb-2">
           <div className=" min-w-max font-bold">{product.title}</div>
-          <div className="">${product.price * product.quantity}</div>
+          <div className="badge badge-primary">
+            {numberToDollars(product.price * product.quantity)}
+          </div>
         </div>
-        <div className="ml-auto flex border-[1px] border-neutral-700 w-min px-3 py-1 gap-4 rounded-full">
-          {!loading ? (
-            <>
-              <button
-                onClick={async () => {
-                  setLoading(true);
-                  try {
-                    await updateProductQuantity(
-                      product.id,
-                      product.customer_id,
-                      product.quantity - 1
-                    );
-                    setProducts((products: Product) =>
-                      products.map((p) =>
-                        p.id === product.id
-                          ? { ...p, quantity: p.quantity - 1 }
-                          : p
-                      )
-                    );
-                    console.log("Changed Product Quantity.");
-                  } catch (error) {}
-                  setLoading(false);
-                }}
-              >
-                <MinusIcon className="w-4 h-4" />
-              </button>
-              <div className=" border-r-[1px] border-l-[1px] border-neutral-700 px-5">
-                {product.quantity}
-              </div>
-              <button
-                onClick={async () => {
-                  setLoading(true);
-                  try {
-                    await updateProductQuantity(
-                      product.id,
-                      product.customer_id,
-                      product.quantity + 1
-                    );
-                    setProducts((products: Product) =>
-                      products.map((p) =>
-                        p.id === product.id
-                          ? { ...p, quantity: p.quantity + 1 }
-                          : p
-                      )
-                    );
-                    console.log("Changed Product Quantity.");
-                  } catch (error) {}
-                  setLoading(false);
-                }}
-              >
-                <PlusIcon className="w-4 h-4" />
-              </button>
-            </>
-          ) : (
-            <div className="">
-              <span className="loading loading-dots loading-sm"></span>
-            </div>
-          )}
+
+        <div className="flex justify-between">
+          <div className="badge badge-outline">
+            <span>{product.quantity}</span>
+            <XMarkIcon className="w-3 h-3 text-inherit" />
+            <span>{numberToDollars(+product.price)}</span>
+          </div>
+
+          <ChangeQunatityChip
+            {...{ loading, setLoading, product, setProducts }}
+          />
         </div>
       </div>
     </div>
   );
 };
+
+function ChangeQunatityChip({
+  loading,
+  setLoading,
+  product,
+  setProducts,
+}: {
+  product: any;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+  setProducts: (products: any[]) => void;
+}) {
+  console.log({ cutomer_id: product.customer_id });
+
+  return (
+    <div className="badge flex items-center">
+      {/* <div className="ml-auto flex border-[1px] border-neutral-700 w-min px-3 py-1 gap-4 rounded-full"> */}
+      {!loading ? (
+        <>
+          <button
+            onClick={async () => {
+              setLoading(true);
+              try {
+                console.log({ customer_id: product.customer_id });
+                await updateProductQuantity(product.id, product.quantity - 1);
+                setProducts((products: any) =>
+                  products.map((p) =>
+                    p.id === product.id ? { ...p, quantity: p.quantity - 1 } : p
+                  )
+                );
+                console.log("Changed Product Quantity.");
+              } catch (error) {}
+              setLoading(false);
+            }}
+          >
+            <MinusIcon className="w-4 h-4" />
+          </button>
+          <div className=" border-r-[1px] border-l-[1px] border-neutral-700 px-3 mx-2">
+            {product.quantity}
+          </div>
+          <button
+            onClick={async () => {
+              setLoading(true);
+              try {
+                await updateProductQuantity(product.id, product.quantity + 1);
+                setProducts((products: Product) =>
+                  products.map((p) =>
+                    p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
+                  )
+                );
+                console.log("Changed Product Quantity.");
+              } catch (error) {}
+              setLoading(false);
+            }}
+          >
+            <PlusIcon className="w-4 h-4" />
+          </button>
+        </>
+      ) : (
+        <div className="">
+          <span className="loading loading-dots loading-sm"></span>
+        </div>
+      )}
+    </div>
+  );
+}
