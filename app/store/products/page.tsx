@@ -7,7 +7,7 @@ import DB from "@/database";
 
 async function StoreProductsPage() {
   const result = await DB.query(`
-    // SELECT * from product;
+    SELECT * from product;
   `);
 
   const products: Product[] = result.rows as Product[];

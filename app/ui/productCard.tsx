@@ -9,6 +9,8 @@ type Props = {
 };
 
 function ProductCard({ product }: Props) {
+  console.log({ rating: product.rating });
+
   return (
     // <Link
     //   href={`products/${product.id}`}
@@ -67,7 +69,7 @@ function ProductCard({ product }: Props) {
         <div className="card-actions justify-between items-center">
           <Rating
             // round product.rating to nearest multiple of 0.5
-            defaultRating={Math.round(parseInt(product.rating) * 2)}
+            defaultRating={Math.round(parseFloat(product.rating) * 2)}
             className="rating-xs"
             id={product.id}
           />
@@ -89,11 +91,12 @@ type PropsRating = {
 
 export function Rating({ defaultRating, className, id }: PropsRating) {
   if (isNaN(defaultRating)) {
-    return <div className="italic">No Reviews</div>;
+    return <div className="italic text-amber-400">No Reviews</div>;
   }
+  console.log({ defaultRating });
+
   return (
-    <div className={`rating rating-half rating-xs ${className}`}>
-      <input type="radio" name={`rating-${id}`} className="rating-hidden" />
+    <div className={`rating rating-half rating-sm ${className}`}>
       {new Array(10).fill(0).map((_, i) => (
         <input
           type="radio"
@@ -101,7 +104,6 @@ export function Rating({ defaultRating, className, id }: PropsRating) {
           className={`bg-amber-400 mask pointer-events-none mask-star-2 mask-half-${
             (i % 2) + 1
           }`}
-          //checked for i = 7
           {...(defaultRating && { defaultChecked: i + 1 <= defaultRating })}
         />
       ))}

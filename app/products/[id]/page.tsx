@@ -21,7 +21,7 @@ type Props = {
   params: { id: string };
 };
 
-async function Page({ params }: Props) {
+async function ProductPage({ params }: Props) {
   // unstable_noStore();
 
   const { id } = params;
@@ -259,4 +259,4 @@ function WriteReview({ productId }: { productId: number }) {
   );
 }
 
-export default Page;
+export default ProductPage;

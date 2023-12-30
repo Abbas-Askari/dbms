@@ -12,7 +12,7 @@ type Props = {
   };
 };
 
-async function ProductPage({ searchParams }: Props) {
+async function ProductsPage({ searchParams }: Props) {
   const { query } = searchParams;
   let result: QueryResult<QueryResultRow>;
 
@@ -46,4 +46,4 @@ async function ProductPage({ searchParams }: Props) {
   );
 }
 
-export default ProductPage;
+export default ProductsPage;

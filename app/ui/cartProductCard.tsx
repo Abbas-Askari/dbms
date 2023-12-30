@@ -59,7 +59,7 @@ export const CartProductCard = ({ product, setProducts }: any) => {
           </div>
         </div>
 
-        <div className="flex justify-between w-full">
+        <div className="flex justify-between w-full gap-8">
           <div className="badge badge-outline">
             <span>{product.quantity}</span>
             <XMarkIcon className="w-3 h-3 text-inherit" />
