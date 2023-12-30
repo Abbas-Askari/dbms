@@ -20,12 +20,16 @@ async function ProductPage({ searchParams }: Props) {
 
   if (query) {
     result = await DB.query(`
-    SELECT * FROM product WHERE starts_with(LOWER(title), LOWER(${query}));
+    SELECT Pr.*, I.data, avg(R.rating) as rating from product Pr JOIN (select distinct on (product_id) * from productimage )PI ON Pr.id = PI.product_id
+    JOIN image I ON PI.image_id = I.id
+    LEFT JOIN review R ON r.product_id = Pr.id
+    WHERE starts_with(LOWER(Pr.title), LOWER('${query}'))
+    GROUP BY Pr.id, I.id;
   `);
   } else {
     // SELECT * FROM product;
     result = await DB.query(`
-      select Pr.*, I.data, avg(R.rating) as rating from product Pr JOIN (select distinct on (product_id) * from productimage )PI ON Pr.id = PI.product_id
+      SELECT Pr.*, I.data, avg(R.rating) as rating from product Pr JOIN (select distinct on (product_id) * from productimage )PI ON Pr.id = PI.product_id
         JOIN image I ON PI.image_id = I.id
         LEFT JOIN review R ON r.product_id = Pr.id GROUP BY Pr.id, I.id;
     `);
