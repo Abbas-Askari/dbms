@@ -1,7 +1,7 @@
 import React from "react";
-import { numberToDollars } from "../../utils/general";
+import { numberToDollars } from "@/app/utils/general";
 import * as dayjs from "dayjs";
-import OrderModal from "../../ui/orderModal";
+import OrderModal from "@/app/ui/orderModal";
 import DB from "@/database";
 import Link from "next/link";
 dayjs.extend(require("dayjs/plugin/relativeTime"));
@@ -25,7 +25,7 @@ async function OrdersPage() {
   return (
     <div className="mx-8">
       <div role="tablist" className="tabs tabs-lifted w-min mx-auto">
-        <Link role="tab" className={`tab `} href={"/store/products"}>
+        <Link role="tab" className={`tab `} href={"products"}>
           Products
         </Link>
         <Link

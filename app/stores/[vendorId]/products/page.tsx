@@ -1,9 +1,9 @@
 import React from "react";
 import "../style.css";
-import { Product } from "../../lib/definitions";
-import ProductListCard from "../../ui/productListCard";
+import { Product } from "@/app/lib/definitions";
 import Link from "next/link";
 import DB from "@/database";
+import ProductListCard from "@/app/ui/productListCard";
 
 async function StoreProductsPage() {
   const result = await DB.query(`
@@ -22,11 +22,11 @@ async function StoreProductsPage() {
         >
           Products
         </Link>
-        <Link role="tab" className={`tab `} href={"/store/orders"}>
+        <Link role="tab" className={`tab `} href={"orders"}>
           Orders
         </Link>
       </div>
-      <div className="bg-neutral-800 rounded-lg px-16 pt-2">
+      <div className="bg-neutral-800 rounded-lg px-16 pt-2 mb-4">
         <table
           className={`table ${
             products.length === 0 ? "hidden" : ""

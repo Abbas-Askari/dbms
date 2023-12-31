@@ -1,16 +1,16 @@
-import "../globals.css";
-import SellerInfo from "../ui/sellerInfo";
+import "@/app/globals.css";
+import SellerInfo from "@/app/ui/sellerInfo";
 import DB from "@/database";
-import { numberToDollars } from "../utils/general";
+import { numberToDollars } from "../../utils/general";
 
 export default async function StoreLayout({
   children,
-  pageUrl,
+  params,
 }: {
   children: React.ReactNode;
-  pageUrl: string;
+  params: { vendorId: string };
 }) {
-  console.log({ pageUrl });
+  console.log({ vendorId: params.vendorId });
 
   const customersResult = await DB.query(
     `SELECT count(distinct customer_id) as total FROM orders JOIN orderproducts ON orders.id = orderProducts.order_id WHERE completed = true;`
@@ -29,7 +29,7 @@ export default async function StoreLayout({
 
   return (
     <div>
-      <SellerInfo />
+      <SellerInfo vendorId={params.vendorId} />
       <div className="flex justify-center gap-8">
         {/* <StatsCard index={1} title="Revenue" value="$92,110,135" />
     <StatsCard index={2} title="Products Sold" value="128" />

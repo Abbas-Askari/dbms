@@ -49,14 +49,12 @@ const handler = NextAuth({
             getUser(email),
             getVendor(email),
           ]);
-          console.log({ customer, vendor });
           if (!customer && !vendor) return null;
           if (password === customer?.password)
             return { ...customer, isVendor: false };
           if (password === vendor?.password)
             return { ...vendor, isVendor: true };
         }
-        console.log("Invalid credentials");
         return null;
       },
     }),

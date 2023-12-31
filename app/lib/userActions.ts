@@ -111,7 +111,6 @@ export async function makeVendor(data: {
         '${vendor.store_description}'
     )
     RETURNING id;`;
-    console.log(query);
     const res = await DB.query(query);
 
     console.log({ res });

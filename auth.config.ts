@@ -26,7 +26,6 @@ export const authConfig = {
       return isLoggedIn || onLoginPage || onSignUpPage;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
-      console.log({ token, user, account, profile, isNewUser });
       if (user) {
         token.accessToken = account.access_token;
         token.id = user.id;
@@ -35,10 +34,7 @@ export const authConfig = {
       return token;
     },
     session({ session, token, user }) {
-      console.log({ token, user });
-
       session.user = token.user;
-      // session.user.id = parseInt(token.sub) as number;
       return session;
     },
   },

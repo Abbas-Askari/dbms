@@ -17,11 +17,6 @@ function CarouselButtons({ className, ...props }: Props) {
 
   function handleClick(isLeft: boolean) {
     const button = isLeft ? ref.current.firstChild : ref.current.lastChild;
-    console.log({
-      isLeft,
-      //   scroll: ref.current.,
-      button,
-    });
     if (!ref.current) return;
     if (isLeft) {
       button.parentNode.parentNode.lastChild.scrollLeft -=
