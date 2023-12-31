@@ -36,10 +36,6 @@ export default async function StoreLayout({
     <div>
       <SellerInfo vendorId={params.vendorId} />
       <div className="flex justify-center gap-8">
-        {/* <StatsCard index={1} title="Revenue" value="$92,110,135" />
-    <StatsCard index={2} title="Products Sold" value="128" />
-    <StatsCard index={3} title="Customers" value="118" /> */}
-
         <div className="stats shadow bg-inherit">
           <div className="stat place-items-center">
             <div className="stat-title text-xs">Customers</div>

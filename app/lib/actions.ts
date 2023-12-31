@@ -44,6 +44,7 @@ export async function createProduct(formData: FormData) {
 
   revalidatePath("/products");
   revalidatePath("/stores");
+  redirect(`/stores/${vendor_id}/products`);
 }
 
 export async function deleteProduct(id: string) {
