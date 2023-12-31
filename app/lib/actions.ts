@@ -43,12 +43,12 @@ export async function createProduct(formData: FormData) {
   }
 
   revalidatePath("/products");
-  revalidatePath("/store");
+  revalidatePath("/stores");
 }
 
 export async function deleteProduct(id: string) {
   await DB.query(`DELETE FROM product WHERE id=${id};`);
-  revalidatePath("/store");
+  revalidatePath("/stores");
   revalidatePath("/products");
 }
 
@@ -79,10 +79,8 @@ export async function updateProduct(id: number, formData: FormData) {
   } catch (error) {
     console.error({ error });
   }
-  // TODO: uncomment these lines.
   revalidatePath("/products");
-  revalidatePath("/store");
-  // revalidatePath("/");
+  revalidatePath("/stores");
   redirect("/store/products");
 }
 

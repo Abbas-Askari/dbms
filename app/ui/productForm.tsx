@@ -72,7 +72,7 @@ export const ProductForm = ({
             <input
               name="stock"
               id="stock"
-              type="numebr"
+              type="number"
               placeholder="Give a title to your product"
               className="input input-sm input-bordered w-full"
               defaultValue={stock}

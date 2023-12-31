@@ -6,11 +6,11 @@ import { deleteProduct } from "../lib/actions";
 function ProductListCard({
   product,
   index,
-  canEdit,
+  isOwner,
 }: {
   product: Product;
   index: number;
-  canEdit?: boolean;
+  isOwner?: boolean;
 }) {
   const deleteProductWithId = deleteProduct.bind(null, product.id);
 
@@ -25,7 +25,7 @@ function ProductListCard({
           <Link href={`/products/${product.id}`} className="btn   ">
             View
           </Link>
-          {canEdit && (
+          {isOwner && (
             <>
               <Link href={`/products/${product.id}/edit`} className="btn   ">
                 Edit

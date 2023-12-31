@@ -10,20 +10,25 @@ export default async function StoreLayout({
   children: React.ReactNode;
   params: { vendorId: string };
 }) {
-  console.log({ vendorId: params.vendorId });
+  const vendor_id = params.vendorId;
 
   const customersResult = await DB.query(
-    `SELECT count(distinct customer_id) as total FROM orders JOIN orderproducts ON orders.id = orderProducts.order_id WHERE completed = true;`
+    `SELECT count(distinct customer_id) as total
+      FROM orders JOIN orderproducts ON orders.id = orderProducts.order_id
+      JOIN (SELECT id FROM product WHERE vendor_id = ${vendor_id}) Pr ON Pr.id = orderProducts.product_id
+      WHERE completed = true;`
   );
   const customersTotal = customersResult.rows[0].total;
 
   const salesResult = await DB.query(
-    `SELECT SUM(Pr.price * OP.quantity) as total FROM product PR JOIN orderproducts OP ON PR.id = OP.product_id WHERE completed = true;`
+    `SELECT SUM(Pr.price * OP.quantity) as total FROM product PR JOIN orderproducts OP ON PR.id = OP.product_id WHERE completed = true AND vendor_id = ${vendor_id};`
   );
   const salesTotal = +salesResult.rows[0].total;
 
   const productsResult = await DB.query(
-    `SELECT SUM(quantity) as total FROM orderproducts WHERE completed = true;`
+    `SELECT SUM(quantity) as total FROM orderproducts
+      JOIN (SELECT id FROM product WHERE vendor_id = ${vendor_id}) Pr ON Pr.id = orderProducts.product_id
+      WHERE completed = true;`
   );
   const productsTotal = +productsResult.rows[0].total;
 

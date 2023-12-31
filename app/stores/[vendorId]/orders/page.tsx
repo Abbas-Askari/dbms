@@ -4,16 +4,20 @@ import * as dayjs from "dayjs";
 import OrderModal from "@/app/ui/orderModal";
 import DB from "@/database";
 import Link from "next/link";
+import { auth } from "@/app/api/auth/[...nextauth]/route";
 dayjs.extend(require("dayjs/plugin/relativeTime"));
 
 async function getOrders(): Promise<any[]> {
   "use server";
 
+  const session = await auth();
+  const vendorId = session?.user?.id as number;
+
   return (
     await DB.query(`
       SELECT * FROM orders JOIN customer ON orders.customer_id = customer.id
       JOIN orderProducts ON orders.id = orderProducts.order_id JOIN product ON orderProducts.product_id = product.id
-      JOIN address ON address.id::INT = orders.address_id::INT WHERE completed = false;
+      JOIN address ON address.id::INT = orders.address_id::INT WHERE completed = false AND vendor_id = ${vendorId};
   `)
   ).rows;
 }
@@ -40,7 +44,9 @@ async function OrdersPage() {
       <div className=" bg-neutral-800 rounded-lg px-16 py-8 pt-2">
         <div className="overflow-x-auto">
           {orders.length === 0 && (
-            <div className="text-center w-full italic">No pending orders</div>
+            <div className="text-center w-full  italic opacity-20 pt-4">
+              No pending orders
+            </div>
           )}
           <table className={`table ${orders.length === 0 ? "hidden" : ""}`}>
             <thead>

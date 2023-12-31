@@ -13,8 +13,10 @@ async function StoreProductsPage({ params }: { params: { vendorId: string } }) {
 
   const products: Product[] = result.rows as Product[];
   const session = await auth();
-  const canEdit =
-    session?.user?.id === params.vendorId && session.user.isVendor;
+  const isOwner =
+    +session?.user?.id === +params.vendorId && session.user.isVendor;
+
+  console.log({ user: session.user, vid: params.vendorId });
 
   return (
     <div className="mx-8">
@@ -26,11 +28,18 @@ async function StoreProductsPage({ params }: { params: { vendorId: string } }) {
         >
           Products
         </Link>
-        <Link role="tab" className={`tab `} href={"orders"}>
-          Orders
-        </Link>
+        {isOwner && (
+          <Link role="tab" className={`tab `} href={"orders"}>
+            Orders
+          </Link>
+        )}
       </div>
       <div className="bg-neutral-800 rounded-lg px-16 pt-2 mb-4">
+        {products.length === 0 && (
+          <div className="text-center w-full italic   italic opacity-20 pt-4">
+            This store has no products
+          </div>
+        )}
         <table
           className={`table ${
             products.length === 0 ? "hidden" : ""
@@ -48,7 +57,7 @@ async function StoreProductsPage({ params }: { params: { vendorId: string } }) {
           <tbody>
             {products.map((product, i) => (
               <ProductListCard
-                canEdit={canEdit}
+                isOwner={isOwner}
                 product={product}
                 key={i}
                 index={i}
@@ -57,12 +66,13 @@ async function StoreProductsPage({ params }: { params: { vendorId: string } }) {
           </tbody>
         </table>
 
-        <div className="flex mt-4 p-4">
-          <Link href="/editproduct" className="btn btn-primary  ml-auto">
-            Add A Product
-          </Link>
-        </div>
-
+        {isOwner && (
+          <div className="flex mt-4 p-4">
+            <Link href="/editproduct" className="btn btn-primary  ml-auto">
+              Add A Product
+            </Link>
+          </div>
+        )}
         {/* <div className="product-list  items-center grid gap-4 px-12 mb-8">
           {products.map((product, i) => (
             <ProductListCard

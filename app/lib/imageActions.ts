@@ -36,6 +36,10 @@ export async function updateProductImages(
         WHERE id in (SELECT image_id FROM productimage WHERE product_id = ${productId});
     `);
 
+    if (newImages.length === 0) {
+      return;
+    }
+
     const query = `
       INSERT INTO image (name, data) VALUES
       ${newImages
