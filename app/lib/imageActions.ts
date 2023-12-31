@@ -64,10 +64,7 @@ export async function updateProductImages(
   }
 }
 
-export async function updateStoreImages(
-  storeId: number,
-  newImages: Image[]
-) {
+export async function updateStoreImages(storeId: number, newImages: Image[]) {
   try {
     const storeimageDelete = await DB.query(`
     DELETE FROM storeimage WHERE vendor_id = ${storeId};
@@ -76,7 +73,7 @@ export async function updateStoreImages(
         DELETE FROM image
         WHERE id in (SELECT image_id FROM storeimage WHERE vendor_id = ${storeId});
     `);
-    
+
     const query = `
       INSERT INTO image (name, data) VALUES
       ${newImages
@@ -99,7 +96,7 @@ export async function updateStoreImages(
     console.log(q);
     const storeimageInsert = await DB.query(q);
 
-    console.log({ addResult });
+    console.log({ storeimageInsert });
   } catch (error) {
     console.error("Failed to update store images", error);
   }

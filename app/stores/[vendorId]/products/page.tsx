@@ -4,13 +4,17 @@ import { Product } from "@/app/lib/definitions";
 import Link from "next/link";
 import DB from "@/database";
 import ProductListCard from "@/app/ui/productListCard";
+import { auth } from "@/app/api/auth/[...nextauth]/route";
 
-async function StoreProductsPage() {
+async function StoreProductsPage({ params }: { params: { vendorId: string } }) {
   const result = await DB.query(`
-    SELECT * from product;
+    SELECT * from product WHERE vendor_id = ${params.vendorId};
   `);
 
   const products: Product[] = result.rows as Product[];
+  const session = await auth();
+  const canEdit =
+    session?.user?.id === params.vendorId && session.user.isVendor;
 
   return (
     <div className="mx-8">
@@ -43,7 +47,12 @@ async function StoreProductsPage() {
           </thead>
           <tbody>
             {products.map((product, i) => (
-              <ProductListCard product={product} key={i} index={i} />
+              <ProductListCard
+                canEdit={canEdit}
+                product={product}
+                key={i}
+                index={i}
+              />
             ))}
           </tbody>
         </table>

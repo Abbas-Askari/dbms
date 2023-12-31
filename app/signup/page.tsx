@@ -7,13 +7,13 @@ import { Carousel } from "../ui/carousel";
 const page = () => {
   const [page, setPage] = useState(4);
   const [role, setRole] = useState("Vendor");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [storeName, setStoreName] = useState("");
-  const [storeDesc, setStoreDesc] = useState("");
+  const [firstName, setFirstName] = useState("Chacking");
+  const [lastName, setLastName] = useState("Iamges");
+  const [email, setEmail] = useState("123@123.com");
+  const [password, setPassword] = useState("12345678");
+  const [phoneNumber, setPhoneNumber] = useState("03000000000");
+  const [storeName, setStoreName] = useState("Le Store");
+  const [storeDesc, setStoreDesc] = useState("Le Store Desc");
   const [error, setError] = useState("");
 
   const verifyEmail = (value: string) => {
@@ -60,7 +60,7 @@ const page = () => {
                 lastName,
                 storeName,
                 storeDesc,
-                images: formData.get("images") as string,
+                images: JSON.stringify(formData.get("images")) as string,
               })
         }
       >

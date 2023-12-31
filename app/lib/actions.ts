@@ -1,29 +1,37 @@
 "use server";
 
-import { sql } from "@vercel/postgres";
-import { Product } from "./definitions";
-import { randomUUID } from "crypto";
+import { Customer, Product, Vendor } from "./definitions";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { updateProductImages } from "./imageActions";
-import DB, { SQL } from "@/database";
+import DB from "@/database";
+import { auth } from "../api/auth/[...nextauth]/route";
+import { AuthError } from "next-auth";
 
 export async function createProduct(formData: FormData) {
-  //   const product: Product = {
+  const session = await auth();
+  const user = session?.user;
+  if (!user.isVendor || !user) {
+    throw new AuthError("You are not a vendor");
+  }
+
   const product: any = {
     title: formData.get("title"),
     description: formData.get("description"),
     stock: formData.get("stock"),
     price: formData.get("price"),
   };
+  const vendor_id = user?.id;
 
   try {
     const query = `
-    INSERT INTO product (title, description, stock, price) VALUES (
-      '${product.title}',
-      '${product.description}',
-      ${product.stock},
-      ${product.price})
+    INSERT INTO product (title, description, stock, price, vendor_id) VALUES (
+        '${product.title}',
+        '${product.description}',
+        ${product.stock},
+        ${product.price},
+        ${vendor_id}
+      )
       RETURNING id;
   `;
 

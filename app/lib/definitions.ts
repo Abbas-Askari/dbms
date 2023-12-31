@@ -6,6 +6,7 @@ export type Product = {
   description: string;
   price: number;
   stock: number;
+  vendor_id: number;
 };
 
 export type User = {

@@ -6,9 +6,11 @@ import { deleteProduct } from "../lib/actions";
 function ProductListCard({
   product,
   index,
+  canEdit,
 }: {
   product: Product;
   index: number;
+  canEdit?: boolean;
 }) {
   const deleteProductWithId = deleteProduct.bind(null, product.id);
 
@@ -20,12 +22,19 @@ function ProductListCard({
         <td>{product.price}</td>
         <td>{product.stock}</td>
         <td className="flex gap-4  justify-end">
-          <Link href={`/products/${product.id}/edit`} className="btn   ">
-            Edit
+          <Link href={`/products/${product.id}`} className="btn   ">
+            View
           </Link>
-          <form action={deleteProductWithId} className=" ">
-            <button className="btn btn-block    btn-error">Delete</button>
-          </form>
+          {canEdit && (
+            <>
+              <Link href={`/products/${product.id}/edit`} className="btn   ">
+                Edit
+              </Link>
+              <form action={deleteProductWithId} className=" ">
+                <button className="btn btn-block    btn-error">Delete</button>
+              </form>
+            </>
+          )}
         </td>
       </tr>
     </>
