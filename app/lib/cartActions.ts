@@ -82,8 +82,8 @@ export async function getCartProducts() {
     const session = await auth();
     // const session = await getSession();
     const result = await DB.query(
-      `SELECT * FROM product Pr JOIN cart ON cart.product_id = Pr.id
-        LEFT JOIN productImage PI ON PI.product_id = Pr.id
+      `SELECT Pr.*, data, name, quantity FROM product Pr JOIN cart ON cart.product_id = Pr.id
+        LEFT JOIN (SELECT DISTINCT ON (product_id) * FROM productImage ) PI ON PI.product_id = Pr.id
         LEFT JOIN image I ON I.id = PI.image_id
         WHERE cart.customer_id = 1 ORDER BY Pr.id`
     );
@@ -134,6 +134,8 @@ export async function placeOrder(formData: FormData) {
       cart
         ?.map((product) => `(${orderId}, ${product.id} ,${product.quantity})`)
         .join(", ");
+
+    console.log(defectiveQuery);
     const orderProductsResult = await DB.query(defectiveQuery);
 
     console.log("Success!");

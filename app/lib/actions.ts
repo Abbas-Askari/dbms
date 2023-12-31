@@ -48,7 +48,7 @@ export async function createProduct(formData: FormData) {
 }
 
 export async function deleteProduct(id: string) {
-  await DB.query(`DELETE FROM product WHERE id=${id};`);
+  await DB.query(`DELETE FROM product WHERE id=${id}`);
   revalidatePath("/stores");
   revalidatePath("/products");
 }

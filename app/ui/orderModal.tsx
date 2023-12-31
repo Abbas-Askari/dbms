@@ -1,10 +1,13 @@
 "use client";
 
+import { PhotoIcon } from "@heroicons/react/20/solid";
 import { completeOrder } from "../lib/cartActions";
 import { numberToDollars } from "../utils/general";
 import CompleteOrderButton from "./completeOrderButton";
 
 function OrderModal({ order }: { order: any }) {
+  console.log({ order });
+
   return (
     <td className="">
       <button
@@ -17,11 +20,19 @@ function OrderModal({ order }: { order: any }) {
       </button>
       <dialog id={`${order.id}-order-modal`} className="modal">
         <div className="modal-box">
-          <figure>
-            <img
-              src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-              alt="Shoes"
-            />
+          <figure className=" bg-base-200 p-4 box-border flex justify-center items-center">
+            {order.data ? (
+              <img
+                src={order.data}
+                alt={order.title}
+                className=" object-contain h-64"
+              />
+            ) : (
+              <div className="h-64 flex items-center gap-2 justify-center opacity-25">
+                <PhotoIcon className="w-12 h-12 textwhite" />
+                <span className=" font-extrabold italic">No photo</span>
+              </div>
+            )}
           </figure>
           <div className="card-body">
             <h2 className="card-title">
