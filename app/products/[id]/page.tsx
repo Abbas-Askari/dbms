@@ -124,24 +124,10 @@ async function ProductPage({ params }: Props) {
       <div className="">
         <div className="text-2xl font-bold">Store</div>
         <Link
-          href="/store/products"
+          href={`/stores/${product.vendor_id}/products`}
           className=" hover:bg-[#ffffff20] transition-colors py-4 px-8 rounded-md flex gap-8 items-center "
         >
-          <img
-            src={"/next.svg"}
-            alt=""
-            className=" w-20  aspect-square object-contain flex-shrink-0 bg-white box-border p-4"
-          />
-          <div className="">
-            <h1 className="text-xl font-semibold">Abbas And Bros.</h1>
-            <div className="description text-sm">
-              An online store is a website or app where buyers can see a catalog
-              of products or services and make electronic purchases. An
-              ecommerce store is slightly different from an online store in that
-              it doesn't need to have a digital catalog or checkout process,
-              only an electronic payment method.
-            </div>
-          </div>
+          <SellerInfo vendorId={""+product.vendor_id} />
         </Link>
       </div>
 

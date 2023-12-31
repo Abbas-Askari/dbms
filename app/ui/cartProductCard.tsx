@@ -98,8 +98,8 @@ function ChangeQunatityChip({
               setLoading(true);
               try {
                 console.log({ customer_id: product.customer_id });
-                await updateProductQuantity(product.id, product.quantity - 1);
-                setProducts((products: any) =>
+                let status = await updateProductQuantity(product.id, product.quantity - 1);
+                if (status) setProducts((products: any) =>
                   products.map((p) =>
                     p.id === product.id ? { ...p, quantity: p.quantity - 1 } : p
                   )
@@ -118,8 +118,8 @@ function ChangeQunatityChip({
             onClick={async () => {
               setLoading(true);
               try {
-                await updateProductQuantity(product.id, product.quantity + 1);
-                setProducts((products: Product) =>
+                let status = await updateProductQuantity(product.id, product.quantity + 1);
+                if (status) setProducts((products: Product) =>
                   products.map((p) =>
                     p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
                   )

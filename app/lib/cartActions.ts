@@ -53,6 +53,7 @@ export async function updateProductQuantity(
   unstable_noStore();
   const session = await auth();
   const customer_id = session?.user?.id;
+  let status = true;
   console.log({ product_id, quantity }, "updating quantity");
 
   if (quantity === 0) {
@@ -61,19 +62,24 @@ export async function updateProductQuantity(
   }
 
   try {
+
+    const limit = await DB.query(`SELECT * FROM product WHERE id = ${product_id}`)
+    let stock = limit.rows[0].stock
+    status =  quantity <= stock
     const res = await DB.query(`
-            UPDATE cart SET quantity = ${quantity} WHERE product_id=${product_id} AND customer_id=${customer_id};
+            UPDATE cart SET quantity = ${Math.min(quantity, stock)} WHERE product_id=${product_id} AND customer_id=${customer_id};
         `);
-    console.log({ res, row: res.rows }, "updating quantity");
   } catch (error) {
     console.log("Failed to update qunatity: ", error);
-    return;
+    return false;
   }
 
   console.log("revalidating");
   revalidateTag("cart");
   revalidatePath(`/`, "layout");
   revalidatePath(`/`, "page");
+  return status;
+  
 }
 
 export async function getCartProducts() {
@@ -152,11 +158,15 @@ export async function placeOrder(formData: FormData) {
 
 export async function completeOrder(orderId: number, productId: number) {
   try {
+    console.log("COMPLETING ORDER")
     const result = await DB.query(`
-            UPDATE orderProducts SET completed = true WHERE order_id = ${orderId} AND product_id = ${productId};;    
+            UPDATE orderProducts SET completed = true WHERE order_id = ${orderId} AND product_id = ${productId}
+            RETURNING quantity;    
         `);
 
-    console.log("Success!", { result });
+    const decreaseStock = await DB.query(`
+      UPDATE product SET stock = stock - ${result.rows[0].quantity} WHERE id = ${productId}
+    `)
     revalidatePath(`/orders`);
   } catch (error) {
     console.error("Failed to complete order", error);
