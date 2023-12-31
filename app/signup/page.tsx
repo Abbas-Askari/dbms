@@ -60,7 +60,7 @@ const page = () => {
                 lastName,
                 storeName,
                 storeDesc,
-                images: JSON.stringify(formData.get("images")) as string,
+                images: formData.get("images") as string,
               })
         }
       >

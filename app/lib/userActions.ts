@@ -114,7 +114,8 @@ export async function makeVendor(data: {
     const res = await DB.query(query);
 
     console.log({ res });
-    const images = JSON.parse(data.images as string);
+    const images = JSON.parse(data.images);
+    console.log({ images });
     updateStoreImages(res.rows[0].id, images);
   } catch (error) {
     console.log("Failed to create vendor: ", error);
