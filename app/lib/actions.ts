@@ -64,6 +64,7 @@ export async function updateProduct(id: number, formData: FormData) {
   const images = JSON.parse(formData.get("images") as string);
   updateProductImages(id, images);
 
+  let vendor_id;
   try {
     const result = await DB.query(`
       UPDATE product SET
@@ -72,7 +73,9 @@ export async function updateProduct(id: number, formData: FormData) {
         stock = ${product.stock},
         price = ${product.price}
       WHERE id = ${id};
+      RETURNING vendor_id;
     `);
+    vendor_id = result.rows[0].vendor_id;
     console.log({
       result,
       product,
@@ -82,7 +85,7 @@ export async function updateProduct(id: number, formData: FormData) {
   }
   revalidatePath("/products");
   revalidatePath("/stores");
-  redirect("/store/products");
+  redirect(`/stores/${vendor_id}/products`);
 }
 
 export async function getProductById(id: string) {
