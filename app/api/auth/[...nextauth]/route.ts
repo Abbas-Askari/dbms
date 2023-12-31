@@ -51,17 +51,10 @@ const handler = NextAuth({
           ]);
           console.log({ customer, vendor });
           if (!customer && !vendor) return null;
-          if (password === customer?.password) return customer;
-          if (password === vendor?.password) return vendor;
-          // const passwordMatches = await bcrypt.compare(password, customer.password);
-
-          // const { email, password } = parsedCredentials.data;
-          // const user = await getUser(email);
-          // console.log({ user });
-          // if (!user) return null;
-          // const passwordMatches = password === user.password;
-          // // const passwordMatches = await bcrypt.compare(password, user.password);
-          // if (passwordMatches) return user;
+          if (password === customer?.password)
+            return { ...customer, isVendor: false };
+          if (password === vendor?.password)
+            return { ...vendor, isVendor: true };
         }
         console.log("Invalid credentials");
         return null;
