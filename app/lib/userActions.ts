@@ -13,7 +13,7 @@ import { updateStoreImages } from "./imageActions";
 // import { signIn } from "@/auth";
 
 export async function createCustomer(formData: FormData) {
-  console.log(formData)
+  console.log(formData);
   // const customer: Customer = {
   //   email: formData.get("email") as string,
   //   password: formData.get("password") as string,
@@ -43,7 +43,13 @@ export async function createCustomer(formData: FormData) {
   // redirect("/login");
 }
 
-export async function makeCustomer(data: {email: string, password: string, firstName: string, lastName: string, phoneNumber: string}) {
+export async function makeCustomer(data: {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+}) {
   const customer: Customer = {
     email: data.email as string,
     password: data.password as string,
@@ -73,8 +79,16 @@ export async function makeCustomer(data: {email: string, password: string, first
   redirect("/login");
 }
 
-export async function makeVendor(data: {email: string, password: string, firstName: string, lastName: string, phoneNumber: string, storeName: string, storeDesc: string, images: string}) {
-  
+export async function makeVendor(data: {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  storeName: string;
+  storeDesc: string;
+  images: string;
+}) {
   const vendor: Vendor = {
     email: data.email as string,
     password: data.password as string,
@@ -82,26 +96,27 @@ export async function makeVendor(data: {email: string, password: string, firstNa
     last_name: data.lastName as string,
     phone: data.phoneNumber as string,
     store_name: data.storeName as string,
-    store_description: data.storeDesc as string
+    store_description: data.storeDesc as string,
   };
 
   try {
-    const res =
-      await DB.query(`INSERT INTO vendor (email, password, first_name, last_name, phone, store_name, store_description) VALUES
-        (
-            '${vendor.email}',
-            '${vendor.password}',
-            '${vendor.first_name}',
-            '${vendor.last_name}',
-            '${vendor.phone}',
-            '${vendor.store_name}',
-            '${vendor.store_description}'
-        )
-        RETURNING id;`);
+    const query = `INSERT INTO vendor (email, password, first_name, last_name, phone, store_name, store_description) VALUES
+    (
+        '${vendor.email}',
+        '${vendor.password}',
+        '${vendor.first_name}',
+        '${vendor.last_name}',
+        '${vendor.phone}',
+        '${vendor.store_name}',
+        '${vendor.store_description}'
+    )
+    RETURNING id;`;
+    console.log(query);
+    const res = await DB.query(query);
 
-  const images = JSON.parse(data.images as string);
-  updateStoreImages(res.rows[0].id, images)
-
+    console.log({ res });
+    const images = JSON.parse(data.images as string);
+    updateStoreImages(res.rows[0].id, images);
   } catch (error) {
     console.log("Failed to create vendor: ", error);
     return error;
