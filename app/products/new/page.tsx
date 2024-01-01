@@ -1,7 +1,6 @@
 import React from "react";
-import { createProduct } from "../lib/actions";
-import Link from "next/link";
-import { ProductForm } from "../ui/productForm";
+import { ProductForm } from "@/app/ui/productForm";
+import { createProduct } from "@/app/lib/actions";
 
 const Page = () => {
   return (

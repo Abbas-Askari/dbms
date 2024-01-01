@@ -16,10 +16,10 @@ async function getOrders(): Promise<any[]> {
   return (
     await DB.query(`
       SELECT * FROM orders JOIN users ON orders.user_id = users.id
-        JOIN orderProduct ON orders.id = orderProduct.order_id JOIN product ON orderProduct.product_id = product.id
-        LEFT JOIN (SELECT DISTINCT ON (product_id) * FROM productImage ) PI ON PI.product_id = product.id
-        LEFT JOIN (SELECT id as image_id, data, name FROM image) I ON I.image_id = PI.image_id
-        JOIN address ON address.id::INT = orders.address_id::INT WHERE completed = false AND product.store_id = ${store_id};
+      JOIN orderProduct ON orders.id = orderProduct.order_id JOIN product ON orderProduct.product_id = product.id
+      LEFT JOIN (SELECT DISTINCT ON (product_id) * FROM productImage ) PI ON PI.product_id = product.id
+      LEFT JOIN (SELECT id as image_id, data, name FROM image) I ON I.image_id = PI.image_id
+      JOIN address ON address.id::INT = orders.address_id::INT WHERE completed = false AND product.store_id = ${store_id};
   `)
   ).rows;
 }
