@@ -8,7 +8,7 @@ async function SellerInfo({ vendorId }: { vendorId: string }) {
   const vendor = result.rows[0] as Vendor;
 
   const query = `
-  SELECT data FROM image JOIN storeimage ON vendor_id = ${vendorId} AND image_id = id;
+  SELECT data FROM image JOIN storeimage ON store_id = ${vendorId} AND image_id = id;
   `;
 
   console.log(query);

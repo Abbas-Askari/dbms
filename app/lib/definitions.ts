@@ -10,8 +10,13 @@ export type Product = {
 };
 
 export type User = {
-  emial: string;
+  email: string;
   password: string;
+  last_name: string;
+  first_name: string;
+  phone: string;
+  id?: number
+  store_id?: number;
 };
 
 export type Customer = {

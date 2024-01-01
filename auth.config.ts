@@ -1,5 +1,6 @@
 import { on } from "events";
 import type { NextAuthConfig } from "next-auth";
+import { User } from "./app/lib/definitions";
 
 export const authConfig = {
   pages: {
@@ -33,8 +34,8 @@ export const authConfig = {
       }
       return token;
     },
-    session({ session, token, user }) {
-      session.user = token.user;
+    session({ session, token }) {
+      session.user = token.user as User;
       return session;
     },
   },

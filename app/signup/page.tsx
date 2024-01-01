@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { createCustomer, makeCustomer, makeVendor } from "../lib/userActions";
+import { makeCustomer, makeVendor } from "../lib/userActions";
 import { useEffect, useState } from "react";
 import { Carousel } from "../ui/carousel";
 

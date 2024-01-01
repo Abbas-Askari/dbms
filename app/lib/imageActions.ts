@@ -71,13 +71,14 @@ export async function updateProductImages(
 export async function updateStoreImages(storeId: number, newImages: Image[]) {
   try {
     const storeimageDelete = await DB.query(`
-    DELETE FROM storeimage WHERE vendor_id = ${storeId};
+    DELETE FROM storeimage WHERE store_id = ${storeId};
     `);
     const deleteResult = await DB.query(`
         DELETE FROM image
-        WHERE id in (SELECT image_id FROM storeimage WHERE vendor_id = ${storeId});
+        WHERE id in (SELECT image_id FROM storeimage WHERE store_id = ${storeId});
     `);
 
+    if (newImages.length === 0) return;
     const query = `
       INSERT INTO image (name, data) VALUES
       ${newImages

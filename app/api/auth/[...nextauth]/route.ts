@@ -7,24 +7,36 @@ import { sql } from "@vercel/postgres";
 import DB from "@/database";
 const bcrypt = require("bcrypt");
 
-async function getUser(email: string): Promise<Customer | undefined> {
+// async function getUser(email: string): Promise<Customer | undefined> {
+//   try {
+//     const user = (
+//       await DB.query(`SELECT * FROM customer WHERE email = '${email}'`)
+//     ).rows[0] as Customer;
+//     return user;
+//   } catch (error) {
+//     console.error("Failed to fetch user: ", error);
+//     return undefined;
+//   }
+// }
+
+// async function getVendor(email: string): Promise<Vendor | undefined> {
+//   try {
+//     const vendor = (
+//       await DB.query(`SELECT * FROM vendor WHERE email = '${email}'`)
+//     ).rows[0] as Vendor;
+//     return vendor;
+//   } catch (error) {
+//     console.error("Failed to fetch user: ", error);
+//     return undefined;
+//   }
+// }
+
+async function getUser(email: string): Promise<User | undefined> {
   try {
     const user = (
-      await DB.query(`SELECT * FROM customer WHERE email = '${email}'`)
-    ).rows[0] as Customer;
+      await DB.query(`SELECT * FROM users WHERE email = '${email}'`)
+    ).rows[0] as User;
     return user;
-  } catch (error) {
-    console.error("Failed to fetch user: ", error);
-    return undefined;
-  }
-}
-
-async function getVendor(email: string): Promise<Vendor | undefined> {
-  try {
-    const vendor = (
-      await DB.query(`SELECT * FROM vendor WHERE email = '${email}'`)
-    ).rows[0] as Vendor;
-    return vendor;
   } catch (error) {
     console.error("Failed to fetch user: ", error);
     return undefined;
@@ -45,15 +57,9 @@ const handler = NextAuth({
 
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data;
-          const [customer, vendor] = await Promise.all([
-            getUser(email),
-            getVendor(email),
-          ]);
-          if (!customer && !vendor) return null;
-          if (password === customer?.password)
-            return { ...customer, isVendor: false };
-          if (password === vendor?.password)
-            return { ...vendor, isVendor: true };
+          const user = await getUser(email);
+          if (!user) return null;
+          if (password === user?.password) return user;
         }
         return null;
       },

@@ -11,7 +11,7 @@ import { AuthError } from "next-auth";
 export async function createProduct(formData: FormData) {
   const session = await auth();
   const user = session?.user;
-  if (!user.isVendor || !user) {
+  if (user?.store_id === null || !user) {
     throw new AuthError("You are not a vendor");
   }
 
@@ -21,7 +21,7 @@ export async function createProduct(formData: FormData) {
     stock: formData.get("stock"),
     price: formData.get("price"),
   };
-  const vendor_id = user?.id;
+  const vendor_id = user?.store_id;
 
   try {
     const query = `

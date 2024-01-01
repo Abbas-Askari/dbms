@@ -59,8 +59,8 @@ async function ProductPage({ params }: Props) {
 
   const reviews = (
     await DB.query(`
-    SELECT review.*, customer.first_name, customer.last_name 
-    FROM review JOIN customer ON customer_id = customer.id
+    SELECT review.*, users.first_name, users.last_name 
+    FROM review JOIN users ON customer_id = users.id
     WHERE product_id = ${product.id};`)
   ).rows as Review[];
 
