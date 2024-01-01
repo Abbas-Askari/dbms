@@ -21,11 +21,7 @@ async function StoreProductsPage({ params }: { params: { vendorId: string } }) {
   GROUP BY product.id`)).rows
 
   const products: Product[] = result.rows as Product[];
-
-  console.log(products, canDelete)
   
-  console.log({ user: session.user, vid: params.vendorId });
-
   return (
     <div className="mx-8">
       <div role="tablist" className="tabs tabs-lifted w-min mx-auto">

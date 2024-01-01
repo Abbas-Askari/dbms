@@ -43,6 +43,7 @@ function ProductModal({ product, canDelete, mainAction }: { product: any, canDel
               >
               <button className="btn btn-accent flex-1">{product.onshelf ? canDelete ? "Delete" : "Take off Shelf": "Re-rack product"}</button>
               </form>
+              {!canDelete && product.onshelf && <div className="text-red-500 text-xs text-center w-full">This product can not be deleted because it has pending orders</div>}
             </div>
           </div>
         </div>
