@@ -41,7 +41,7 @@ function ProductModal({ product, canDelete, mainAction }: { product: any, canDel
                   document.getElementById(`${product.id}-product-modal`).close();
                 }}
               >
-              <button className="btn btn-accent flex-1">{canDelete ? "Delete" : "Take off Shelf"}</button>
+              <button className="btn btn-accent flex-1">{product.onshelf ? canDelete ? "Delete" : "Take off Shelf": "Re-rack product"}</button>
               </form>
             </div>
           </div>

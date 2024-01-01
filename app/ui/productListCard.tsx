@@ -1,7 +1,7 @@
 import React from "react";
 import { Product } from "../lib/definitions";
 import Link from "next/link";
-import { deleteProduct, removeProductFromShelf } from "../lib/actions";
+import { deleteProduct, removeProductFromShelf, reRackProduct } from "../lib/actions";
 import DB from "@/database";
 import ProductModal from "./productModal";
 
@@ -19,6 +19,7 @@ async function ProductListCard({
 }) {
   const deleteProductWithId = deleteProduct.bind(null, product.id);
   const removeProductFromShelfWithId = removeProductFromShelf.bind(null, product.id);
+  const reRackProductWithId = reRackProduct.bind(null, product.id);
 
   // const canDelete = await DB.query(`SELECT COUNT`)
 
@@ -39,7 +40,7 @@ async function ProductListCard({
               {/* <form action={deleteProductWithId} className=" ">
                 <button className="btn btn-block    btn-error">Delete</button>
               </form> */}
-              <ProductModal product={product} canDelete={canDelete} mainAction={canDelete ? deleteProductWithId : removeProductFromShelfWithId}/>
+              <ProductModal product={product} canDelete={canDelete} mainAction={product.onshelf ? canDelete ? deleteProductWithId : removeProductFromShelfWithId: reRackProductWithId}/>
             </>
           )}
         </td>
