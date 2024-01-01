@@ -3,7 +3,7 @@
 import { User } from "./definitions";
 import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
-import { signIn } from "../api/auth/[...nextauth]/route";
+import { auth, signIn } from "../api/auth/[...nextauth]/route";
 import DB from "@/database";
 import { updateStoreImages } from "./imageActions";
 // import { signIn } from "@/auth";
@@ -107,4 +107,15 @@ export async function authenticate(
     console.log("Failed to authenticate: ", error);
     throw error;
   }
+}
+
+export async function getUserOrders () {
+  const session = await auth()
+  const user_id = session?.user?.id
+
+  const query = `SELECT product.*, orderproduct.completed, orderproduct.quantity, orders.date
+  FROM orders JOIN orderproduct ON orderproduct.order_id = orders.id JOIN product ON orderproduct.product_id = product.id
+  WHERE user_id = ${user_id}`
+
+  return (await DB.query(query)).rows
 }

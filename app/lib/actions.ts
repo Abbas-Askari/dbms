@@ -1,6 +1,6 @@
 "use server";
 
-import { Product } from "./definitions";
+import { Product, User } from "./definitions";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { updateProductImages } from "./imageActions";
@@ -10,7 +10,7 @@ import { AuthError } from "next-auth";
 
 export async function createProduct(formData: FormData) {
   const session = await auth();
-  const user = session?.user;
+  const user = session?.user as unknown as User;
   if (user?.store_id === null || !user) {
     throw new AuthError("You are not a vendor");
   }
