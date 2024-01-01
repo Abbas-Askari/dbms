@@ -1,12 +1,8 @@
 "use server";
 
-import { sql } from "@vercel/postgres";
-import { Customer, Product, User, Vendor } from "./definitions";
-import { randomUUID } from "crypto";
-import { revalidatePath } from "next/cache";
+import { User } from "./definitions";
 import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
-import { error } from "console";
 import { signIn } from "../api/auth/[...nextauth]/route";
 import DB from "@/database";
 import { updateStoreImages } from "./imageActions";
@@ -60,7 +56,7 @@ export async function makeVendor(data: {
 
   
   try {
-    const storeQuery = `INSERT INTO store (store_name, store_description) VALUES ('${data.storeName}', '${data.storeDesc}') RETURNING id`
+    const storeQuery = `INSERT INTO store (name, description) VALUES ('${data.storeName}', '${data.storeDesc}') RETURNING id`
     const storeID = (await DB.query(storeQuery)).rows[0].id  
     const user: User = {
       email: data.email as string,

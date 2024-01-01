@@ -1,11 +1,12 @@
 import React from "react";
-import { Vendor } from "../lib/definitions";
 import DB from "@/database";
 import { PhotoIcon } from "@heroicons/react/20/solid";
 
 async function SellerInfo({ vendorId }: { vendorId: string }) {
-  const result = await DB.query(`SELECT * FROM vendor WHERE id = ${vendorId}`);
-  const vendor = result.rows[0] as Vendor;
+  const result = await DB.query(`SELECT * FROM users WHERE store_id = ${vendorId}`);
+  const vendor = result.rows[0]
+  const store_id = result.rows[0].store_id 
+  const store = (await DB.query(`SELECT * FROM store WHERE id = ${store_id}`)).rows[0]
 
   const query = `
   SELECT data FROM image JOIN storeimage ON store_id = ${vendorId} AND image_id = id;
@@ -50,8 +51,8 @@ async function SellerInfo({ vendorId }: { vendorId: string }) {
       )}
 
       <div className=" flex flex-col self-streach">
-        <h1 className="text-2xl font-bold">{vendor.store_name}</h1>
-        <div className="description text-sm">{vendor.store_description}</div>
+        <h1 className="text-2xl font-bold">{store.name}</h1>
+        <div className="description text-sm">{store.description}</div>
         <div className="mt-auto flex gap-8">
           <div className="">Phone: {vendor.phone}</div>
           <div className="">Email: {vendor.email}</div>

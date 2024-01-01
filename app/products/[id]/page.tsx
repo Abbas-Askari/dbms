@@ -47,7 +47,7 @@ async function ProductPage({ params }: Props) {
   const inCart =
     (
       await DB.query(
-        `SELECT * FROM cart WHERE product_id=${product.id} AND customer_id=${session?.user?.id};`
+        `SELECT * FROM cart WHERE product_id=${product.id} AND user_id=${session?.user?.id};`
       )
     ).rowCount > 0;
 
@@ -60,7 +60,7 @@ async function ProductPage({ params }: Props) {
   const reviews = (
     await DB.query(`
     SELECT review.*, users.first_name, users.last_name 
-    FROM review JOIN users ON customer_id = users.id
+    FROM review JOIN users ON user_id = users.id
     WHERE product_id = ${product.id};`)
   ).rows as Review[];
 
@@ -124,10 +124,10 @@ async function ProductPage({ params }: Props) {
       <div className="">
         <div className="text-2xl font-bold">Store</div>
         <Link
-          href={`/stores/${product.vendor_id}/products`}
+          href={`/stores/${product.store_id}/products`}
           className=" hover:bg-[#ffffff20] transition-colors py-4 px-8 rounded-md flex gap-8 items-center "
         >
-          <SellerInfo vendorId={""+product.vendor_id} />
+          <SellerInfo vendorId={""+product.store_id} />
         </Link>
       </div>
 

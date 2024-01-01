@@ -5,12 +5,17 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   try {
     const session = await auth();
+
+    //get cart objects from DB according to userID
     const result = (
       await DB.query(`
-      SELECT Pr.*, Cr.quantity, I.data FROM cart Cr JOIN product Pr ON Cr.product_id = Pr.id 
-        LEFT JOIN (SELECT distinct on (product_id) * FROM productimage) PI ON PI.product_id = Pr.id
-        LEFT JOIN image I ON I.id = PI.image_id WHERE Cr.customer_id = '${session?.user?.id}' ORDER BY Pr.id`)
+      SELECT product.*, cart.quantity, image.data 
+      FROM cart JOIN product ON cart.product_id = product.id 
+      LEFT JOIN (SELECT distinct ON (product_id) * FROM productimage) ProdImage ON ProdImage.product_id = product.id
+      LEFT JOIN image ON image.id = ProdImage.image_id WHERE cart.user_id = '${session?.user?.id}' ORDER BY product.id`)
     ).rows as any[];
+
+    //return all rows
     return NextResponse.json({ result }, { status: 200 });
   } catch (error) {
     console.error("Failed to create tables: ", error);

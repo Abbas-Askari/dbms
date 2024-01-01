@@ -1,12 +1,10 @@
-import { StringValidation } from "zod";
-
 export type Product = {
   id: number;
   title: string;
   description: string;
   price: number;
   stock: number;
-  vendor_id: number;
+  store_id: number;
 };
 
 export type User = {
@@ -17,26 +15,6 @@ export type User = {
   phone: string;
   id?: number
   store_id?: number;
-};
-
-export type Customer = {
-  email: string;
-  last_name: string;
-  first_name: string;
-  password: string;
-  phone: string;
-  id?: number;
-};
-
-export type Vendor = {
-  email: string;
-  last_name: string;
-  first_name: string;
-  password: string;
-  phone: string;
-  store_name: string;
-  store_description: string;
-  id?: number;
 };
 
 export type Address = {

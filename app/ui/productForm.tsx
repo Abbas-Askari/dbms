@@ -9,7 +9,7 @@ type Props = {
   desc?: string;
   price?: number;
   stock?: number;
-  id: number;
+  id?: number;
 };
 
 export const ProductForm = ({

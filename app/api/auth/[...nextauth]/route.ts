@@ -2,37 +2,12 @@ import NextAuth from "next-auth";
 import { authConfig } from "../../../../auth.config";
 import credentials from "next-auth/providers/credentials";
 import { z } from "zod";
-import { Customer, User, Vendor } from "../../../lib/definitions";
-import { sql } from "@vercel/postgres";
+import { User } from "../../../lib/definitions";
 import DB from "@/database";
-const bcrypt = require("bcrypt");
 
-// async function getUser(email: string): Promise<Customer | undefined> {
-//   try {
-//     const user = (
-//       await DB.query(`SELECT * FROM customer WHERE email = '${email}'`)
-//     ).rows[0] as Customer;
-//     return user;
-//   } catch (error) {
-//     console.error("Failed to fetch user: ", error);
-//     return undefined;
-//   }
-// }
-
-// async function getVendor(email: string): Promise<Vendor | undefined> {
-//   try {
-//     const vendor = (
-//       await DB.query(`SELECT * FROM vendor WHERE email = '${email}'`)
-//     ).rows[0] as Vendor;
-//     return vendor;
-//   } catch (error) {
-//     console.error("Failed to fetch user: ", error);
-//     return undefined;
-//   }
-// }
-
+//check if a user with email exists
 async function getUser(email: string): Promise<User | undefined> {
-  try {
+  try { 
     const user = (
       await DB.query(`SELECT * FROM users WHERE email = '${email}'`)
     ).rows[0] as User;
@@ -48,6 +23,7 @@ const handler = NextAuth({
   providers: [
     credentials({
       async authorize(credentials, req) {
+        //check if valid email and password format
         const parsedCredentials = z
           .object({
             email: z.string().email(),
@@ -55,11 +31,12 @@ const handler = NextAuth({
           })
           .safeParse(credentials);
 
+        //get and return corresponding user if password matches
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data;
           const user = await getUser(email);
           if (!user) return null;
-          if (password === user?.password) return user;
+          if (password === user.password) return user;
         }
         return null;
       },

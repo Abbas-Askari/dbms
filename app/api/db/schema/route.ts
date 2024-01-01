@@ -12,7 +12,7 @@ import { NextResponse } from "next/server";
 //     phone VARCHAR(13) NOT NULL
 // );
 
-// ALTER TABLE orderProducts ALTER COLUMN order_id TYPE INT USING order_id::INT
+// ALTER TABLE orderproduct ALTER COLUMN order_id TYPE INT USING order_id::INT
 
 // CREATE TABLE IF NOT EXISTS image (
 //   id SERIAL PRIMARY KEY,
@@ -59,7 +59,7 @@ import { NextResponse } from "next/server";
 //     FOREIGN KEY (customer_id) REFERENCES customer(id)
 //   )
 
-// CREATE TABLE IF NOT EXISTS  orderProducts  (
+// CREATE TABLE IF NOT EXISTS  orderproduct  (
 //     order_id INT NOT NULL,
 //     product_id INT NOT NULL,
 //     quantity INT,

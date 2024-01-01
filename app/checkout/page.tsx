@@ -8,7 +8,6 @@ import FormSubmitButton from "../ui/formSubmitButton";
 const CheckoutProductCard = ({ product }) => {
   return (
     <div className="flex items-center gap-4 my-2">
-      {/* <PhotoIcon className="w-12 h-12" /> */}
       <div className="w-16 h-16">
         {product.data ? (
           <img
@@ -103,7 +102,7 @@ const CheckoutPage = async () => {
           <FormSubmitButton
             className="bg-blue-500 px-6 py-2 rounded-md text-white font-bold  "
             value={"Place Order"}
-            type="submit"
+            type={"submit"}
           />
           {/* <button className='bg-blue-500 px-6 py-2 rounded-md text-white font-bold  '>Place Order</button> */}
         </div>

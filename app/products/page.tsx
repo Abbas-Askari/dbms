@@ -2,9 +2,8 @@ import { QueryResult, QueryResultRow, sql } from "@vercel/postgres";
 import React from "react";
 import { Product } from "../lib/definitions";
 import ProductCard from "../ui/productCard";
-import Search from "../ui/search";
 import { unstable_noStore } from "next/cache";
-import DB, { SQL } from "@/database";
+import DB from "@/database";
 
 type Props = {
   searchParams: {

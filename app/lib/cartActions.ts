@@ -2,22 +2,19 @@
 
 import DB from "@/database";
 import { auth } from "../api/auth/[...nextauth]/route";
-import { sql } from "@vercel/postgres";
-import { randomUUID } from "crypto";
-import { getSession } from "next-auth/react";
 import { revalidatePath, revalidateTag, unstable_noStore } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function addToCart(
   product_id: number,
-  customer_id: string,
+  user_id: string,
   formData: FormData
 ) {
   try {
     const res = await DB.query(`
         INSERT INTO cart VALUES(
             ${product_id},
-            ${customer_id},
+            ${user_id},
             ${1}
         )`);
   } catch (error) {
@@ -30,14 +27,14 @@ export async function addToCart(
 
 export async function removeFromCart(
   product_id: number,
-  customer_id?: number,
+  user_id?: number,
   formData?: FormData
 ) {
   const session = await auth();
-  customer_id = customer_id ?? (session?.user?.id as unknown as number);
+  user_id = user_id ?? (session?.user?.id as unknown as number);
   try {
     const res = await DB.query(`
-            DELETE FROM cart WHERE product_id=${product_id} AND customer_id=${customer_id};
+            DELETE FROM cart WHERE product_id=${product_id} AND user_id=${user_id};
         `);
   } catch (error) {
     console.log("Failed to add to cart: ", error);
@@ -52,7 +49,7 @@ export async function updateProductQuantity(
 ) {
   unstable_noStore();
   const session = await auth();
-  const customer_id = session?.user?.id;
+  const user_id = session?.user?.id;
   let status = true;
   console.log({ product_id, quantity }, "updating quantity");
 
@@ -67,7 +64,7 @@ export async function updateProductQuantity(
     let stock = limit.rows[0].stock
     status =  quantity <= stock
     const res = await DB.query(`
-            UPDATE cart SET quantity = ${Math.min(quantity, stock)} WHERE product_id=${product_id} AND customer_id=${customer_id};
+            UPDATE cart SET quantity = ${Math.min(quantity, stock)} WHERE product_id=${product_id} AND user_id=${user_id};
         `);
   } catch (error) {
     console.log("Failed to update qunatity: ", error);
@@ -91,7 +88,8 @@ export async function getCartProducts() {
       `SELECT Pr.*, data, name, quantity FROM product Pr JOIN cart ON cart.product_id = Pr.id
         LEFT JOIN (SELECT DISTINCT ON (product_id) * FROM productImage ) PI ON PI.product_id = Pr.id
         LEFT JOIN image I ON I.id = PI.image_id
-        WHERE cart.customer_id = 1 ORDER BY Pr.id`
+        WHERE cart.user_id = ${session?.user?.id} 
+        ORDER BY Pr.id`
     );
     console.log("getting cart products!");
     return result.rows as any[];
@@ -129,20 +127,20 @@ export async function placeOrder(formData: FormData) {
     const addressId = addressResult.rows[0].id as number;
     console.log({ rows: addressResult.rows });
     const orderResult =
-      await DB.query(`INSERT INTO orders (date, customer_id, address_id) VALUES
+      await DB.query(`INSERT INTO orders (date, user_id, address_id) VALUES
             ('${new Date().toISOString()}', ${
         session?.user?.id
       }, ${addressId}) RETURNING id;
         `);
     const orderId = orderResult.rows[0].id as number;
     const defectiveQuery =
-      `INSERT INTO orderproducts VALUES ` +
+      `INSERT INTO orderproduct VALUES ` +
       cart
         ?.map((product) => `(${orderId}, ${product.id} ,${product.quantity})`)
         .join(", ");
 
     console.log(defectiveQuery);
-    const orderProductsResult = await DB.query(defectiveQuery);
+    const orderproductResult = await DB.query(defectiveQuery);
 
     console.log("Success!");
     clearCart();
@@ -153,14 +151,13 @@ export async function placeOrder(formData: FormData) {
   }
 
   redirect("/products");
-  console.log(formData);
 }
 
 export async function completeOrder(orderId: number, productId: number) {
   try {
     console.log("COMPLETING ORDER")
     const result = await DB.query(`
-            UPDATE orderProducts SET completed = true WHERE order_id = ${orderId} AND product_id = ${productId}
+            UPDATE orderproduct SET completed = true WHERE order_id = ${orderId} AND product_id = ${productId}
             RETURNING quantity;    
         `);
 

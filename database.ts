@@ -4,7 +4,7 @@ const DBClientSingleton = () => {
   return new pg.Pool({
     user: "postgres",
     host: "localhost",
-    database: "dbms",
+    database: "test",
     password: "123",
     idleTimeoutMillis: 0,
     connectionTimeoutMillis: 0,

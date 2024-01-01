@@ -1,6 +1,6 @@
 "use server";
 
-import { Customer, Product, Vendor } from "./definitions";
+import { Product } from "./definitions";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { updateProductImages } from "./imageActions";
@@ -21,16 +21,16 @@ export async function createProduct(formData: FormData) {
     stock: formData.get("stock"),
     price: formData.get("price"),
   };
-  const vendor_id = user?.store_id;
+  const store_id = user?.store_id;
 
   try {
     const query = `
-    INSERT INTO product (title, description, stock, price, vendor_id) VALUES (
+    INSERT INTO product (title, description, stock, price, store_id) VALUES (
         '${product.title}',
         '${product.description}',
         ${product.stock},
         ${product.price},
-        ${vendor_id}
+        ${store_id}
       )
       RETURNING id;
   `;
@@ -44,7 +44,7 @@ export async function createProduct(formData: FormData) {
 
   revalidatePath("/products");
   revalidatePath("/stores");
-  redirect(`/stores/${vendor_id}/products`);
+  redirect(`/stores/${store_id}/products`);
 }
 
 export async function deleteProduct(id: string) {
@@ -64,7 +64,7 @@ export async function updateProduct(id: number, formData: FormData) {
   const images = JSON.parse(formData.get("images") as string);
   updateProductImages(id, images);
 
-  let vendor_id;
+  let store_id;
   try {
     const result = await DB.query(`
       UPDATE product SET
@@ -73,9 +73,9 @@ export async function updateProduct(id: number, formData: FormData) {
         stock = ${product.stock},
         price = ${product.price}
       WHERE id = ${id};
-      RETURNING vendor_id;
+      RETURNING store_id;
     `);
-    vendor_id = result.rows[0].vendor_id;
+    store_id = result.rows[0].store_id;
     console.log({
       result,
       product,
@@ -85,7 +85,7 @@ export async function updateProduct(id: number, formData: FormData) {
   }
   revalidatePath("/products");
   revalidatePath("/stores");
-  redirect(`/stores/${vendor_id}/products`);
+  redirect(`/stores/${store_id}/products`);
 }
 
 export async function getProductById(id: string) {

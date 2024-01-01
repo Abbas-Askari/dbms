@@ -8,13 +8,13 @@ import { auth } from "@/app/api/auth/[...nextauth]/route";
 
 async function StoreProductsPage({ params }: { params: { vendorId: string } }) {
   const result = await DB.query(`
-    SELECT * from product WHERE vendor_id = ${params.vendorId};
+    SELECT * from product WHERE store_id = ${params.vendorId};
   `);
 
   const products: Product[] = result.rows as Product[];
   const session = await auth();
   const isOwner =
-    +session?.user?.id === +params.vendorId && session.user.isVendor;
+    +session?.user?.id === +params.vendorId && session.user.store_id !== null;
 
   console.log({ user: session.user, vid: params.vendorId });
 
@@ -73,14 +73,7 @@ async function StoreProductsPage({ params }: { params: { vendorId: string } }) {
             </Link>
           </div>
         )}
-        {/* <div className="product-list  items-center grid gap-4 px-12 mb-8">
-          {products.map((product, i) => (
-            <ProductListCard
-              product={product}
-              key={i} // bad, Pass product_id as key here.
-              />
-              ))}
-            </div> */}
+        
       </div>
     </div>
   );
