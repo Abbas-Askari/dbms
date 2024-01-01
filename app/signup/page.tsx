@@ -75,7 +75,7 @@ const page = () => {
             </h1>
 
             <div className="flex rounded-xl overflow-hidden border-2 border-black">
-              <button
+              {/* <button
                 type="button"
                 onClick={() => setRole("Customer")}
                 className={`${
@@ -96,7 +96,21 @@ const page = () => {
                 } flex-1 font-mono text-xl p-4 border-l border-white `}
               >
                 Vendor
-              </button>
+              </button> */}
+              <div className="join">
+                <input
+                  className="join-item btn"
+                  type="radio"
+                  name="options"
+                  aria-label="Radio 1"
+                />
+                <input
+                  className="join-item btn"
+                  type="radio"
+                  name="options"
+                  aria-label="Radio 2"
+                />
+              </div>
             </div>
             <button
               tabIndex={0}
