@@ -7,17 +7,18 @@ import ProductListCard from "@/app/ui/productListCard";
 import { auth } from "@/app/api/auth/[...nextauth]/route";
 
 async function StoreProductsPage({ params }: { params: { vendorId: string } }) {
-  
-  const products: Product[] = result.rows as Product[];
   const session = await auth();
-  const isOwner =
-  +session?.user?.id === +params.vendorId && session.user.store_id !== null;
-  
+  const isOwner = +params.vendorId === session.user.store_id;
+
   const result = await DB.query(`
-    SELECT * from product WHERE store_id = ${params.vendorId} ${isOwner ? "" : "AND onShelf = true"}; 
+  SELECT * from product WHERE store_id = ${params.vendorId} ${
+    isOwner ? "" : "AND onShelf = true"
+  }; 
   `);
-  
-  console.log({ user: session.user, vid: params.vendorId });
+  //
+
+  const products: Product[] = result.rows as Product[];
+  console.log({ user: session.user, vid: params.vendorId, isOwner });
 
   return (
     <div className="mx-8">
@@ -69,12 +70,11 @@ async function StoreProductsPage({ params }: { params: { vendorId: string } }) {
 
         {isOwner && (
           <div className="flex mt-4 p-4">
-            <Link href="/editproduct" className="btn btn-primary  ml-auto">
+            <Link href="/products/new" className="btn btn-primary  ml-auto">
               Add A Product
             </Link>
           </div>
         )}
-        
       </div>
     </div>
   );
