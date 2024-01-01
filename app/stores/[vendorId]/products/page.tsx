@@ -8,14 +8,23 @@ import { auth } from "@/app/api/auth/[...nextauth]/route";
 
 async function StoreProductsPage({ params }: { params: { vendorId: string } }) {
   
-  const products: Product[] = result.rows as Product[];
   const session = await auth();
   const isOwner =
   +session?.user?.id === +params.vendorId && session.user.store_id !== null;
   
   const result = await DB.query(`
-    SELECT * from product WHERE store_id = ${params.vendorId} ${isOwner ? "" : "AND onShelf = true"}; 
+  SELECT * from product WHERE store_id = ${params.vendorId} ${isOwner ? "" : "AND onShelf = true"}; 
   `);
+
+  const canDelete = (await DB.query(`
+  SELECT product.id, COUNT(orderproduct.order_id) 
+  FROM product LEFT JOIN orderproduct ON product.id = orderproduct.product_id 
+  WHERE store_id = ${params.vendorId} 
+  GROUP BY product.id`)).rows
+
+  const products: Product[] = result.rows as Product[];
+
+  console.log(products, canDelete)
   
   console.log({ user: session.user, vid: params.vendorId });
 
@@ -62,6 +71,7 @@ async function StoreProductsPage({ params }: { params: { vendorId: string } }) {
                 product={product}
                 key={i}
                 index={i}
+                canDelete={+(canDelete.filter(product_orderCount => product_orderCount.id === product.id)[0].count) === 0}
               />
             ))}
           </tbody>
@@ -69,7 +79,7 @@ async function StoreProductsPage({ params }: { params: { vendorId: string } }) {
 
         {isOwner && (
           <div className="flex mt-4 p-4">
-            <Link href="/editproduct" className="btn btn-primary  ml-auto">
+            <Link href="/products/new" className="btn btn-primary  ml-auto">
               Add A Product
             </Link>
           </div>

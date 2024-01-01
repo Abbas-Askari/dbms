@@ -47,6 +47,13 @@ export async function createProduct(formData: FormData) {
   redirect(`/stores/${store_id}/products`);
 }
 
+export async function removeProductFromShelf(id: string) {
+  await DB.query(`UPDATE product SET onshelf = false WHERE id = ${id}`)
+  await DB.query(`DELETE FROM cart WHERE product_id = ${id}`)
+  revalidatePath("/stores");
+  revalidatePath("/products");
+}
+
 export async function deleteProduct(id: string) {
   await DB.query(`DELETE FROM product WHERE id=${id}`);
   revalidatePath("/stores");
