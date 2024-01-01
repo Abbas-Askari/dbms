@@ -59,12 +59,16 @@ export async function updateProductQuantity(
   }
 
   try {
-
-    const limit = await DB.query(`SELECT * FROM product WHERE id = ${product_id}`)
-    let stock = limit.rows[0].stock
-    status =  quantity <= stock
+    const limit = await DB.query(
+      `SELECT * FROM product WHERE id = ${product_id}`
+    );
+    let stock = limit.rows[0].stock;
+    status = quantity <= stock;
     const res = await DB.query(`
-            UPDATE cart SET quantity = ${Math.min(quantity, stock)} WHERE product_id=${product_id} AND user_id=${user_id};
+            UPDATE cart SET quantity = ${Math.min(
+              quantity,
+              stock
+            )} WHERE product_id=${product_id} AND user_id=${user_id};
         `);
   } catch (error) {
     console.log("Failed to update qunatity: ", error);
@@ -76,7 +80,6 @@ export async function updateProductQuantity(
   revalidatePath(`/`, "layout");
   revalidatePath(`/`, "page");
   return status;
-  
 }
 
 export async function getCartProducts() {
@@ -102,7 +105,7 @@ export async function clearCart() {
   try {
     const session = await auth();
     const result = await DB.query(
-      `DELETE FROM cart WHERE customer_id = ${session?.user?.id}`
+      `DELETE FROM cart WHERE user_id = ${session?.user?.id}`
     );
     console.log("Success!");
     revalidatePath(`/`);
@@ -155,7 +158,7 @@ export async function placeOrder(formData: FormData) {
 
 export async function completeOrder(orderId: number, productId: number) {
   try {
-    console.log("COMPLETING ORDER")
+    console.log("COMPLETING ORDER");
     const result = await DB.query(`
             UPDATE orderproduct SET completed = true WHERE order_id = ${orderId} AND product_id = ${productId}
             RETURNING quantity;    
@@ -163,7 +166,7 @@ export async function completeOrder(orderId: number, productId: number) {
 
     const decreaseStock = await DB.query(`
       UPDATE product SET stock = stock - ${result.rows[0].quantity} WHERE id = ${productId}
-    `)
+    `);
     revalidatePath(`/orders`);
   } catch (error) {
     console.error("Failed to complete order", error);
