@@ -7,15 +7,16 @@ import ProductListCard from "@/app/ui/productListCard";
 import { auth } from "@/app/api/auth/[...nextauth]/route";
 
 async function StoreProductsPage({ params }: { params: { vendorId: string } }) {
-  const result = await DB.query(`
-    SELECT * from product WHERE store_id = ${params.vendorId};
-  `);
-
+  
   const products: Product[] = result.rows as Product[];
   const session = await auth();
   const isOwner =
-    +session?.user?.id === +params.vendorId && session.user.store_id !== null;
-
+  +session?.user?.id === +params.vendorId && session.user.store_id !== null;
+  
+  const result = await DB.query(`
+    SELECT * from product WHERE store_id = ${params.vendorId} ${isOwner ? "" : "AND onShelf = true"}; 
+  `);
+  
   console.log({ user: session.user, vid: params.vendorId });
 
   return (

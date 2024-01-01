@@ -26,7 +26,6 @@ async function getOrders(): Promise<any[]> {
 
 async function OrdersPage() {
   const orders = await getOrders();
-  console.log({ orders }, "asdad");
 
   return (
     <div className="mx-8">

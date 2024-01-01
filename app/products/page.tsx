@@ -24,7 +24,7 @@ async function ProductsPage({ searchParams }: Props) {
     LEFT JOIN (select distinct on (product_id) * FROM productimage ) PI ON Pr.id = PI.product_id
     LEFT JOIN image I ON PI.image_id = I.id
     LEFT JOIN review R ON r.product_id = Pr.id 
-    WHERE starts_with(LOWER(Pr.title), LOWER('${query}'))
+    WHERE starts_with(LOWER(Pr.title), LOWER('${query}')) AND Pr.onShelf
     GROUP BY Pr.id, I.id;
   `);
   } else {
@@ -34,7 +34,8 @@ async function ProductsPage({ searchParams }: Props) {
       FROM product Pr 
       LEFT JOIN (select distinct on (product_id) * FROM productimage ) PI ON Pr.id = PI.product_id
       LEFT JOIN image I ON PI.image_id = I.id
-      LEFT JOIN review R ON r.product_id = Pr.id 
+      LEFT JOIN review R ON r.product_id = Pr.id
+      WHERE Pr.onShelf 
       GROUP BY Pr.id, I.id;
     `);
   }
