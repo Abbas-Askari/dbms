@@ -11,7 +11,7 @@ async function getOrders(): Promise<any[]> {
   "use server";
 
   const session = await auth();
-  const store_id = session?.user?.id as number;
+  const store_id = session?.user?.store_id as number;
 
   return (
     await DB.query(`

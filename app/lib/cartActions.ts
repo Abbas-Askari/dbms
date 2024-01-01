@@ -102,7 +102,7 @@ export async function clearCart() {
   try {
     const session = await auth();
     const result = await DB.query(
-      `DELETE FROM cart WHERE customer_id = ${session?.user?.id}`
+      `DELETE FROM cart WHERE user_id = ${session?.user?.id}`
     );
     console.log("Success!");
     revalidatePath(`/`);
