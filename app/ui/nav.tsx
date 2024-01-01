@@ -60,7 +60,7 @@ const Nav = async () => {
 
   const cartItemQuantity = await getCartItemQuantity();
 
-  console.log({ store_id });
+  console.log({ store_id }, "nav");
 
   return (
     // <div className="px-8 py-4 flex gap-2  items-center justify-between">
@@ -197,7 +197,7 @@ const Nav = async () => {
 
           <ul
             tabIndex={0}
-            className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-52 mt-4"
+            className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-52   mt-4"
           >
             <li>
               <Link href={"/my-orders"}>My Orders</Link>
