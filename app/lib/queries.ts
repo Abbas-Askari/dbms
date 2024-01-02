@@ -38,8 +38,8 @@ export const insertProduct = (title: string, description: string, stock: number,
 export const updateProduct = (product_id: number, title: string, description: string, stock: number, price: number) =>
 `UPDATE product SET title = '${title}', description = '${description}', stock = ${stock}, price = ${price} WHERE id = ${product_id};`
 
-export const insertUser = (email: string, password: string, phone: string, first_name: string, last_name: string) => 
-`INSERT INTO users (email, password, first_name, last_name, phone) VALUES ('${email}', '${password}', '${first_name}', '${last_name}', '${phone}')`
+export const insertUser = (email: string, password: string, phone: string, first_name: string, last_name: string, store_id?: number) => 
+`INSERT INTO users (email, password, first_name, last_name, phone ${store_id ? ", store_id": ""}) VALUES ('${email}', '${password}', '${first_name}', '${last_name}', '${phone}' ${store_id ? `, ${store_id}`: ""}) RETURNING id`
 
 export const insertStore = (name: string, description: string) => 
 `INSERT INTO store (name, description) VALUES ('${name}', '${description}') RETURNING id`

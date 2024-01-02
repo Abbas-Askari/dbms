@@ -48,7 +48,7 @@ export async function updateProductImages(
 export async function updateStoreImage(storeId: number, newImage: Image) {
   
   try {
-  const query = `UPDATE store SET image = ${newImage.data} WHERE id = ${storeId}`
+  const query = `UPDATE store SET image = '${newImage.data}' WHERE id = ${storeId}`
   await DB.query(query);
 
   } catch (error) {

@@ -5,15 +5,15 @@ import { useEffect, useState } from "react";
 import { Carousel } from "../ui/carousel";
 
 const page = () => {
-  const [page, setPage] = useState(0);
-  const [role, setRole] = useState("Customer");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [storeName, setStoreName] = useState("");
-  const [storeDesc, setStoreDesc] = useState("");
+  const [page, setPage] = useState(4);
+  const [role, setRole] = useState("Vendor");
+  const [firstName, setFirstName] = useState("Test");
+  const [lastName, setLastName] = useState("Vendor");
+  const [email, setEmail] = useState("vendor@vendor.com");
+  const [password, setPassword] = useState("12345678");
+  const [phoneNumber, setPhoneNumber] = useState("2367898765");
+  const [storeName, setStoreName] = useState("Test");
+  const [storeDesc, setStoreDesc] = useState("Store");
   const [error, setError] = useState("");
 
   const verifyEmail = (value: string) => {

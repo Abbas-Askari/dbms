@@ -56,7 +56,7 @@ export async function makeVendor(data: {
       store_id: storeID,
     };
 
-    await DB.query(insertUser(user.email, user.password, user.phone, user.first_name, user.last_name));
+    await DB.query(insertUser(user.email, user.password, user.phone, user.first_name, user.last_name, user.store_id));
 
     const images = JSON.parse(data.images);
     if (images.length !== 0)
