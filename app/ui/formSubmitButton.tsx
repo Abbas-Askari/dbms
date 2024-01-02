@@ -14,7 +14,11 @@ function FormSubmitButton({
 }) {
   const status = useFormStatus();
   return (
-    <button {...props} className={`btn ${className}`} disabled={status.pending}>
+    <button
+      {...props}
+      className={`btn ${className}`}
+      disabled={status.pending || props.disabled}
+    >
       <span>{value}</span>
       {status.pending && (
         <span className="loading loading-spinner loading-xs"></span>

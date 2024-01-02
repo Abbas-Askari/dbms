@@ -39,6 +39,11 @@ const page = () => {
     setError("");
   }, [page]);
 
+  function radioOnChange(e: any) {
+    console.log(e.target.value);
+    setRole(e.target.value);
+  }
+
   return (
     <div className="flex justify-center items-center flex-1">
       <form
@@ -71,11 +76,10 @@ const page = () => {
         {page === 0 && (
           <>
             <h1 className="font-bold text-2xl text-neutral-700">
-              Select Your Role:{" "}
+              Select Account type:{" "}
             </h1>
 
-            <div className="flex rounded-xl overflow-hidden border-2 border-black">
-              {/* <button
+            {/* <button
                 type="button"
                 onClick={() => setRole("Customer")}
                 className={`${
@@ -97,21 +101,26 @@ const page = () => {
               >
                 Vendor
               </button> */}
-              <div className="join">
-                <input
-                  className="join-item btn"
-                  type="radio"
-                  name="options"
-                  aria-label="Radio 1"
-                />
-                <input
-                  className="join-item btn"
-                  type="radio"
-                  name="options"
-                  aria-label="Radio 2"
-                />
-              </div>
+            <div className="join flex rounded-xl overflow-hidden border-2 ">
+              <input
+                className="join-item btn flex-1"
+                type="radio"
+                name="role"
+                value="Customer"
+                defaultChecked
+                onChange={radioOnChange}
+                aria-label="Customer"
+              />
+              <input
+                className="join-item btn flex-1"
+                type="radio"
+                name="role"
+                value={"Vendor"}
+                onChange={radioOnChange}
+                aria-label="Vendor"
+              />
             </div>
+
             <button
               tabIndex={0}
               type="button"

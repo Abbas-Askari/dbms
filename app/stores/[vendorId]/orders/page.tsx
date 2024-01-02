@@ -36,7 +36,7 @@ async function OrdersPage() {
         <Link
           role="tab"
           className={`tab tab-active [--tab-bg:#262626] `}
-          href={"/store/orders"}
+          href={"orders"}
         >
           Orders
         </Link>

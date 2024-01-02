@@ -4,6 +4,7 @@ import { ChevronLeftIcon, PhotoIcon } from "@heroicons/react/24/outline";
 import FormInput from "../ui/formInput";
 import Link from "next/link";
 import FormSubmitButton from "../ui/formSubmitButton";
+import { auth } from "../api/auth/[...nextauth]/route";
 
 const CheckoutProductCard = ({ product }) => {
   return (
@@ -35,6 +36,10 @@ const CheckoutProductCard = ({ product }) => {
 const CheckoutPage = async () => {
   const cart = await getCartProducts();
 
+  const session = await auth();
+
+  const username = session.user.first_name + " " + session.user.last_name;
+
   const subtotal =
     cart?.reduce((acc, product) => acc + product.quantity * product.price, 0) ||
     0;
@@ -43,34 +48,51 @@ const CheckoutPage = async () => {
     <div className="flex flex-1">
       <form action={placeOrder} className="flex-1 p-16 flex flex-col">
         <h3 className=" font-semibold text-lg mb-2">Contact</h3>
+
         <FormInput
-          placeholder="Email or phone number"
+          placeholder="Username"
           name="email_phone"
           type="text"
-          className=""
+          value={session?.user?.email}
+          disabled={true}
+          className="mb-4"
+        />
+
+        <div className="flex gap-4">
+          <FormInput
+            placeholder="First name"
+            name="first_name"
+            type="text"
+            value={session?.user.first_name}
+            disabled={true}
+            className="mb-4"
+          />
+          <FormInput
+            placeholder="Last name"
+            name="last_name"
+            type="text"
+            value={session?.user.last_name}
+            disabled={true}
+            className="mb-4"
+          />
+        </div>
+
+        <FormInput
+          placeholder="Phone"
+          name=""
+          type="text"
+          value={session?.user.phone}
+          disabled={true}
         />
 
         <h3 className=" font-semibold text-lg mb-2 mt-6">Shipping Address</h3>
         <div className="flex flex-col gap-4">
-          <div className="flex gap-4">
-            <FormInput
-              placeholder="First name"
-              name="first_name"
-              type="text"
-              className=""
-            />
-            <FormInput
-              placeholder="Last name"
-              name="last_name"
-              type="text"
-              className=""
-            />
-          </div>
           <FormInput
             placeholder="Address"
             name="address"
             type="text"
             className=""
+            required={true}
           />
           <div className="flex gap-4">
             <FormInput
@@ -78,18 +100,21 @@ const CheckoutPage = async () => {
               name="city"
               type="text"
               className=""
+              required={true}
             />
             <FormInput
               placeholder="State"
               name="province"
               type="text"
               className=""
+              required={true}
             />
             <FormInput
               placeholder="Zip Code"
-              type="text"
+              type="number"
               name="zip_code"
               className=""
+              required={true}
             />
           </div>
         </div>

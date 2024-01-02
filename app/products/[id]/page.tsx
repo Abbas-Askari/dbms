@@ -104,6 +104,7 @@ async function ProductPage({ params }: Props) {
                   <FormSubmitButton
                     className="  outline-none  mx-auto btn-primary  "
                     value={!inCart ? "Add to Cart" : "Remove from Cart"}
+                    disabled={product.stock === 0}
                   />
                 </form>
               </div>
@@ -127,18 +128,25 @@ async function ProductPage({ params }: Props) {
           href={`/stores/${product.store_id}/products`}
           className=" hover:bg-[#ffffff20] transition-colors py-4 px-8 rounded-md flex gap-8 items-center "
         >
-          <SellerInfo vendorId={""+product.store_id} />
+          <SellerInfo vendorId={"" + product.store_id} />
         </Link>
       </div>
 
       <div className="flex flex-col gap-4">
         <div className="text-2xl font-bold">Reviews</div>
         <div className="flex flex-col gap-2">
-          <Revi />
-          <Revi />
-          {reviews.map((review) => (
-            <Review review={review} customerId={+session?.user?.id as number} />
-          ))}
+          {reviews.length > 0 ? (
+            reviews.map((review) => (
+              <ReviewComponent
+                review={review}
+                customerId={+session?.user?.id as number}
+              />
+            ))
+          ) : (
+            <div className="text-center italic opacity-50">
+              This product has no reviews
+            </div>
+          )}
         </div>
         <WriteReview productId={product.id} />
       </div>
@@ -168,11 +176,19 @@ function Revi() {
   );
 }
 
-function Review({ review, customerId }: { review: any; customerId: number }) {
+function ReviewComponent({
+  review,
+  customerId,
+}: {
+  review: any;
+  customerId: number;
+}) {
+  console.log({ review, customerId });
+
   const deleteReviewBound = deleteReview.bind(null, review.id);
   return (
     <div className="flex flex-col bg-neutral-800 p-4 rounded-lg relative">
-      {customerId === review.customer_id && (
+      {customerId === review.user_id && (
         <form action={deleteReviewBound}>
           <button className="btn btn-circle btn-xs absolute right-0 top-0">
             <XMarkIcon className="p-1 text-white" />

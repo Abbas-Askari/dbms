@@ -21,13 +21,12 @@ type Props = {
 
 export function Carousel({ productId, className, formInput, ...props }: Props) {
   const [images, setImages] = useState([]);
+  console.log(images.map((i) => JSON.parse(JSON.stringify(i))));
 
   useEffect(() => {
     if (productId === undefined) return;
     getImages(productId).then((images) => setImages(images));
   }, [productId]);
-
-  console.log({ images });
 
   return (
     <div
@@ -53,8 +52,8 @@ export function Carousel({ productId, className, formInput, ...props }: Props) {
                 ...images,
                 ...datas.map((data, i) => ({
                   name: e.target.files[i].name,
-                  id: Math.random() * 100,
-                  data,
+                  id: Math.random() * 100 + Date.now(),
+                  data: data,
                 })),
               ]);
             }}

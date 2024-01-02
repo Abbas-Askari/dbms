@@ -10,6 +10,7 @@ type Props = {
   price?: number;
   stock?: number;
   id?: number;
+  isNew?: boolean;
 };
 
 export const ProductForm = ({
@@ -19,6 +20,7 @@ export const ProductForm = ({
   price,
   stock,
   id,
+  isNew,
 }: Props) => {
   return (
     <div className="flex justify-center items-center flex-1">
@@ -26,7 +28,9 @@ export const ProductForm = ({
         action={actionCallback}
         className="w-1/2 flex flex-col gap-4 bg-neutral-800 text-white shadow-md rounded-xl p-12 artboard"
       >
-        <h1 className=" text-2xl font-bold">Edit Product</h1>
+        <h1 className=" text-2xl font-bold">
+          {isNew ? "Create a new Product" : "Edit Product"}
+        </h1>
 
         <div className="flex gap-4">
           <div className="flex-1">
@@ -70,6 +74,7 @@ export const ProductForm = ({
           <div className="group flex-1">
             <label htmlFor="stock">Stock</label>
             <input
+              required
               name="stock"
               id="stock"
               type="number"
@@ -81,6 +86,7 @@ export const ProductForm = ({
           <div className="group flex-1">
             <label htmlFor="price">Price</label>
             <input
+              required
               name="price"
               id="price"
               type="number"

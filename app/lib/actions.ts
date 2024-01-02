@@ -26,36 +26,39 @@ export async function createProduct(formData: FormData) {
   try {
     const query = `
     INSERT INTO product (title, description, stock, price, store_id) VALUES (
-        '${product.title}',
+      '${product.title}',
         '${product.description}',
         ${product.stock},
         ${product.price},
         ${store_id}
       )
       RETURNING id;
-  `;
+      `;
+
+    console.log(query);
 
     const result = await DB.query(query);
+    console.log({ iamges: formData.get("images") });
     const images = JSON.parse(formData.get("images") as string);
     updateProductImages(result.rows[0].id, images);
   } catch (error) {
     console.error({ error });
+    return;
   }
-
   revalidatePath("/products");
   revalidatePath("/stores");
   redirect(`/stores/${store_id}/products`);
 }
 
 export async function reRackProduct(id: string) {
-  await DB.query(`UPDATE product SET onshelf = true WHERE id = ${id}`)
+  await DB.query(`UPDATE product SET onshelf = true WHERE id = ${id}`);
   revalidatePath("/stores");
   revalidatePath("/products");
 }
 
 export async function removeProductFromShelf(id: string) {
-  await DB.query(`UPDATE product SET onshelf = false WHERE id = ${id}`)
-  await DB.query(`DELETE FROM cart WHERE product_id = ${id}`)
+  await DB.query(`UPDATE product SET onshelf = false WHERE id = ${id}`);
+  await DB.query(`DELETE FROM cart WHERE product_id = ${id}`);
   revalidatePath("/stores");
   revalidatePath("/products");
 }
@@ -75,21 +78,25 @@ export async function updateProduct(id: number, formData: FormData) {
     price: formData.get("price"),
   };
 
+  console.log({ iamges: formData.get("images") });
   const images = JSON.parse(formData.get("images") as string);
-  updateProductImages(id, images);
 
   let store_id;
   try {
+    console.log("updating product", id, product);
+
+    updateProductImages(id, images);
     const result = await DB.query(`
       UPDATE product SET
         title = '${product.title}',
         description = '${product.description}',
         stock = ${product.stock},
         price = ${product.price}
-      WHERE id = ${id};
+      WHERE id = ${id}
       RETURNING store_id;
     `);
     store_id = result.rows[0].store_id;
+    console.log({ rows: result.rows });
     console.log({
       result,
       product,
