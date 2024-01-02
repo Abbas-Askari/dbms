@@ -129,7 +129,6 @@ export async function placeOrder(formData: FormData) {
 
 export async function completeOrder(orderId: number, productId: number) {
   try {
-    console.log("COMPLETING ORDER");
     const result = await DB.query(`
             UPDATE orderproduct SET completed = true WHERE order_id = ${orderId} AND product_id = ${productId}
             RETURNING quantity;    

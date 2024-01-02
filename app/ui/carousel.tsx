@@ -18,7 +18,6 @@ type Props = {
 
 export function Carousel({ productId, className, formInput, ...props }: Props) {
   const [images, setImages] = useState([]);
-  console.log(images.map((i) => JSON.parse(JSON.stringify(i))));
 
   useEffect(() => {
     if (productId === undefined) return;
@@ -39,7 +38,6 @@ export function Carousel({ productId, className, formInput, ...props }: Props) {
             type="file"
             className="hidden"
             onChange={async (e) => {
-              console.log(e.target.files);
               const dataPromises = [];
               for (let file of Array.from(e.target.files)) {
                 dataPromises.push(fileToImage(file));

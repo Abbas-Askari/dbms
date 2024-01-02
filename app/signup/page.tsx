@@ -40,7 +40,6 @@ const page = () => {
   }, [page]);
 
   function radioOnChange(e: any) {
-    console.log(e.target.value);
     setRole(e.target.value);
   }
 

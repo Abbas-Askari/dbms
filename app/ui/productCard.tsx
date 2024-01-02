@@ -9,7 +9,6 @@ type Props = {
 };
 
 function ProductCard({ product }: Props) {
-  console.log({ rating: product.rating });
 
   return (
     <Link
@@ -65,7 +64,6 @@ export function Rating({ defaultRating, className, id }: PropsRating) {
   if (isNaN(defaultRating)) {
     return <div className="italic text-amber-400">No Reviews</div>;
   }
-  console.log({ defaultRating });
 
   return (
     <div className={`rating rating-half rating-sm ${className}`}>

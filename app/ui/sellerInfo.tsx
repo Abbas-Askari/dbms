@@ -12,7 +12,6 @@ async function SellerInfo({ vendorId }: { vendorId: string }) {
   SELECT data FROM image JOIN storeimage ON store_id = ${vendorId} AND image_id = id;
   `;
 
-  console.log(query);
 
   const imageResult = await DB.query(query);
 

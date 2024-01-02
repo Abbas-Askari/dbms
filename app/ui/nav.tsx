@@ -51,8 +51,6 @@ const Nav = async () => {
 
   const cartItemQuantity = await getCartItemQuantity();
 
-  console.log({ store_id }, "nav");
-
   return (
     
     <div className="navbar bg-base-100">

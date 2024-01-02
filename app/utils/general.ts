@@ -6,12 +6,10 @@ export function numberToDollars(x: number): string {
 
 export async function fileToImage(file: File) {
   // can only be used client-side
-  console.log("Compressing image");
   const reader = new FileReader();
   const fileCompressed = (await compressImage(file, {
     quality: Math.min(300000 / file.size, 1),
   })) as Blob;
-  console.log({ fileCompressed, file });
   reader.readAsDataURL(fileCompressed);
   return new Promise((resolve, reject) => {
     reader.addEventListener("load", () => {

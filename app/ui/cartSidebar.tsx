@@ -18,9 +18,7 @@ const CartSidebar = ({}) => {
 
   useEffect(() => {
     if (data) {
-      console.log({ newProducts: data.result });
       setProducts(data.result);
-      console.log(products);
     }
   }, [data]);
 

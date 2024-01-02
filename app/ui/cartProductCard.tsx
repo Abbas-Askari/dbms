@@ -15,7 +15,6 @@ import FormSubmitButton from "./formSubmitButton";
 export const CartProductCard = ({ product, setProducts }: any) => {
   const [loading, setLoading] = useState(false);
 
-  console.log({ product });
   const removeFromCartBound = removeFromCart.bind(null, product.id, null);
 
   return (
@@ -86,7 +85,6 @@ function ChangeQunatityChip({
   setLoading: (loading: boolean) => void;
   setProducts: (products: any[]) => void;
 }) {
-  console.log({ cutomer_id: product.customer_id });
 
   return (
     <div className="badge flex items-center">
@@ -97,14 +95,12 @@ function ChangeQunatityChip({
             onClick={async () => {
               setLoading(true);
               try {
-                console.log({ customer_id: product.customer_id });
                 let status = await updateProductQuantity(product.id, product.quantity - 1);
                 if (status) setProducts((products: any) =>
                   products.map((p) =>
                     p.id === product.id ? { ...p, quantity: p.quantity - 1 } : p
                   )
                 );
-                console.log("Changed Product Quantity.");
               } catch (error) {}
               setLoading(false);
             }}
@@ -124,7 +120,6 @@ function ChangeQunatityChip({
                     p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
                   )
                 );
-                console.log("Changed Product Quantity.");
               } catch (error) {}
               setLoading(false);
             }}

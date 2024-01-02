@@ -6,7 +6,6 @@ import { numberToDollars } from "../utils/general";
 import CompleteOrderButton from "./completeOrderButton";
 
 function OrderModal({ order }: { order: any }) {
-  console.log({ order });
 
   return (
     <td className="">

@@ -138,7 +138,6 @@ function ReviewComponent({
   review: any;
   customerId: number;
 }) {
-  console.log({ review, customerId });
 
   const deleteReviewBound = deleteReview.bind(null, review.id);
   return (

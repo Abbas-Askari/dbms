@@ -7,7 +7,6 @@ export function LogoutButton() {
     <button
       onClick={async () => {
         const result = await signOut();
-        console.log({ result });
       }}
       className=""
     >
