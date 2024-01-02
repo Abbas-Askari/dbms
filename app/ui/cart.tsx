@@ -12,7 +12,6 @@ function Cart() {
         <ShoppingCartIcon className="w-6 h-6  " />
       </label>
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle " />
-      <div className="drawer-content">{/* Page content here */}</div>
       <div className="drawer-side  z-20 overflow-hidden">
         <label
           htmlFor="my-drawer-4"

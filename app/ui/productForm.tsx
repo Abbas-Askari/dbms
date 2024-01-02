@@ -1,5 +1,4 @@
 import Link from "next/link";
-import FormInput from "./formInput";
 import { Carousel } from "./carousel";
 import FormSubmitButton from "./formSubmitButton";
 

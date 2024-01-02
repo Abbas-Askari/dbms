@@ -4,12 +4,12 @@ import credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 import { User } from "../../../lib/definitions";
 import DB from "@/database";
+import { getUserFromEmail } from "@/app/lib/queries";
 
 //check if a user with email exists
 async function getUser(email: string): Promise<User | undefined> {
   try { 
-    const user = (
-      await DB.query(`SELECT * FROM users WHERE email = '${email}'`)
+    const user = (await DB.query(getUserFromEmail(email))
     ).rows[0] as User;
     return user;
   } catch (error) {

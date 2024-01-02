@@ -5,6 +5,7 @@ import OrderModal from "@/app/ui/orderModal";
 import DB from "@/database";
 import Link from "next/link";
 import { auth } from "@/app/api/auth/[...nextauth]/route";
+import { getStoreOrders } from "@/app/lib/queries";
 dayjs.extend(require("dayjs/plugin/relativeTime"));
 
 async function getOrders(): Promise<any[]> {
@@ -14,13 +15,7 @@ async function getOrders(): Promise<any[]> {
   const store_id = session?.user?.store_id as number;
 
   return (
-    await DB.query(`
-      SELECT * FROM orders JOIN users ON orders.user_id = users.id
-      JOIN orderProduct ON orders.id = orderProduct.order_id JOIN product ON orderProduct.product_id = product.id
-      LEFT JOIN (SELECT DISTINCT ON (product_id) * FROM productImage ) PI ON PI.product_id = product.id
-      LEFT JOIN (SELECT id as image_id, data, name FROM image) I ON I.image_id = PI.image_id
-      JOIN address ON address.id::INT = orders.address_id::INT WHERE completed = false AND product.store_id = ${store_id};
-  `)
+    await DB.query(getStoreOrders(store_id))
   ).rows;
 }
 

@@ -1,7 +1,5 @@
 "use client";
 
-// import { signOut } from "@/auth";
-import { ArrowLeftOnRectangleIcon } from "@heroicons/react/20/solid";
 import { signOut } from "next-auth/react";
 
 export function LogoutButton() {

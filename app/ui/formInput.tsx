@@ -5,22 +5,28 @@ function FormInput({
   type = "text",
   className,
   name,
-  ...props
+  value,
+  disabled,
+  required
 }: {
-  props?: any;
   name: string;
   placeholder: string;
   type: string;
-  className: string;
+  className?: string;
+  value?: string | null;
+  disabled?: boolean;
+  required?: boolean;
 }) {
   return (
     <div
       className={` relative group w-full  ${
-        props.disabled ? "opacity-40 " : ""
+        disabled ? "opacity-40 " : ""
       }`}
     >
       <input
-        {...props}
+        disabled={disabled}
+        required={required}
+        value={value ? value : undefined}
         id={name}
         type={type}
         name={name}

@@ -6,18 +6,20 @@ import { useFormStatus } from "react-dom";
 function FormSubmitButton({
   value,
   className,
-  ...props
+  disabled,
+  type
 }: {
   value: any;
   className?: string;
-  props?: any;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset" | undefined
 }) {
   const status = useFormStatus();
   return (
     <button
-      {...props}
+      type={type}
       className={`btn ${className}`}
-      disabled={status.pending || props.disabled}
+      disabled={status.pending || disabled}
     >
       <span>{value}</span>
       {status.pending && (

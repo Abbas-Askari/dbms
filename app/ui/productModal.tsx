@@ -24,58 +24,6 @@ function ProductModal({
       >
         Manage
       </button>
-      {/* <dialog id={`${product.id}-product-modal`} className="modal">
-        <div className="modal-box">
-          <div className="card-body">
-            <h2 className="justify-center card-title">{product.title}</h2>
-            <div className="flex  justify-between items-center">
-              <div className="card-title">Price</div>
-              <div className=" text-xl font-bold">
-                {numberToDollars(+product.price)}
-              </div>
-            </div>
-            <div className="flex  justify-between items-center">
-              <div className="card-title">Stock</div>
-              <div className=" text-xl font-bold">{product.stock}</div>
-            </div>
-            <div className="card-actions flex mt-4">
-              <form method="dialog" className="flex flex-1">
-                <Link
-                  href={`/products/${product.id}/edit`}
-                  className="btn flex-1"
-                >
-                  Edit
-                </Link>
-              </form>
-              <form
-                className="flex-1 flex"
-                action={async () => {
-                  await mainAction();
-                  document
-                    .getElementById(`${product.id}-product-modal`)
-                    .close();
-                }}
-              >
-                <button className="btn btn-accent flex-1">
-                  {product.onshelf
-                    ? canDelete
-                      ? "Delete"
-                      : "Take off Shelf"
-                    : "Re-rack product"}
-                </button>
-              </form>
-              {!canDelete && product.onshelf && (
-                <div className="text-red-500 text-xs text-center w-full">
-                  This product can not be deleted because it has pending orders
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
-      </dialog> */}
 
       <dialog id={`${product.id}-product-modal`} className="modal">
         <div className="modal-box">
@@ -125,13 +73,6 @@ function ProductModal({
                     ?.close();
                 }}
               >
-                {/* <button className="btn btn-accent flex-1">
-                  {product.onshelf
-                    ? canDelete
-                      ? "Delete"
-                      : "Take off Shelf"
-                    : "Re-rack product"}
-                </button> */}
 
                 <FormSubmitButton
                   className="btn btn-accent flex-1 "

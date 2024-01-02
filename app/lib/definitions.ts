@@ -5,7 +5,8 @@ export type Product = {
   price: number;
   stock: number;
   store_id: number;
-  onshelf?: boolean; 
+  onshelf?: boolean;
+  data?: string
 };
 
 export type User = {

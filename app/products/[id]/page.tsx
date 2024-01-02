@@ -1,6 +1,6 @@
-import { getProductById } from "@/app/lib/actions";
+import { getProductById } from "@/app/lib/productActions";
 import { addToCart, removeFromCart } from "@/app/lib/cartActions";
-import { Product, Review } from "@/app/lib/definitions";
+import { Product, Review, User } from "@/app/lib/definitions";
 import SellerInfo from "@/app/ui/sellerInfo";
 import { auth } from "@/app/api/auth/[...nextauth]/route";
 // import { sql } from "@vercel/postgres";
@@ -16,53 +16,37 @@ import { notFound } from "next/navigation";
 import { Rating } from "@/app/ui/rating";
 import { addReview, deleteReview } from "@/app/lib/reviewActions";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { getCartProduct, getProductImages, getProductReviewsWithName } from "@/app/lib/queries";
 
 type Props = {
   params: { id: string };
 };
 
 async function ProductPage({ params }: Props) {
-  // unstable_noStore();
 
   const { id } = params;
   const product: Product = await getProductById(id);
   if (!product) notFound();
-
-  // const products: Product[] = (await sql`SELECT * FROM product;`)
-  //   .rows as Product[];
-
-  // const session = await getSession();
   const session = await auth();
-  // const session = await getSession();
+  const user = session?.user as unknown as User
   const addToCartBound = addToCart.bind(
     null,
     product.id,
-    session?.user?.id as string
+    user.id as number
   );
   const removeFromCartBound = removeFromCart.bind(
     null,
     product.id,
-    session?.user?.id as string
+    user.id as number
   );
   const inCart =
     (
-      await DB.query(
-        `SELECT * FROM cart WHERE product_id=${product.id} AND user_id=${session?.user?.id};`
-      )
+      await DB.query(getCartProduct(product.id, user.id as number))
     ).rowCount > 0;
 
-  const images = (
-    await DB.query(`
-    SELECT * from image WHERE id IN 
-      (SELECT image_id FROM productimage WHERE product_id = ${product.id}) ;`)
-  ).rows;
+  const images = (await DB.query(getProductImages(product.id))).rows;
 
-  const reviews = (
-    await DB.query(`
-    SELECT review.*, users.first_name, users.last_name 
-    FROM review JOIN users ON user_id = users.id
-    WHERE product_id = ${product.id};`)
-  ).rows as Review[];
+  const reviews = (await DB.query(getProductReviewsWithName(product.id))).rows as Review[];
 
   return (
     <div className="p-8 flex flex-col gap-4">
@@ -71,13 +55,6 @@ async function ProductPage({ params }: Props) {
           <div className="flex-1 h-full aspect-square relative bg-neutral-800 rounded-2xl">
             <CarouselButtons className="absolute left-2 right-2 top-[50%] translate-y-[-50%]" />
             <div className="w-full h-full carousel rounded-box">
-              {/* <div className="carousel-item w-full">
-                <img
-                  src="https://daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg"
-                  className="w-full"
-                  alt="Tailwind CSS Carousel component"
-                />
-              </div> */}
               {images.length > 0 ? (
                 images.map((image) => (
                   <div className="carousel-item w-full">
@@ -139,7 +116,7 @@ async function ProductPage({ params }: Props) {
             reviews.map((review) => (
               <ReviewComponent
                 review={review}
-                customerId={+session?.user?.id as number}
+                customerId={+(user.id) as number}
               />
             ))
           ) : (
@@ -149,28 +126,6 @@ async function ProductPage({ params }: Props) {
           )}
         </div>
         <WriteReview productId={product.id} />
-      </div>
-    </div>
-  );
-}
-
-function Revi() {
-  return (
-    <div className="flex flex-col bg-neutral-800 p-4 rounded-lg">
-      <div className="flex justify-between p-2 border-b border-white">
-        <div className="text-sm">Abbas Askari</div>
-        <div className="text-sm">
-          12<sup>th</sup> Sep. 2023
-        </div>
-      </div>
-      <div className="flex flex-col p-4">
-        <div className="title text-lg font-semibold">
-          <span>An Amazing Product</span>
-        </div>
-
-        <div className="">
-          Thanks Mr's Abbas and you'r bros. as well for this awsome product.
-        </div>
       </div>
     </div>
   );

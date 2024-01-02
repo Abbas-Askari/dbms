@@ -4,19 +4,16 @@ import DB from "@/database";
 import { auth } from "../api/auth/[...nextauth]/route";
 import { revalidatePath, revalidateTag, unstable_noStore } from "next/cache";
 import { redirect } from "next/navigation";
+import { User } from "./definitions";
+import { clearUserCart, deleteFromCart, getCartItems, getProductFromID, insertAddress, insertIntoCart, updateProductQuantityInCart } from "./queries";
 
 export async function addToCart(
   product_id: number,
-  user_id: string,
+  user_id: number,
   formData: FormData
 ) {
   try {
-    const res = await DB.query(`
-        INSERT INTO cart VALUES(
-            ${product_id},
-            ${user_id},
-            ${1}
-        )`);
+    await DB.query(insertIntoCart(+user_id, product_id, 1));
   } catch (error) {
     console.log("Failed to add to cart: ", error);
   }
@@ -33,9 +30,7 @@ export async function removeFromCart(
   const session = await auth();
   user_id = user_id ?? (session?.user?.id as unknown as number);
   try {
-    const res = await DB.query(`
-            DELETE FROM cart WHERE product_id=${product_id} AND user_id=${user_id};
-        `);
+    const res = await DB.query(deleteFromCart(user_id, product_id));
   } catch (error) {
     console.log("Failed to add to cart: ", error);
   }
@@ -51,7 +46,6 @@ export async function updateProductQuantity(
   const session = await auth();
   const user_id = session?.user?.id;
   let status = true;
-  console.log({ product_id, quantity }, "updating quantity");
 
   if (quantity === 0) {
     await removeFromCart(product_id);
@@ -59,23 +53,15 @@ export async function updateProductQuantity(
   }
 
   try {
-    const limit = await DB.query(
-      `SELECT * FROM product WHERE id = ${product_id}`
-    );
+    const limit = await DB.query(getProductFromID(product_id));
     let stock = limit.rows[0].stock;
     status = quantity <= stock;
-    const res = await DB.query(`
-            UPDATE cart SET quantity = ${Math.min(
-              quantity,
-              stock
-            )} WHERE product_id=${product_id} AND user_id=${user_id};
-        `);
+    const res = await DB.query(updateProductQuantityInCart(user_id, product_id, Math.min(quantity, stock)));
   } catch (error) {
-    console.log("Failed to update qunatity: ", error);
+    console.log("Failed to update quantity: ", error);
     return false;
   }
 
-  console.log("revalidating");
   revalidateTag("cart");
   revalidatePath(`/`, "layout");
   revalidatePath(`/`, "page");
@@ -86,15 +72,8 @@ export async function getCartProducts() {
   unstable_noStore();
   try {
     const session = await auth();
-    // const session = await getSession();
-    const result = await DB.query(
-      `SELECT Pr.*, data, name, quantity FROM product Pr JOIN cart ON cart.product_id = Pr.id
-        LEFT JOIN (SELECT DISTINCT ON (product_id) * FROM productImage ) PI ON PI.product_id = Pr.id
-        LEFT JOIN image I ON I.id = PI.image_id
-        WHERE cart.user_id = ${session?.user?.id} 
-        ORDER BY Pr.id`
-    );
-    console.log("getting cart products!");
+    const user = session?.user as unknown as User
+    const result = await DB.query(getCartItems(user.id));
     return result.rows as any[];
   } catch (error) {
     console.log("Failed to get cart products: ", error);
@@ -104,10 +83,8 @@ export async function getCartProducts() {
 export async function clearCart() {
   try {
     const session = await auth();
-    const result = await DB.query(
-      `DELETE FROM cart WHERE user_id = ${session?.user?.id}`
-    );
-    console.log("Success!");
+    const user = session?.user as unknown as User
+    await DB.query(clearUserCart(user.id));
     revalidatePath(`/`);
   } catch (error) {
     console.error("Failed to clear cart: ", error);
@@ -116,19 +93,16 @@ export async function clearCart() {
 
 export async function placeOrder(formData: FormData) {
   try {
-    // const session = await getSession();
     const session = await auth();
-    console.log({ session });
     const cart = await getCartProducts();
     const addressResult =
-      await DB.query(`INSERT INTO address (address, city, province, zip_code) VALUES 
-            ('${formData.get("address")}', '${formData.get("city")}',
-            '${formData.get("province")}', ${formData.get(
-        "zip_code"
-      )}) RETURNING id;
-        `);
+      await DB.query(insertAddress(
+        formData.get("address") as string, 
+        formData.get("city") as string, 
+        formData.get("province") as string, 
+        formData.get("zip_code") as unknown as number)
+        );
     const addressId = addressResult.rows[0].id as number;
-    console.log({ rows: addressResult.rows });
     const orderResult =
       await DB.query(`INSERT INTO orders (date, user_id, address_id) VALUES
             ('${new Date().toISOString()}', ${
@@ -141,11 +115,8 @@ export async function placeOrder(formData: FormData) {
       cart
         ?.map((product) => `(${orderId}, ${product.id} ,${product.quantity})`)
         .join(", ");
+    await DB.query(defectiveQuery);
 
-    console.log(defectiveQuery);
-    const orderproductResult = await DB.query(defectiveQuery);
-
-    console.log("Success!");
     clearCart();
     revalidatePath("/");
   } catch (error) {

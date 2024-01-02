@@ -7,11 +7,13 @@ import { updateProductImages } from "./imageActions";
 import DB from "@/database";
 import { auth } from "../api/auth/[...nextauth]/route";
 import { AuthError } from "next-auth";
+import { getProductFromID, insertProduct, updateProduct as updateProductQuery } from "./queries";
 
 export async function createProduct(formData: FormData) {
   const session = await auth();
   const user = session?.user as unknown as User;
-  if (user?.store_id === null || !user) {
+  const store_id = user?.store_id as number;
+  if (store_id === null || !user) {
     throw new AuthError("You are not a vendor");
   }
 
@@ -21,26 +23,13 @@ export async function createProduct(formData: FormData) {
     stock: formData.get("stock"),
     price: formData.get("price"),
   };
-  const store_id = user?.store_id;
+  
 
   try {
-    const query = `
-    INSERT INTO product (title, description, stock, price, store_id) VALUES (
-      '${product.title}',
-        '${product.description}',
-        ${product.stock},
-        ${product.price},
-        ${store_id}
-      )
-      RETURNING id;
-      `;
-
-    console.log(query);
-
-    const result = await DB.query(query);
-    console.log({ iamges: formData.get("images") });
+    const productID = (await DB.query(insertProduct(product.title, product.description, product.stock, product.price, store_id))).rows[0].id;
     const images = JSON.parse(formData.get("images") as string);
-    updateProductImages(result.rows[0].id, images);
+    updateProductImages(productID, images);
+
   } catch (error) {
     console.error({ error });
     return;
@@ -51,12 +40,14 @@ export async function createProduct(formData: FormData) {
 }
 
 export async function reRackProduct(id: string) {
+  //put product back on shelf (displayable)
   await DB.query(`UPDATE product SET onshelf = true WHERE id = ${id}`);
   revalidatePath("/stores");
   revalidatePath("/products");
 }
 
 export async function removeProductFromShelf(id: string) {
+  //take product off shelf and remove it from all carts
   await DB.query(`UPDATE product SET onshelf = false WHERE id = ${id}`);
   await DB.query(`DELETE FROM cart WHERE product_id = ${id}`);
   revalidatePath("/stores");
@@ -64,7 +55,9 @@ export async function removeProductFromShelf(id: string) {
 }
 
 export async function deleteProduct(id: string) {
+  //remove product images
   updateProductImages(+id, []);
+  //delete product
   await DB.query(`DELETE FROM product WHERE id=${id}`);
   revalidatePath("/stores");
   revalidatePath("/products");
@@ -78,29 +71,14 @@ export async function updateProduct(id: number, formData: FormData) {
     price: formData.get("price"),
   };
 
-  console.log({ iamges: formData.get("images") });
   const images = JSON.parse(formData.get("images") as string);
 
   let store_id;
   try {
-    console.log("updating product", id, product);
 
     updateProductImages(id, images);
-    const result = await DB.query(`
-      UPDATE product SET
-        title = '${product.title}',
-        description = '${product.description}',
-        stock = ${product.stock},
-        price = ${product.price}
-      WHERE id = ${id}
-      RETURNING store_id;
-    `);
+    const result = await DB.query(updateProductQuery(id, product.title, product.description, product.stock, product.price));
     store_id = result.rows[0].store_id;
-    console.log({ rows: result.rows });
-    console.log({
-      result,
-      product,
-    });
   } catch (error) {
     console.error({ error });
   }
@@ -110,6 +88,6 @@ export async function updateProduct(id: number, formData: FormData) {
 }
 
 export async function getProductById(id: string) {
-  const result = await DB.query(`SELECT * FROM product WHERE id = ${id}`);
+  const result = await DB.query(getProductFromID(+id));
   return result.rows[0] as Product;
 }

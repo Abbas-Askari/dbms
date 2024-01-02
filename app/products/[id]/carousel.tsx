@@ -1,7 +1,6 @@
 "use client";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { setDefaultAutoSelectFamily } from "net";
 import { useRef, useState } from "react";
 
 type Props = {
@@ -11,7 +10,6 @@ type Props = {
 
 function CarouselButtons({ className, ...props }: Props) {
   const ref = useRef(null);
-  const button = ref.current as unknown as HTMLButtonElement;
   const [disabledLeft, setDisabledLeft] = useState(true);
   const [disabledRight, setDisabledRight] = useState(false);
 
@@ -21,13 +19,10 @@ function CarouselButtons({ className, ...props }: Props) {
     if (isLeft) {
       button.parentNode.parentNode.lastChild.scrollLeft -=
         button.parentNode.getBoundingClientRect().width;
-      //   ref.current.parent.scrollLeft -= button.parentNode.getClient;
     } else {
       button.parentNode.parentNode.lastChild.scrollLeft +=
         button.parentNode.getBoundingClientRect().width;
-      //   ref.current.parent.scrollLeft += 100;
     }
-    // setDisabled(disabled);
     const disabledLeft = button
       ? button.parentNode?.parentNode?.lastChild.scrollLeft === 0
       : false;
@@ -48,7 +43,6 @@ function CarouselButtons({ className, ...props }: Props) {
         onClick={() => handleClick(true)}
         disabled={disabledLeft}
         className={` btn btn-circle  btn-sm active:transfrom-y-[-50%]  `}
-        //   className={` disabled:invisible w-8 h-8 rounded-full ${className} bg-red text-white bg-neutral-400 justify-center flex items-center`}
       >
         <ChevronLeftIcon className="w-4 h-4 rounded-full text-white" />
       </button>
@@ -58,7 +52,6 @@ function CarouselButtons({ className, ...props }: Props) {
         onClick={() => handleClick(false)}
         disabled={disabledRight}
         className={` btn btn-circle  btn-sm active:transfrom-y-[-50%] `}
-        //   className={` disabled:invisible w-8 h-8 rounded-full ${className} bg-red text-white bg-neutral-400 justify-center flex items-center`}
       >
         <ChevronRightIcon className="w-4 h-4 rounded-full text-white" />
       </button>

@@ -6,7 +6,7 @@ import { AuthError } from "next-auth";
 import { auth, signIn } from "../api/auth/[...nextauth]/route";
 import DB from "@/database";
 import { updateStoreImages } from "./imageActions";
-// import { signIn } from "@/auth";
+import { getUserOrdersByID, insertStore, insertUser } from "./queries";
 
 export async function makeCustomer(data: {
   email: string;
@@ -25,17 +25,7 @@ export async function makeCustomer(data: {
   };
 
   try {
-    const res =
-      await DB.query(`INSERT INTO users (email, password, first_name, last_name, phone) VALUES
-        (
-            '${user.email}',
-            '${user.password}',
-            '${user.first_name}',
-            '${user.last_name}',
-            '${user.phone}'
-        )`);
-
-    console.log(res);
+    await DB.query(insertUser(user.email, user.password, user.phone, user.first_name, user.last_name));
   } catch (error) {
     console.log("Failed to create customer: ", error);
   }
@@ -56,8 +46,7 @@ export async function makeVendor(data: {
 
   
   try {
-    const storeQuery = `INSERT INTO store (name, description) VALUES ('${data.storeName}', '${data.storeDesc}') RETURNING id`
-    const storeID = (await DB.query(storeQuery)).rows[0].id  
+    const storeID = (await DB.query(insertStore(data.storeName, data.storeDesc))).rows[0].id  
     const user: User = {
       email: data.email as string,
       password: data.password as string,
@@ -67,17 +56,7 @@ export async function makeVendor(data: {
       store_id: storeID,
     };
 
-    const userQuery = `INSERT INTO users (email, password, first_name, last_name, phone, store_id) VALUES
-    (
-        '${user.email}',
-        '${user.password}',
-        '${user.first_name}',
-        '${user.last_name}',
-        '${user.phone}',
-        ${user.store_id}
-    )`;
-
-    const res = await DB.query(userQuery);
+    await DB.query(insertUser(user.email, user.password, user.phone, user.first_name, user.last_name));
 
     const images = JSON.parse(data.images);
     updateStoreImages(storeID, images);
@@ -113,9 +92,5 @@ export async function getUserOrders () {
   const session = await auth()
   const user_id = session?.user?.id
 
-  const query = `SELECT product.*, orderproduct.completed, orderproduct.quantity, orders.date
-  FROM orders JOIN orderproduct ON orderproduct.order_id = orders.id JOIN product ON orderproduct.product_id = product.id
-  WHERE user_id = ${user_id}`
-
-  return (await DB.query(query)).rows
+  return (await DB.query(getUserOrdersByID(user_id))).rows
 }

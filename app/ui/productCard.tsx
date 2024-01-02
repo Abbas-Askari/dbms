@@ -12,32 +12,6 @@ function ProductCard({ product }: Props) {
   console.log({ rating: product.rating });
 
   return (
-    // <Link
-    //   href={`products/${product.id}`}
-    //   className=" bg-neutral-800 rounded-xl p-6 flex flex-col gap-4 cursor-pointer"
-    // >
-    //   <img
-    //     src={product.data ?? "/next.svg"}
-    //     alt=""
-    //     className="bg-neutral-500 p-[1px] rounded-xl self-stretch aspect-square object-contain flex-shrink-0"
-    //   />
-    //   <div className="flex flex-col gap-2">
-    //     <div className=" text-3xl font-bold">{product.title}</div>
-    //     <div
-    //       title={product.description}
-    //       className=" text-sm whitespace-nowrap overflow-hidden text-ellipsis text-neutral-300"
-    //     >
-    //       {product.description}
-    //     </div>
-    //   </div>
-    //   <div className="flex justify-between items-center">
-    //     <div className="text-2xl">${product.price}</div>
-    //     <div className=" text-lg">
-    //       {product.stock > 0 ? "In stock" : "Out of stock"}
-    //     </div>
-    //   </div>
-    // </Link>
-
     <Link
       href={`products/${product.id}`}
       className="card w-64 card-compact bg-base-100 shadow-xl"
@@ -76,8 +50,6 @@ function ProductCard({ product }: Props) {
           <div className="badge badge-outline">
             {product.stock > 0 ? "In stock" : "Out of stock"}
           </div>
-          {/* <div className="badge badge-outline">Fashion</div> */}
-          {/* <div className="badge badge-outline">Products</div> */}
         </div>
       </div>
     </Link>

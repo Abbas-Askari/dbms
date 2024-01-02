@@ -1,10 +1,7 @@
 "use client";
 
-import { sql } from "@vercel/postgres";
-import { Image } from "../lib/definitions";
 import CarouselButtons from "../products/[id]/carousel";
 import {
-  PlusCircleIcon,
   PlusIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
@@ -71,11 +68,6 @@ export function Carousel({ productId, className, formInput, ...props }: Props) {
 
       <div className="w-full h-full carousel rounded-box">
         <div className="carousel-item w-full flex items-center justify-center">
-          {/* <img
-            src="https://daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg"
-            className="w-full"
-            alt="Tailwind CSS Carousel component"
-          /> */}
           <span className="text-xs">Click + to Add Images</span>
         </div>
         {images.map((image) => (

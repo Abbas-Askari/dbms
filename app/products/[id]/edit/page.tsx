@@ -1,4 +1,4 @@
-import { updateProduct } from "@/app/lib/actions";
+import { updateProduct } from "@/app/lib/productActions";
 import { ProductForm } from "@/app/ui/productForm";
 import DB from "@/database";
 import { sql } from "@vercel/postgres";

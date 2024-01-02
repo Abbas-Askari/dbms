@@ -2,6 +2,7 @@ import "@/app/globals.css";
 import SellerInfo from "@/app/ui/sellerInfo";
 import DB from "@/database";
 import { numberToDollars } from "../../utils/general";
+import { storeCustomerCount, storeTotalProductsSold, storeTotalSales } from "@/app/lib/queries";
 
 export default async function StoreLayout({
   children,
@@ -12,24 +13,13 @@ export default async function StoreLayout({
 }) {
   const store_id = params.vendorId;
 
-  const customersResult = await DB.query(
-    `SELECT count(distinct user_id) as total
-      FROM orders JOIN orderproduct ON orders.id = orderproduct.order_id
-      JOIN (SELECT id FROM product WHERE store_id = ${store_id}) Pr ON Pr.id = orderproduct.product_id
-      WHERE completed = true;`
-  );
+  const customersResult = await DB.query(storeCustomerCount(+store_id));
   const customersTotal = customersResult.rows[0].total;
 
-  const salesResult = await DB.query(
-    `SELECT SUM(Pr.price * OP.quantity) as total FROM product PR JOIN orderproduct OP ON PR.id = OP.product_id WHERE completed = true AND store_id = ${store_id};`
-  );
+  const salesResult = await DB.query(storeTotalSales(+store_id));
   const salesTotal = +salesResult.rows[0].total;
 
-  const productsResult = await DB.query(
-    `SELECT SUM(quantity) as total FROM orderproduct
-      JOIN (SELECT id FROM product WHERE store_id = ${store_id}) Pr ON Pr.id = orderproduct.product_id
-      WHERE completed = true;`
-  );
+  const productsResult = await DB.query(storeTotalProductsSold(+store_id));
   const productsTotal = +productsResult.rows[0].total;
 
   return (

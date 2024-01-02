@@ -79,28 +79,6 @@ const page = () => {
               Select Account type:{" "}
             </h1>
 
-            {/* <button
-                type="button"
-                onClick={() => setRole("Customer")}
-                className={`${
-                  role === "Customer"
-                    ? "bg-red-500 text-white"
-                    : "bg-neutral-900 text-neutral-100 hover:bg-white hover:text-black"
-                } flex-1 font-mono text-xl p-4 border-r border-white `}
-              >
-                Customer
-              </button>
-              <button
-                type="button"
-                onClick={() => setRole("Vendor")}
-                className={`${
-                  role === "Vendor"
-                    ? "bg-red-500 text-white"
-                    : "bg-neutral-900 text-neutral-100 hover:bg-white hover:text-black"
-                } flex-1 font-mono text-xl p-4 border-l border-white `}
-              >
-                Vendor
-              </button> */}
             <div className="join flex rounded-xl overflow-hidden border-2 ">
               <input
                 className="join-item btn flex-1"

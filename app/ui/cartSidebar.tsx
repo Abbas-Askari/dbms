@@ -1,6 +1,6 @@
 "use client";
 
-import React, { cache, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CartProductCard } from "./cartProductCard";
 import useSWR from "swr";
 import { unstable_noStore } from "next/cache";

@@ -5,44 +5,16 @@ import FormInput from "../ui/formInput";
 import Link from "next/link";
 import FormSubmitButton from "../ui/formSubmitButton";
 import { auth } from "../api/auth/[...nextauth]/route";
-
-const CheckoutProductCard = ({ product }) => {
-  return (
-    <div className="flex items-center gap-4 my-2">
-      <div className="w-16 h-16">
-        {product.data ? (
-          <img
-            src={product.data}
-            className="h-16 w-16 rounded-lg bg-[#00000080] border-neutral-100 border-[1px] object-contain"
-          />
-        ) : (
-          <div className="h-16 w-16 rounded-lg bg-[#00000080] border-neutral-100 border-[1px] flex flex-col items-center  justify-center opacity-25">
-            <PhotoIcon className="w-8 h-8 textwhite" />
-            <span className=" font-extrabold italic text-xs">No photo</span>
-          </div>
-        )}
-      </div>
-      <div className="flex-1">
-        <div className="">{product.title}</div>
-        <div className=" text-neutral-400 text-xs">
-          {product.quantity} x ${product.price}
-        </div>
-      </div>
-      <div className="">${(product.quantity * product.price).toFixed(2)}</div>
-    </div>
-  );
-};
+import { CheckoutProductCard } from "../ui/checkoutProductCard";
+import { User } from "../lib/definitions";
 
 const CheckoutPage = async () => {
   const cart = await getCartProducts();
-
   const session = await auth();
 
-  const username = session.user.first_name + " " + session.user.last_name;
+  const user = session?.user as unknown as User
 
-  const subtotal =
-    cart?.reduce((acc, product) => acc + product.quantity * product.price, 0) ||
-    0;
+  const subtotal = cart?.reduce((acc, product) => acc + product.quantity * product.price, 0) || 0;
 
   return (
     <div className="flex flex-1">
@@ -53,7 +25,7 @@ const CheckoutPage = async () => {
           placeholder="Username"
           name="email_phone"
           type="text"
-          value={session?.user?.email}
+          value={user.email}
           disabled={true}
           className="mb-4"
         />
@@ -63,7 +35,7 @@ const CheckoutPage = async () => {
             placeholder="First name"
             name="first_name"
             type="text"
-            value={session?.user.first_name}
+            value={user.first_name}
             disabled={true}
             className="mb-4"
           />
@@ -71,7 +43,7 @@ const CheckoutPage = async () => {
             placeholder="Last name"
             name="last_name"
             type="text"
-            value={session?.user.last_name}
+            value={user.last_name}
             disabled={true}
             className="mb-4"
           />
@@ -81,7 +53,7 @@ const CheckoutPage = async () => {
           placeholder="Phone"
           name=""
           type="text"
-          value={session?.user.phone}
+          value={user.phone}
           disabled={true}
         />
 
@@ -129,7 +101,6 @@ const CheckoutPage = async () => {
             value={"Place Order"}
             type={"submit"}
           />
-          {/* <button className='bg-blue-500 px-6 py-2 rounded-md text-white font-bold  '>Place Order</button> */}
         </div>
       </form>
       <div className="flex-1 flex flex-col border-l-[1px] border-neutral-700 p-16">
