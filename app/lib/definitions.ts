@@ -9,6 +9,13 @@ export type Product = {
   data?: string
 };
 
+export type Store = {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+}
+
 export type User = {
   email: string;
   password: string;

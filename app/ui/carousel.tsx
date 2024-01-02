@@ -14,9 +14,10 @@ type Props = {
   className?: string;
   props?: any;
   formInput?: boolean;
+  limit?: number;
 };
 
-export function Carousel({ productId, className, formInput, ...props }: Props) {
+export function Carousel({ productId, className, formInput, limit, ...props }: Props) {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export function Carousel({ productId, className, formInput, ...props }: Props) {
     >
       <CarouselButtons className="absolute left-2 right-2 top-[50%] translate-y-[-50%]" />
 
-      {formInput && (
+      {(limit !== undefined && images.length < limit) && formInput && (
         <label className="btn p-1 box-border btn-circle btn-xs absolute left-1 top-1">
           <PlusIcon />
           <input
@@ -66,7 +67,7 @@ export function Carousel({ productId, className, formInput, ...props }: Props) {
 
       <div className="w-full h-full carousel rounded-box">
         <div className="carousel-item w-full flex items-center justify-center">
-          <span className="text-xs">Click + to Add Images</span>
+          {(limit !== undefined && images.length < limit) && <span className="text-xs">Click + to Add Images</span>}
         </div>
         {images.map((image) => (
           <div className="carousel-item w-full">

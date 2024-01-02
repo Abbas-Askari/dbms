@@ -103,3 +103,8 @@ export const storeTotalProductsSold = (store_id: number) =>
 JOIN (SELECT id FROM product WHERE store_id = ${store_id}) Pr ON Pr.id = orderproduct.product_id
 WHERE completed = true;`
 
+export const getAllStores = () =>
+`SELECT * FROM store`
+
+export const getQueriedStores = (query: string) =>
+`SELECT * FROM store WHERE starts_with(LOWER(name), LOWER('${query}'))`

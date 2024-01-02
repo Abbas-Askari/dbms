@@ -284,6 +284,7 @@ const page = () => {
                 <Carousel
                   className="aspect-square w-48 h-48"
                   formInput={true}
+                  limit={1}
                 />
 
                 <div className="flex flex-col gap-2 w-96">

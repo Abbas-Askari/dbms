@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
 import { auth, signIn } from "../api/auth/[...nextauth]/route";
 import DB from "@/database";
-import { updateStoreImages } from "./imageActions";
+import { updateStoreImage } from "./imageActions";
 import { getUserOrdersByID, insertStore, insertUser } from "./queries";
 
 export async function makeCustomer(data: {
@@ -59,7 +59,9 @@ export async function makeVendor(data: {
     await DB.query(insertUser(user.email, user.password, user.phone, user.first_name, user.last_name));
 
     const images = JSON.parse(data.images);
-    updateStoreImages(storeID, images);
+    if (images.length !== 0)
+    updateStoreImage(storeID, images[0]);
+    
   } catch (error) {
     console.log("Failed to create vendor: ", error);
     return error;

@@ -1,21 +1,15 @@
 import React from "react";
 import DB from "@/database";
 import { PhotoIcon } from "@heroicons/react/20/solid";
+import { Store } from "../lib/definitions";
 
 async function SellerInfo({ vendorId }: { vendorId: string }) {
   const result = await DB.query(`SELECT * FROM users WHERE store_id = ${vendorId}`);
   const vendor = result.rows[0]
   const store_id = result.rows[0].store_id 
-  const store = (await DB.query(`SELECT * FROM store WHERE id = ${store_id}`)).rows[0]
+  const store = (await DB.query(`SELECT * FROM store WHERE id = ${store_id}`)).rows[0] as Store
 
-  const query = `
-  SELECT data FROM image JOIN storeimage ON store_id = ${vendorId} AND image_id = id;
-  `;
-
-
-  const imageResult = await DB.query(query);
-
-  const imageData = imageResult.rows[0]?.data;
+  const imageData = store.image;
 
   return (
         <div className="p-8 flex gap-8">
